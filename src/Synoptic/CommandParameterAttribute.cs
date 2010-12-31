@@ -21,7 +21,6 @@ namespace Synoptic
         }
 
         public string Prototype { get; set; }
-        public string Name { get; set; }
         public string Description { get; set; }
     }
 }

@@ -17,7 +17,6 @@ namespace Synoptic
                 Prototype = commandParameter.Prototype;
 
                 Description = Description.GetNewIfValid(commandParameter.Description);
-                Name = Name.GetNewIfValid(commandParameter.Name);
             }
 
             IsOptionValueRequired = parameter.ParameterType != typeof(bool);

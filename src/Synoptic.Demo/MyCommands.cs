@@ -31,7 +31,7 @@ namespace Synoptic.Demo
         }
 
         [Command(Description = "this is another test command")]
-        public void MyThirdCommand([CommandParameter(Name = "lobster")] string param1, int? param2, [CommandParameter(Description = "this is a test parameter")] bool param3)
+        public void MyThirdCommand(string param1, int? param2, [CommandParameter(Description = "this is a test parameter")] bool param3)
         {
             Console.WriteLine("MyCommand");
             Console.WriteLine("  param1=" + param1);
