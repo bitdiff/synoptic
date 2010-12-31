@@ -29,7 +29,7 @@ namespace Synoptic.Tests
                     if (memberInfo.MemberType == MemberTypes.Constructor)
                     {
                         var constructorInfo = memberInfo as ConstructorInfo;
-                        Console.WriteLine("  {0}({1})", type.Name, GetS(constructorInfo));
+                        Console.WriteLine("  {0}({1})", type.Name, GetArguments(constructorInfo));
                     }
                     else if (memberInfo.MemberType == MemberTypes.Method)
                     {
@@ -39,7 +39,7 @@ namespace Synoptic.Tests
                         string s = string.Join(", ", methodInfo.GetGenericArguments().Select(g => g.Name).ToArray());
                         if (!string.IsNullOrEmpty(s)) gen = "<" + s + ">";
 
-                        Console.WriteLine("  {0} {1}{2}({3})", methodInfo.ReturnType.Name, methodInfo.Name, gen, GetS(methodInfo));
+                        Console.WriteLine("  {0} {1}{2}({3})", methodInfo.ReturnType.Name, methodInfo.Name, gen, GetArguments(methodInfo));
                     }
                     else if (memberInfo.MemberType == MemberTypes.Property)
                     {
@@ -60,10 +60,9 @@ namespace Synoptic.Tests
             }
         }
 
-        private string GetS(MethodBase constructorInfo)
+        private static string GetArguments(MethodBase constructorInfo)
         {
-            return string.Join(", ", constructorInfo.GetParameters().Select(p => p.ParameterType.Name + " " + p.Name).
-                                         ToArray());
+            return string.Join(", ", constructorInfo.GetParameters().Select(p => p.ParameterType.Name + " " + p.Name).ToArray());
         }
     }
 }

@@ -63,7 +63,7 @@ Compile and run your application and you should see output similar to:
 
     Usage: ConsoleApplication1 <command> [options]
 
-    hello
+    say-hello
        message=<VALUE>
 
 Congratulations - you have now exposed your first command via the command line!
@@ -86,7 +86,7 @@ Passing parameters
 ------------------
 Execute your command by running the following:  
       
-    ConsoleApplication1 hello --message=world
+    ConsoleApplication1 say-hello --message=world
 
 It should show the following output:
 
@@ -103,7 +103,7 @@ In order to have a method interpreted as a valid command that is understood by S
   - The method must be public
   - The method must only have primitive parameters (it can have no parameters too) 
   - The method must be decorated with the [Command] attribute.
-  - If there are duplicate command names (either through method naming or aliasing), the command which will be resolved for execution is unpredictable.
+  - If there are duplicate command names (either through method naming or aliasing), the command which will be resolved for execution is undefined.
 
 You will notice that the command names specified in the usage help is formatted as lower-case with hyphens; the command will be resolved when you refer to it using the formatted or unformatted name and is case-insensitive.
 
@@ -114,15 +114,15 @@ Although Synoptic was designed to cover the most common use-cases with minimal e
 ####Specifying commands manually
 In the above example, the commands were in the same assembly as the executable which "just works". If there are commands defined  in other assemblies, synoptic can be initialised as follows:
 
-    new CommandRunner().
-        WithCommandsFromAssembly(MyOtherAssembly).
-        Run(args);
+    new CommandRunner()
+        .WithCommandsFromAssembly(MyOtherAssembly)
+        .Run(args);
 
 To register commands only defined within a specific class, the following can be used:
 
-    new CommandRunner().
-        WithCommandsFromType<MyType>().
-        Run(args);
+    new CommandRunner()
+        .WithCommandsFromType<MyType>()
+        .Run(args);
 
 These calls can be chained together as necessary.
 
