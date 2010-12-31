@@ -12,7 +12,7 @@ namespace Synoptic.HelpUtilities
         public CommandLineHelp(IEnumerable<Command> commands)
         {
             var spacer = new string(' ', SpacingWidth);
-            MaximumCommandNameLength = commands.Max(c => c.Name.Length);
+            MaximumCommandNameLength = commands.Count() > 0 ? commands.Max(c => c.Name.Length) : 0;
             
             // Determine the length of the longest prototype across all commands.
             foreach(var command in commands)
