@@ -7,7 +7,7 @@ namespace Synoptic
 {
     public class CommandRunner
     {
-        private CommandManifest _manifest;
+        private readonly CommandManifest _manifest = new CommandManifest();
         private readonly ICommandFinder _finder;
         private CommandLineHelp _help;
 
@@ -16,36 +16,30 @@ namespace Synoptic
             _finder = new CommandFinder();
         }
 
-        public CommandRunner WithCommand<T>()
+        public CommandRunner WithCommandsFromType<T>()
         {
-            CommandManifest findInType = _finder.FindInType(typeof (T));
-
-            if (_manifest == null)
-                _manifest = findInType;
-            else
-                _manifest.Commands.AddRange(findInType.Commands);
-
+            _manifest.Commands.AddRange(_finder.FindInType(typeof(T)).Commands);
             return this;
         }
 
         public CommandRunner WithCommandsFromAssembly(Assembly assembly)
         {
-            CommandManifest findInType = _finder.FindInAssembly(assembly);
-
-            if (_manifest == null)
-                _manifest = findInType;
-            else
-                _manifest.Commands.AddRange(findInType.Commands);
-
+            _manifest.Commands.AddRange(_finder.FindInAssembly(assembly).Commands);
             return this;
         }
 
         public void Run(string[] args)
         {
-            if (_manifest == null)
-                _manifest = _finder.FindInAssembly(Assembly.GetCallingAssembly());
+            if (_manifest.Commands.Count == 0)
+                WithCommandsFromAssembly(Assembly.GetCallingAssembly());
 
-            if(_help == null)
+            if (_manifest.Commands.Count == 0)
+            {
+                Console.WriteLine("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic.");
+                return;
+            }
+
+            if (_help == null)
                 _help = CommandLineHelpGenerator.Generate(_manifest);
 
             if (args == null || args.Length == 0)
@@ -69,10 +63,10 @@ namespace Synoptic
                     throw new CommandException(String.Format("There is no command with name '{0}'.", commandName));
 
                 var commandParseResult = parseResult[command];
-                
-                if(!commandParseResult.WasSuccessfullyParsed)
+
+                if (!commandParseResult.WasSuccessfullyParsed)
                     throw new CommandException(commandParseResult.Message);
-                
+
                 command.Run(parseResult[command]);
             }
             catch (CommandException commandException)
@@ -80,7 +74,7 @@ namespace Synoptic
                 ShowErrorMessage(commandException);
                 ShowHelp();
             }
-            catch(TargetInvocationException targetInvocationException)
+            catch (TargetInvocationException targetInvocationException)
             {
                 if (targetInvocationException.InnerException != null)
                     throw targetInvocationException.InnerException;
@@ -103,9 +97,7 @@ namespace Synoptic
 
             foreach (var command in _help.Commands)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine(command.FormattedLine);
-                Console.ResetColor();
                 foreach (var parameter in command.Parameters)
                 {
                     Console.WriteLine(parameter.FormattedLine);

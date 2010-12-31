@@ -9,7 +9,7 @@ namespace Synoptic.Tests
         [Test]
         public void should_display_help_for_one_class()
         {
-            new CommandRunner().WithCommand<RunnerTest1>().Run(null);
+            new CommandRunner().WithCommandsFromType<RunnerTest1>().Run(null);
         }
         
         [Test]
@@ -21,8 +21,8 @@ namespace Synoptic.Tests
         [Test]
         public void should_handle_bool()
         {
-            new CommandRunner().WithCommand<RunnerTest1>().Run(new[] { "CommandWithBool", "--param1" });
-            new CommandRunner().WithCommand<RunnerTest1>().Run(new[] { "CommandWithBool" });
+            new CommandRunner().WithCommandsFromType<RunnerTest1>().Run(new[] { "CommandWithBool", "--param1" });
+            new CommandRunner().WithCommandsFromType<RunnerTest1>().Run(new[] { "CommandWithBool" });
         }
 
         public class RunnerTest1

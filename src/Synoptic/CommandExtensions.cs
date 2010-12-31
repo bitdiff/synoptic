@@ -31,8 +31,7 @@ namespace Synoptic
                 {
                     var value = commandLineParameter.Value;
                     if (parameterInfo.ParameterType == typeof(bool))
-                        value = commandLineParameter.Name.Equals(commandLineParameter.Value,
-                                                                                      StringComparison.OrdinalIgnoreCase).ToString();
+                        value = commandLineParameter.Value != null;
 
                     object changeType = Convert.ChangeType(value, parameterInfo.ParameterType);
                     args.Add(changeType);

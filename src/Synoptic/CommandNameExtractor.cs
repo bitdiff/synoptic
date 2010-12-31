@@ -7,7 +7,10 @@ namespace Synoptic
     {
         public static string Extract(IEnumerable<CommandLineParseResult> parsedCommandLineResults)
         {
-            return parsedCommandLineResults.FirstOrDefault(p => 
+            if (parsedCommandLineResults == null || parsedCommandLineResults.Count() == 0)
+                return null;
+
+            return parsedCommandLineResults.First(p => 
                 p.AdditionalParameters != null && p.AdditionalParameters.Length > 0)
                 .AdditionalParameters.FirstOrDefault();
         }
