@@ -14,14 +14,7 @@ namespace Synoptic
 
             object[] objects = GetObjects(parameterInfos, parseResult);
 
-            ConstructorInfo constructorInfo = methodInfo.DeclaringType.BestMatch(parseResult);
-
-            if (constructorInfo == null)
-            {
-                throw new CommandException("Parameter types need at least one constructor");
-            }
-
-            object o = constructorInfo.Invoke(GetObjects(constructorInfo.GetParameters(), parseResult));
+            object o = Activator.CreateInstance(methodInfo.DeclaringType);
 
             methodInfo.Invoke(o, objects);
         }
@@ -33,14 +26,6 @@ namespace Synoptic
             foreach (var parameterInfo in parameterInfos)
             {
                 CommandLineParameter commandLineParameter = parseResult.ParsedParameters.FirstOrDefault(p => p.Name.EqualEnough(parameterInfo.Name));
-
-                if (!parameterInfo.ParameterType.IsPrimitive && parameterInfo.ParameterType != typeof (string))
-                {
-                    ConstructorInfo constructorInfo = parameterInfo.ParameterType.BestMatch(parseResult);
-                    object o = constructorInfo.Invoke(GetObjects(constructorInfo.GetParameters(), parseResult));
-                    args.Add(o);
-                    continue;
-                }
 
                 if (commandLineParameter != null)
                 {
@@ -58,34 +43,6 @@ namespace Synoptic
             }
 
             return args.ToArray();
-        }
-
-        internal static ConstructorInfo BestMatch(this Type type, CommandLineParseResult parseResult)
-        {
-            ConstructorInfo result = null;
-            var maxMatch = 0;
-            foreach (var constructorInfo in type.GetConstructors())
-            {
-                if (result == null)
-                    result = constructorInfo;
-
-                var match = 0;
-                foreach (var parameterInfo in constructorInfo.GetParameters())
-                {
-                    CommandLineParameter commandLineParameter =
-                        parseResult.ParsedParameters.FirstOrDefault(p => p.Name.EqualEnough(parameterInfo.Name));
-                    if (commandLineParameter != null)
-                        match++;
-                }
-
-                if (match > maxMatch)
-                {
-                    maxMatch = match;
-                    result = constructorInfo;
-                }
-            }
-
-            return result;
         }
     }
 }
