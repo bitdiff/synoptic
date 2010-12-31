@@ -1,8 +1,7 @@
 ﻿using System;
-using ConsoleWrapper.Synoptic;
 using NUnit.Framework;
 
-namespace ConsoleWrapper.Test.Synoptic
+namespace Synoptic.Tests
 {
     [TestFixture]
     public class CommandRunnerTests
