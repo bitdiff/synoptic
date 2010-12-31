@@ -19,7 +19,7 @@ namespace Synoptic.Tests
             string testResult = "fail";
             Test1.TestAction = s => testResult = s;
 
-            command.Run(parseResult);
+            command.Run(new ActivatorDependencyResolver(), parseResult);
 
             Assert.That(testResult, Is.EqualTo("testParam1Value"));
         }

@@ -9,6 +9,7 @@ namespace Synoptic
     {
         private readonly CommandManifest _manifest = new CommandManifest();
         private readonly ICommandFinder _finder;
+        private IDependencyResolver _resolver = new ActivatorDependencyResolver();
         private CommandLineHelp _help;
 
         public CommandRunner()
@@ -16,6 +17,12 @@ namespace Synoptic
             _finder = new CommandFinder();
         }
 
+        public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
+        {
+            _resolver = resolver;
+            return this;
+        }
+        
         public CommandRunner WithCommandsFromType<T>()
         {
             _manifest.Commands.AddRange(_finder.FindInType(typeof(T)).Commands);
@@ -67,7 +74,7 @@ namespace Synoptic
                 if (!commandParseResult.WasSuccessfullyParsed)
                     throw new CommandException(commandParseResult.Message);
 
-                command.Run(parseResult[command]);
+                command.Run(_resolver, parseResult[command]);
             }
             catch (CommandException commandException)
             {

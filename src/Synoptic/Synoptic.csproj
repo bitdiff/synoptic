@@ -38,6 +38,7 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="ActivatorDependencyResolver.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandAttribute.cs" />
     <Compile Include="CommandException.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="ICommandFinder.cs" />
     <Compile Include="ICommandLineParser.cs" />
     <Compile Include="ICommandResolver.cs" />
+    <Compile Include="IDependencyResolver.cs" />
     <Compile Include="MethodInfoWrapper.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="ParameterInfoWrapper.cs" />

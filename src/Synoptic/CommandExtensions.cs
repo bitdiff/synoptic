@@ -7,16 +7,16 @@ namespace Synoptic
 {
     internal static class CommandExtensions
     {
-        internal static void Run(this Command command, CommandLineParseResult parseResult)
+        internal static void Run(this Command command, IDependencyResolver resolver, CommandLineParseResult parseResult)
         {
             MethodInfo methodToInvoke = command.LinkedToMethod;
             object[] objects = GetCommandParameterValues(command.Parameters, parseResult);
 
-            object instance = Activator.CreateInstance(methodToInvoke.DeclaringType);
+            object instance = resolver.Resolve(methodToInvoke.DeclaringType);
             methodToInvoke.Invoke(instance, objects);
         }
 
-        internal static object[] GetCommandParameterValues(IEnumerable<ParameterInfoWrapper> parameters, CommandLineParseResult parseResult)
+        private static object[] GetCommandParameterValues(IEnumerable<ParameterInfoWrapper> parameters, CommandLineParseResult parseResult)
         {
             var args = new List<object>();
             foreach (var parameter in parameters)
