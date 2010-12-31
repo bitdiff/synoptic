@@ -12,9 +12,7 @@ namespace Synoptic.Tests
         {
             CommandManifest manifest = new CommandFinder().FindInType(typeof(Test1));
 
-            var commandLineParseResult = new CommandLineParseResult(new List<CommandLineParameter> { }, new[] { "my-command" });
-            var commandName = CommandNameExtractor.Extract(new[] {commandLineParseResult});
-            Command command = new CommandResolver().Resolve(manifest, commandName);
+            Command command = new CommandResolver().Resolve(manifest, "my-command");
 
             Assert.IsNotNull(command);
             Assert.That(command.Name, Is.EqualTo("MyCommand"));

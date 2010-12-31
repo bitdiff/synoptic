@@ -33,7 +33,7 @@ namespace Synoptic
 
         public string GetOptionPrototype()
         {
-            return PrototypeGenerator.ToOptionPrototype(this);
+            return this.ToOptionPrototype();
         }
         
         public string GetOptionPrototypeHelp()

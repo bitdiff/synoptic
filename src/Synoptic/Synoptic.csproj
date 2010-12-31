@@ -48,7 +48,6 @@
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="CommandLineParseResult.cs" />
     <Compile Include="CommandManifest.cs" />
-    <Compile Include="CommandNameExtractor.cs" />
     <Compile Include="CommandParameterAttribute.cs" />
     <Compile Include="CommandResolver.cs" />
     <Compile Include="CommandRunner.cs" />

@@ -22,7 +22,7 @@ namespace Synoptic
             _resolver = resolver;
             return this;
         }
-        
+
         public CommandRunner WithCommandsFromType<T>()
         {
             _manifest.Commands.AddRange(_finder.FindInType(typeof(T)).Commands);
@@ -55,26 +55,15 @@ namespace Synoptic
                 return;
             }
 
-            ICommandLineParser parser = new CommandLineParser();
-            var parseResult = parser.Parse(_manifest, args);
-
             try
             {
-                string commandName = CommandNameExtractor.Extract(parseResult.Values);
-                if (commandName == null)
-                    throw new CommandException("Cannot derive command name from input.");
+                ICommandLineParser parser = new CommandLineParser();
+                CommandLineParseResult parseResult = parser.Parse(_manifest, args);
 
-                var command = new CommandResolver().Resolve(_manifest, commandName);
+                if (!parseResult.WasSuccessfullyParsed)
+                    throw new CommandException(parseResult.Message);
 
-                if (command == null)
-                    throw new CommandException(String.Format("There is no command with name '{0}'.", commandName));
-
-                var commandParseResult = parseResult[command];
-
-                if (!commandParseResult.WasSuccessfullyParsed)
-                    throw new CommandException(commandParseResult.Message);
-
-                command.Run(_resolver, parseResult[command]);
+                parseResult.Command.Run(_resolver, parseResult);
             }
             catch (CommandException commandException)
             {
@@ -83,13 +72,18 @@ namespace Synoptic
             }
             catch (TargetInvocationException targetInvocationException)
             {
-                if (targetInvocationException.InnerException != null)
-                    throw targetInvocationException.InnerException;
-                throw;
+                Exception innerException = targetInvocationException.InnerException;
+
+                if (innerException == null) throw;
+
+                if (!(innerException is CommandException)) throw innerException;
+
+                ShowErrorMessage(innerException);
+                ShowHelp();
             }
         }
 
-        private void ShowErrorMessage(Exception exception)
+        private static void ShowErrorMessage(Exception exception)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(exception.Message);

@@ -11,10 +11,9 @@ namespace Synoptic.Tests
         public void shoud_run_command()
         {
             CommandManifest manifest = new CommandFinder().FindInType(typeof(Test1));
-            var parseResult = new CommandLineParseResult(new List<CommandLineParameter> { new CommandLineParameter("param1", "testParam1Value") }, new[] { "my-command" });
-            var commandName = CommandNameExtractor.Extract(new[] { parseResult });
+            var parseResult = new CommandLineParseResult(manifest.Commands[0], new List<CommandLineParameter> { new CommandLineParameter("param1", "testParam1Value") }, new[] { "my-command" });
 
-            Command command = new CommandResolver().Resolve(manifest, commandName);
+            Command command = new CommandResolver().Resolve(manifest, "my-command");
 
             string testResult = "fail";
             Test1.TestAction = s => testResult = s;

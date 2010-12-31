@@ -18,7 +18,7 @@ namespace Synoptic.Tests
                 if (!type.IsPublic) continue;
                 if (!type.FullName.StartsWith("Synoptic.")) continue;
 
-                Console.WriteLine(type.FullName);
+                Console.WriteLine(type.Name);
                 Console.WriteLine("{");
 
                 foreach (var memberInfo in type.GetMembers())

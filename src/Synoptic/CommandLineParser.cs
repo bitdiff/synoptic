@@ -1,38 +1,55 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Mono.Options;
 
 namespace Synoptic
 {
     internal class CommandLineParser : ICommandLineParser
     {
-        public Dictionary<Command, CommandLineParseResult> Parse(CommandManifest manifest, string[] args)
+        public CommandLineParseResult Parse(CommandManifest manifest, string[] args)
         {
-            var result = new Dictionary<Command, CommandLineParseResult>();
-
-            foreach (var command in manifest.Commands)
+            if (args == null || args.Length == 0)
             {
-                var options = new OptionSet();
-                var commandLineParameters = new List<CommandLineParameter>();
-
-                foreach (var parameter in command.Parameters)
-                {
-                    ParameterInfoWrapper localParameter = parameter;
-                    options.Add(
-                        localParameter.GetOptionPrototype(),
-                        localParameter.Description,
-                        parameterValue => commandLineParameters.Add(new CommandLineParameter(localParameter.Name, parameterValue))
-                    );
-                }
-
-                try
-                {
-                    var extra = options.Parse(args);
-                    result.Add(command, new CommandLineParseResult(commandLineParameters, extra.ToArray(), null));
-                }
-                catch (OptionException exception) { result.Add(command, new CommandLineParseResult(commandLineParameters, null, exception.Message)); }
+                throw new CommandException("Cannot derive command name from input.");
             }
 
-            return result;
+            string commandName = args[0];
+            args = args.Skip(1).ToArray();
+
+            Command command = new CommandResolver().Resolve(manifest, commandName);
+
+            if (command==null)
+            {
+                throw new CommandException(String.Format("There is no command with name '{0}'.", commandName));
+            }
+
+            var options = new OptionSet();
+            var commandLineParameters = new List<CommandLineParameter>();
+
+            foreach (ParameterInfoWrapper parameter in command.Parameters)
+            {
+                ParameterInfoWrapper localParameter = parameter;
+                options.Add(
+                    localParameter.GetOptionPrototype(),
+                    localParameter.Description,
+                    parameterValue => commandLineParameters.Add(new CommandLineParameter(localParameter.Name, parameterValue))
+                );
+            }
+
+            var extra = new List<string>();
+            string optionExceptionMessage = null;
+
+            try
+            {
+                extra = options.Parse(args);
+            }
+            catch (OptionException exception)
+            {
+                optionExceptionMessage = exception.Message;
+            }
+
+            return new CommandLineParseResult(command, commandLineParameters, extra.ToArray(), optionExceptionMessage);
         }
     }
 }

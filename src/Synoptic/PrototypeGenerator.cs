@@ -4,15 +4,30 @@ namespace Synoptic
 {
     internal static class PrototypeGenerator
     {
-        internal static string ToOptionPrototype(ParameterInfoWrapper parameter)
+        private const string DefaultSuffix = "=";
+
+        internal static string ToOptionPrototype(this ParameterInfoWrapper parameter)
         {
-            string suffix = parameter.IsOptionValueRequired ? ":" : "";
+            string suffix = parameter.IsOptionValueRequired ? DefaultSuffix : "";
 
-            if (!String.IsNullOrEmpty(parameter.Prototype))
-                // In case the prototype already includes the mandatory syntax.
-                return parameter.Prototype.TrimEnd(':') + suffix;
+            if (String.IsNullOrEmpty(parameter.Prototype))
+                return parameter.Name.ToHyphened() + suffix;
 
-            return parameter.Name.ToHyphened() + suffix;
+
+            string proto = parameter.Prototype.Trim();
+            
+            if (parameter.IsOptionValueRequired)
+            {
+                if (proto.EndsWith("=") || proto.EndsWith(":"))
+                    return proto;
+
+                return proto + DefaultSuffix;
+            }
+
+            if (proto.EndsWith("=") || proto.EndsWith(":"))
+                return proto.TrimEnd('=', ':');
+
+            return proto;
         }
     }
 }
