@@ -28,6 +28,18 @@ namespace Synoptic
             return this;
         }
 
+        public CommandRunner WithCommandsFromAssembly(Assembly assembly)
+        {
+            CommandManifest findInType = _finder.FindInAssembly(assembly);
+
+            if (_manifest == null)
+                _manifest = findInType;
+            else
+                _manifest.Commands.AddRange(findInType.Commands);
+
+            return this;
+        }
+
         public void Run(string[] args)
         {
             if (_manifest == null)

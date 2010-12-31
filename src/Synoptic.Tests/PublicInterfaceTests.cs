@@ -15,6 +15,7 @@ namespace Synoptic.Tests
             foreach (var type in assembly.GetTypes())
             {
                 if (!type.IsPublic) continue;
+                if (!type.FullName.StartsWith("Synoptic.")) continue;
 
                 Console.WriteLine("public Type [{0}]", type.FullName);
                 foreach (var memberInfo in type.GetMembers())
