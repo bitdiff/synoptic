@@ -25,7 +25,7 @@ namespace Synoptic
             
             foreach (var parameterInfo in parameterInfos)
             {
-                CommandLineParameter commandLineParameter = parseResult.ParsedParameters.FirstOrDefault(p => p.Name.EqualEnough(parameterInfo.Name));
+                CommandLineParameter commandLineParameter = parseResult.ParsedParameters.FirstOrDefault(p => p.Name.SimilarTo(parameterInfo.Name));
 
                 if (commandLineParameter != null)
                 {

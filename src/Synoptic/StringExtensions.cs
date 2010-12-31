@@ -5,7 +5,7 @@ namespace Synoptic
 {
     internal static class StringExtensions
     {
-        internal static bool EqualEnough(this string str1, string str2)
+        internal static bool SimilarTo(this string str1, string str2)
         {
             if (str1 == null || str2 == null)
                 return false;

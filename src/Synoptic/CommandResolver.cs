@@ -6,7 +6,7 @@ namespace Synoptic
     {
         public Command Resolve(CommandManifest manifest, string commandName)
         {
-            return manifest.Commands.FirstOrDefault(c => c.Name.EqualEnough(commandName));
+            return manifest.Commands.FirstOrDefault(c => c.Name.SimilarTo(commandName));
         }
     }
 }
