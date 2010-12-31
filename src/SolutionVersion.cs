@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyrightAttribute("Copyright (C) 2011 Bit Diffusion")]
 [assembly: AssemblyTrademarkAttribute("")]
 [assembly: AssemblyCultureAttribute("")]
-[assembly: AssemblyVersionAttribute("0.0.0.1")]
-[assembly: AssemblyInformationalVersionAttribute("0.0.0.1")]
+
+// <major>.<minor>.<revision>.<YMMDD>
+[assembly: AssemblyVersionAttribute("0.0.0.10101")]
 
