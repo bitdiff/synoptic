@@ -12,9 +12,7 @@ namespace Synoptic
 
             foreach (var type in assembly.GetTypes())
             {
-                object[] attributes = type.GetCustomAttributes(typeof(CommandSetAttribute), true);
-                if (attributes.Any())
-                    manifest.Commands.AddRange(FindInType(type).Commands);
+                manifest.Commands.AddRange(FindInType(type).Commands);
             }
 
             return manifest;
@@ -29,7 +27,7 @@ namespace Synoptic
             {
                 manifest.Commands.Add(GetCommand(method));
             }
-            
+
             return manifest;
         }
 
@@ -37,7 +35,7 @@ namespace Synoptic
         {
             var wrapper = new MethodInfoWrapper(methodInfo);
             Command command = new Command(wrapper.Name, wrapper.Description, wrapper.LinkedToMethod);
-            
+
             return command;
         }
     }

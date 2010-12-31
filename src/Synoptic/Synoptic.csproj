@@ -51,7 +51,6 @@
     <Compile Include="CommandParameterAttribute.cs" />
     <Compile Include="CommandResolver.cs" />
     <Compile Include="CommandRunner.cs" />
-    <Compile Include="CommandSetAttribute.cs" />
     <Compile Include="HelpUtilities\CommandHelp.cs" />
     <Compile Include="HelpUtilities\CommandLineHelp.cs" />
     <Compile Include="HelpUtilities\CommandLineHelpGenerator.cs" />
