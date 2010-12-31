@@ -39,7 +39,7 @@ namespace Synoptic
 
                 if (value != null)
                 {
-                    args.Add(GetConvertedParameter(parameter, value));
+                    args.Add(GetConvertedParameterValue(parameter, value));
                     continue;
                 }
 
@@ -49,7 +49,7 @@ namespace Synoptic
             return args.ToArray();
         }
 
-        private static object GetConvertedParameter(ParameterInfoWrapper parameter, object value)
+        private static object GetConvertedParameterValue(ParameterInfoWrapper parameter, object value)
         {
             if (!parameter.IsOptionValueRequired)
                 value = value != null;
