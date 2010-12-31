@@ -74,7 +74,7 @@ Executing a synoptic command always follows the pattern of:
 
     <path to exe> <command> <params[optional]>
 
-In the case of this demo, we can execute it with (we are ignoring parameters for now):
+Ignoring parameters for now, we can execute our command as follows:
 
     ConsoleApplication1 say-hello
 
