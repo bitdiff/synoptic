@@ -2,7 +2,6 @@
 
 namespace Synoptic.Demo
 {
-    [CommandSet]
     public class MyCommands
     {
         [Command]
