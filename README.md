@@ -141,6 +141,6 @@ Parameters can be customised in much the same was as commands using the [Command
 
     public void SayHello([CommandParameter(Prototype = "m|msg", Description = "The message to show.")] string message)
 
-An additional feature only currently supported by parameters is the *Prototype* property replaces the *Name* property. This allows you to specify multiple shortcuts for the same parameter. In the above example, the message could specified using either *--m=mymessage* or *--msg=mymessage*. If a custom prototype is not supplied, the parameter name is used.
+An additional feature only currently supported by parameters is the *Prototype* property replaces the *Name* property. This allows you to specify multiple shortcuts for the same parameter. In the above example, the message could specified using either *--m=mymessage* or *--msg=mymessage*. If a custom prototype is not supplied, the parameter name is used. In addition, the DefaultValue property can be used for a parameter to specify what the value should be if omitted from the command line.
 
 Note: This uses the Mono.Options prototype functionality and, as such, similar rules of formatting apply.
