@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Synoptic.Tests
 {
     [TestFixture]
-    public class CommandExtenxionsTests
+    public class CommandExtensionsTests
     {
         [Test]
         public void shoud_run_command()
