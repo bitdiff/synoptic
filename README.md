@@ -103,7 +103,7 @@ In order to have a method interpreted as a valid command that is understood by S
   - The method must be public
   - The method must only have primitive parameters (it can have no parameters too) 
   - The method must be decorated with the [Command] attribute.
-  - If there are duplicate command names (either through method naming or aliasing), command which will be selected for execution is non-deterministic.
+  - If there are duplicate command names (either through method naming or aliasing), the command which will be resolved for execution is unpredictable.
 
 You will notice that the command names specified in the usage help is formatted as lower-case with hyphens; the command will be resolved when you refer to it using the formatted or unformatted name and is case-insensitive.
 
@@ -115,14 +115,14 @@ Although Synoptic was designed to cover the most common use-cases with minimal e
 In the above example, the commands were in the same assembly as the executable which "just works". If there are commands defined  in other assemblies, synoptic can be initialised as follows:
 
     new CommandRunner().
-    WithCommandsFromAssembly(MyOtherAssembly).
-    Run(args);
+        WithCommandsFromAssembly(MyOtherAssembly).
+        Run(args);
 
 To register commands only defined within a specific class, the following can be used:
 
     new CommandRunner().
-    WithCommandsFromType<MyType>().
-    Run(args);
+        WithCommandsFromType<MyType>().
+        Run(args);
 
 These calls can be chained together as necessary.
 
@@ -132,14 +132,15 @@ By convention, a formatted version of the method name is used as the command nam
 The [Command] attribute can be used to customise the name and help text as follows:
 
     [Command(Name = "hello", 
-    Description = "Says hello from the command line.")]
+        Description = "Says hello from the command line.")]
 
 If you view the usage of your application by running it with no arguments you will see that the command name has changed and there is a description of the command alongside the command name.
 
 ####Customising parameter usage
 Parameters can be customised in much the same was as commands using the [CommandParameterAttribute].
 
-        public void SayHello([CommandParameter(Name = "m", 
-            Prototype = "m|msg", Description = "The message to show.")] string message)
+        public void SayHello([CommandParameter(Prototype = "m|msg", Description = "The message to show.")] string message)
 
-An additional feature only currently supported by parameters is an additional *Prototype* property. This allows you to specify multiple short-cuts for the same parameter. In the above example, the message could specified using either *--m=mymessage* or *--msg=mymessage*.
+An additional feature only currently supported by parameters is an additional *Prototype* property. This allows you to specify multiple short-cuts for the same parameter. In the above example, the message could specified using either *--m=mymessage* or *--msg=mymessage*. If a custom prototype is not supplied, the parameter name is used. If a custom name and prototype are both specified for a parameter, the prototype takes preference and the name is ignored.
+
+Note: This uses the Mono.Options prototype functionality and, as such, similar rules of formatting apply.
