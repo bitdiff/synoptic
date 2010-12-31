@@ -139,7 +139,7 @@ If you view the usage of your application by running it with no arguments you wi
 ####Customising parameter usage
 Parameters can be customised in much the same was as commands using the [CommandParameterAttribute].
 
-        public void SayHello([CommandParameter(Prototype = "m|msg", Description = "The message to show.")] string message)
+    public void SayHello([CommandParameter(Prototype = "m|msg", Description = "The message to show.")] string message)
 
 An additional feature only currently supported by parameters is the *Prototype* property replaces the *Name* property. This allows you to specify multiple shortcuts for the same parameter. In the above example, the message could specified using either *--m=mymessage* or *--msg=mymessage*. If a custom prototype is not supplied, the parameter name is used.
 
