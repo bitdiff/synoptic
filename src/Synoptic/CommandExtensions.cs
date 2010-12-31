@@ -9,39 +9,52 @@ namespace Synoptic
     {
         internal static void Run(this Command command, CommandLineParseResult parseResult)
         {
-            MethodInfo methodInfo = command.LinkedToMethod;
-            ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+            MethodInfo methodToInvoke = command.LinkedToMethod;
+            object[] objects = GetCommandParameterValues(command.Parameters, parseResult);
 
-            object[] objects = GetObjects(parameterInfos, parseResult);
-
-            object o = Activator.CreateInstance(methodInfo.DeclaringType);
-
-            methodInfo.Invoke(o, objects);
+            object instance = Activator.CreateInstance(methodToInvoke.DeclaringType);
+            methodToInvoke.Invoke(instance, objects);
         }
 
-        internal static object[] GetObjects(IEnumerable<ParameterInfo> parameterInfos, CommandLineParseResult parseResult)
+        internal static object[] GetCommandParameterValues(IEnumerable<ParameterInfoWrapper> parameters, CommandLineParseResult parseResult)
         {
             var args = new List<object>();
-            
-            foreach (var parameterInfo in parameterInfos)
+            foreach (var parameter in parameters)
             {
-                CommandLineParameter commandLineParameter = parseResult.ParsedParameters.FirstOrDefault(p => p.Name.SimilarTo(parameterInfo.Name));
+                CommandLineParameter commandLineParameter = parseResult.ParsedParameters.FirstOrDefault(p => p.Name.SimilarTo(parameter.Name));
+                object value = null;
 
-                if (commandLineParameter != null)
+                // Method has parameter which was not supplied.
+                if (commandLineParameter == null || commandLineParameter.Value == null)
                 {
-                    var value = commandLineParameter.Value;
-                    if (parameterInfo.ParameterType == typeof(bool))
-                        value = commandLineParameter.Value != null;
+                    if (parameter.DefaultValue != null)
+                    {
+                        value = parameter.DefaultValue;
+                    }
+                }
+                else
+                {
+                    value = commandLineParameter.Value;
+                }
 
-                    object changeType = Convert.ChangeType(value, parameterInfo.ParameterType);
-                    args.Add(changeType);
+                if (value != null)
+                {
+                    args.Add(GetConvertedParameter(parameter, value));
                     continue;
                 }
-                
+
                 args.Add(null);
             }
 
             return args.ToArray();
+        }
+
+        private static object GetConvertedParameter(ParameterInfoWrapper parameter, object value)
+        {
+            if (!parameter.IsOptionValueRequired)
+                value = value != null;
+
+            return Convert.ChangeType(value, parameter.Type);
         }
     }
 }
