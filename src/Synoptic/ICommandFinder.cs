@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     public interface ICommandFinder
     {

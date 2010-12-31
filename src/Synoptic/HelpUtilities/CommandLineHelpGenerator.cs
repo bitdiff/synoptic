@@ -1,4 +1,4 @@
-﻿namespace ConsoleWrapper.Synoptic.HelpUtilities
+﻿namespace Synoptic.HelpUtilities
 {
     public class CommandLineHelpGenerator
     {

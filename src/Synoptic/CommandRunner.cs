@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection;
-using ConsoleWrapper.Synoptic.HelpUtilities;
+using Synoptic.HelpUtilities;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     public class CommandRunner
     {

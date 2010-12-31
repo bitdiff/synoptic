@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
     public class CommandParameterAttribute : Attribute

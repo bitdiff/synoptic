@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class CommandSetAttribute : Attribute

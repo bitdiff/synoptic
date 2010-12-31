@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     public class Command
     {

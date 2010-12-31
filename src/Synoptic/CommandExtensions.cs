@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     internal static class CommandExtensions
     {

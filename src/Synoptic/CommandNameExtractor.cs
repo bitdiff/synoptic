@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     public static class CommandNameExtractor
     {

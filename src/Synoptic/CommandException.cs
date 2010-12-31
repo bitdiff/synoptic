@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     public class CommandException : Exception
     {

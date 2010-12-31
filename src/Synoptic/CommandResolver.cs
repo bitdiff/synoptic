@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     public class CommandResolver : ICommandResolver
     {

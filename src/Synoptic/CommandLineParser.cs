@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Mono.Options;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     public class CommandLineParser : ICommandLineParser
     {

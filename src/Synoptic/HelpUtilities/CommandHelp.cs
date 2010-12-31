@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleWrapper.Synoptic.HelpUtilities
+namespace Synoptic.HelpUtilities
 {
     public class CommandHelp
     {

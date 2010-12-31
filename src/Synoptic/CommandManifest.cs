@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     public class CommandManifest
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ConsoleWrapper.Synoptic
+namespace Synoptic
 {
     internal static class PrototypeGenerator
     {

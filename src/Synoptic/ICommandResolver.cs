@@ -1,4 +1,4 @@
-﻿namespace ConsoleWrapper.Synoptic
+﻿namespace Synoptic
 {
     public interface ICommandResolver
     {
