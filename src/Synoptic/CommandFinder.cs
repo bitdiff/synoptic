@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 
 namespace Synoptic
 {
-    public class CommandFinder : ICommandFinder
+    internal class CommandFinder : ICommandFinder
     {
         public CommandManifest FindInAssembly(Assembly assembly)
         {

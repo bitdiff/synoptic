@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Synoptic
 {
-    public class Command
+    internal class Command
     {
         private readonly List<ParameterInfoWrapper> _parameters = new List<ParameterInfoWrapper>();
 

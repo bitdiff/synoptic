@@ -1,6 +1,6 @@
 ﻿namespace Synoptic.HelpUtilities
 {
-    public class ParameterHelp
+    internal class ParameterHelp
     {
         public string FormattedLine { get; private set; }
 

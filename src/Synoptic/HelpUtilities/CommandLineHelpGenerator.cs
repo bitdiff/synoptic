@@ -1,6 +1,6 @@
 ﻿namespace Synoptic.HelpUtilities
 {
-    public class CommandLineHelpGenerator
+    internal class CommandLineHelpGenerator
     {
         public static CommandLineHelp Generate(CommandManifest manifest)
         {

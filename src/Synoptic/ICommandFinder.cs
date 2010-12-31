@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Synoptic
 {
-    public interface ICommandFinder
+    internal interface ICommandFinder
     {
         CommandManifest FindInAssembly(Assembly assembly);
         CommandManifest FindInType(Type type);

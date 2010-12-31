@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Synoptic
 {
-    public static class CommandNameExtractor
+    internal static class CommandNameExtractor
     {
         public static string Extract(IEnumerable<CommandLineParseResult> parsedCommandLineResults)
         {

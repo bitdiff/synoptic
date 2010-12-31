@@ -2,7 +2,7 @@
 
 namespace Synoptic
 {
-    public class CommandManifest
+    internal class CommandManifest
     {
         private readonly List<Command> _commands = new List<Command>();
         public List<Command> Commands

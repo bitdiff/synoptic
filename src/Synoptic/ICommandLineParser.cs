@@ -2,7 +2,7 @@
 
 namespace Synoptic
 {
-    public interface ICommandLineParser
+    internal interface ICommandLineParser
     {
         Dictionary<Command, CommandLineParseResult> Parse(CommandManifest manifest, string[] args);
     }

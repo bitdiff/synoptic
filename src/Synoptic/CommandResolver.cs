@@ -2,7 +2,7 @@
 
 namespace Synoptic
 {
-    public class CommandResolver : ICommandResolver
+    internal class CommandResolver : ICommandResolver
     {
         public Command Resolve(CommandManifest manifest, string commandName)
         {

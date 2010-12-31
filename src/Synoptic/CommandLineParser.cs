@@ -3,7 +3,7 @@ using Mono.Options;
 
 namespace Synoptic
 {
-    public class CommandLineParser : ICommandLineParser
+    internal class CommandLineParser : ICommandLineParser
     {
         public Dictionary<Command, CommandLineParseResult> Parse(CommandManifest manifest, string[] args)
         {

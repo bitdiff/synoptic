@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Synoptic
 {
-    public static class ReflectionUtilities
+    internal static class ReflectionUtilities
     {
         public static IEnumerable<MethodInfo> RetrieveMethods(Type type)
         {

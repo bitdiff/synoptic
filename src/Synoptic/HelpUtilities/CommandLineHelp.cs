@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Synoptic.HelpUtilities
 {
-    public class CommandLineHelp
+    internal class CommandLineHelp
     {
         private readonly List<CommandHelp> _commands = new List<CommandHelp>();
         private const int SpacingWidth = 3;

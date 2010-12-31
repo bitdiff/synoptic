@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Synoptic
 {
-    public class MethodInfoWrapper
+    internal class MethodInfoWrapper
     {
         public MethodInfoWrapper(MethodInfo method)
         {

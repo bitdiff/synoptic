@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Synoptic
 {
-    public class ParameterInfoWrapper
+    internal class ParameterInfoWrapper
     {
         public ParameterInfoWrapper(ParameterInfo parameter)
         {

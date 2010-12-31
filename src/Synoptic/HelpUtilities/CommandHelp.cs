@@ -2,7 +2,7 @@
 
 namespace Synoptic.HelpUtilities
 {
-    public class CommandHelp
+    internal class CommandHelp
     {
         private readonly List<ParameterHelp> _parameters = new List<ParameterHelp>();
 

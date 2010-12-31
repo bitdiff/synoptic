@@ -1,6 +1,6 @@
 ﻿namespace Synoptic
 {
-    public interface ICommandResolver
+    internal interface ICommandResolver
     {
         Command Resolve(CommandManifest manifest, string commandName);
     }
