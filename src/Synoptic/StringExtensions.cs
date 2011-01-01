@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Synoptic
 {
-    internal static class StringExtensions
+    public static class StringExtensions
     {
         internal static bool SimilarTo(this string str1, string str2)
         {
@@ -19,18 +20,21 @@ namespace Synoptic
             return String.IsNullOrEmpty(newString) ? originalString : newString;
         }
 
-        public static string ToHyphened(this string value)
+        public static string ToHyphened(this string input)
         {
-            var cs = new List<char>();
-            var firstCharPassed = false;
-            foreach (var c in value)
+            if (String.IsNullOrEmpty(input))
+                return input;
+
+            var chars = input.ToCharArray();
+            var result = new List<char>(chars.Take(1));
+
+            foreach (var c in chars.Skip(1))
             {
-                if (Char.IsUpper(c) && firstCharPassed) cs.Add('-');
-                cs.Add(c);
-                firstCharPassed = true;
+                if (Char.IsUpper(c)) result.Add('-');
+                result.Add(c);
             }
 
-            return new string(cs.ToArray()).ToLower();
+            return new string(result.ToArray()).ToLowerInvariant();
         }
     }
 }

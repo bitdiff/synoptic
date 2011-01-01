@@ -7,7 +7,8 @@ namespace Synoptic.Demo
     {
         static void Main(string[] args)
         {
-            ObjectFactory.Initialize(service => {
+            ObjectFactory.Initialize(service =>
+            {
                 service.For<IMyService>().Use<MyService>();
                 service.For<IMyService2>().Use<MyService2>();
             });
