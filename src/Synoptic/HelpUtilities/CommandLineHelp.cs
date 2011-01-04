@@ -12,10 +12,10 @@ namespace Synoptic.HelpUtilities
         public CommandLineHelp(IEnumerable<Command> commands)
         {
             var spacer = new string(' ', SpacingWidth);
-            MaximumCommandNameLength = commands.Count() > 0 ? commands.Max(c => c.Name.Length) : 0;
-            
+            MaximumCommandNameLength = commands.Count() > 0 ? commands.Max(c => c.Name.ToHyphened().Length) : 0;
+
             // Determine the length of the longest prototype across all commands.
-            foreach(var command in commands)
+            foreach (var command in commands)
             {
                 int length = 0;
                 if (command.Parameters != null && command.Parameters.Count > 0)
@@ -24,17 +24,17 @@ namespace Synoptic.HelpUtilities
                     MaximumPrototypeLength = length;
             }
 
-            foreach(var command in commands)
+            foreach (var command in commands)
             {
-                var commandHelp = new CommandHelp(String.Format("{1}{0," + -MaximumCommandNameLength  + "}{1}{2}", command.Name.ToHyphened(), spacer, command.Description));
-                foreach(var parameter in command.Parameters)
+                var commandHelp = new CommandHelp(String.Format("{1}{0," + -MaximumCommandNameLength + "}{1}{2}", command.Name.ToHyphened(), spacer, command.Description));
+                foreach (var parameter in command.Parameters)
                 {
-                    commandHelp.Parameters.Add(new ParameterHelp(String.Format("{1}{1}{0," + -MaximumPrototypeLength + "}{1}{2}", parameter.GetOptionPrototypeHelp(), spacer, parameter.Description)));    
+                    commandHelp.Parameters.Add(new ParameterHelp(String.Format("{1}{1}{0," + -MaximumPrototypeLength + "}{1}{2}", parameter.GetOptionPrototypeHelp(), spacer, parameter.Description)));
                 }
                 Commands.Add(commandHelp);
             }
         }
-        
+
         public int MaximumCommandNameLength { get; private set; }
         public int MaximumPrototypeLength { get; private set; }
 

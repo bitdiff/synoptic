@@ -38,7 +38,8 @@ namespace Synoptic
         
         public string GetOptionPrototypeHelp()
         {
-            return GetOptionPrototype() + (IsOptionValueRequired ? "<VALUE>" : String.Empty);
+            var valueHelp = (IsOptionValueRequired ? "<VALUE" + (DefaultValue != null ? "|" + DefaultValue : String.Empty) + ">" : String.Empty);
+            return GetOptionPrototype() + valueHelp;
         }
     }
 }

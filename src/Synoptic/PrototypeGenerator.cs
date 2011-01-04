@@ -13,7 +13,6 @@ namespace Synoptic
             if (String.IsNullOrEmpty(parameter.Prototype))
                 return parameter.Name.ToHyphened() + suffix;
 
-
             string proto = parameter.Prototype.Trim();
             
             if (parameter.IsOptionValueRequired)

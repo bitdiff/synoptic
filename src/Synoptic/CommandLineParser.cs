@@ -19,7 +19,7 @@ namespace Synoptic
 
             Command command = new CommandResolver().Resolve(manifest, commandName);
 
-            if (command==null)
+            if (command == null)
             {
                 throw new CommandException(String.Format("There is no command with name '{0}'.", commandName));
             }

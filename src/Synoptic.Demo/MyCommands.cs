@@ -36,26 +36,19 @@ namespace Synoptic.Demo
             Console.WriteLine("  param1=" + camelParamOne);
         }
 
-        [Command]
-        public void MyFourthCommand(Uri myUri)
+        [Command(Name = "ex", Description = "Generates an exception.")]
+        public void GenerateException()
         {
-            Console.WriteLine("MyFourthCommand");
-            Console.WriteLine("  myUri=" + myUri);
+            throw new Exception("Exception generated.");
         }
 
-        [Command(Name = "ex")]
-        public void MyExceptionGenerator()
+        [Command(Name = "cex", Description = "Generates a CommandException.")]
+        public void GenerateCommandException()
         {
-            throw new ApplicationException("MyExceptionGenerator");
+            throw new CommandException("This is caught internally.");
         }
 
-        [Command]
-        public void MyCommandException()
-        {
-            throw new CommandException("This goes to console.");
-        }
-
-        [Command(Description = "this is another test command")]
+        [Command(Description = "A test command that demonstrates command parameters.")]
         public void MyThirdCommand([CommandParameter(DefaultValue = "defaultforparam1")] string param1, int param2, [CommandParameter(Description = "this is a test parameter")] bool param3)
         {
             Console.WriteLine("MyThirdCommand");
