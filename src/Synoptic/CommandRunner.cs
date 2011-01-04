@@ -76,10 +76,13 @@ namespace Synoptic
 
                 if (innerException == null) throw;
 
-                if (!(innerException is CommandException)) throw innerException;
+                if (innerException is CommandException)
+                {
+                    ShowErrorMessage(innerException);
+                    ShowHelp();
+                }
 
-                ShowErrorMessage(innerException);
-                ShowHelp();
+                throw new CommandInvocationException("Error executing command", innerException);
             }
         }
 

@@ -44,6 +44,7 @@
     <Compile Include="CommandException.cs" />
     <Compile Include="CommandExtensions.cs" />
     <Compile Include="CommandFinder.cs" />
+    <Compile Include="CommandInvocationException.cs" />
     <Compile Include="CommandLineParameter.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="CommandLineParseResult.cs" />
