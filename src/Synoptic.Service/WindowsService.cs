@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Configuration.Install;
 using System.Diagnostics;
 using System.Linq;
@@ -87,13 +86,20 @@ namespace Synoptic.Service
             using (var installer = new TransactedInstaller())
             {
                 SetInstallers(installer);
-                installer.Context = new InstallContext(null, new[] { "/assemblypath=\"" + Process.GetCurrentProcess().MainModule.FileName + "\"" });
+                // There is a bug in .NET 3.5 where the image path will not be escaped correctly.
+                installer.Context = new InstallContext(null, new[] { "/assemblypath=\"" + Process.GetCurrentProcess().MainModule.FileName + "\" " + _configuration.CommandLineArguments });
+                installer.AfterInstall += ModifyImagePath;
                 installer.Install(new Hashtable());
             }
+        }
 
+        private void ModifyImagePath(object sender, InstallEventArgs e)
+        {
             string exe = Process.GetCurrentProcess().MainModule.FileName;
             string path = string.Format("\"{0}\" {1}", exe, _configuration.CommandLineArguments);
 
+            _logger.LogInfo(LoggerName, "patching registry for service {0}", ServiceName);
+            
             Registry.LocalMachine.OpenSubKey("System\\CurrentControlSet\\Services")
                 .OpenSubKey(_configuration.ServiceName, true)
                 .SetValue("ImagePath", path);
