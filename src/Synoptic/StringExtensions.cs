@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Synoptic
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         internal static bool SimilarTo(this string str1, string str2)
         {
@@ -15,12 +15,12 @@ namespace Synoptic
                    str2.Replace("-", "").Replace("_", "").ToLowerInvariant();
         }
 
-        public static string GetNewIfValid(this string originalString, string newString)
+        internal static string GetNewIfValid(this string originalString, string newString)
         {
             return String.IsNullOrEmpty(newString) ? originalString : newString;
         }
 
-        public static string ToHyphened(this string input)
+        internal static string ToHyphened(this string input)
         {
             if (String.IsNullOrEmpty(input))
                 return input;

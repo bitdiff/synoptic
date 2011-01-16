@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
 using System.ServiceProcess;
+using System.Text;
 using System.Threading;
 
 namespace Synoptic.Service.Demo
@@ -40,6 +43,24 @@ namespace Synoptic.Service.Demo
             _daemon.Start();
             _resetEvent.WaitOne();
             _daemon.Stop();
+        }
+
+        [Command]
+        public void RunSkinnyUdpServer()
+        {
+            Console.CancelKeyPress += (s, e) => { e.Cancel = true; _resetEvent.Set(); };
+            var udpServer = new SkinnyUdpServer(new ConsoleWriterWorker(), _logger, new SkinnyUdpServerConfiguration(new IPEndPoint(IPAddress.Any, 12345)));
+            udpServer.Start();
+            _resetEvent.WaitOne();
+            udpServer.Stop();
+        }
+
+        [Command]
+        public void SendUdpMessage(string message)
+        {
+            var dgram = Encoding.UTF8.GetBytes(message ?? "");
+
+            new UdpClient().Send(dgram, dgram.Length, new IPEndPoint(IPAddress.Broadcast, 12345));
         }
     }
 }

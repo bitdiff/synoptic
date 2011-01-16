@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -53,6 +54,10 @@
     <Compile Include="PublicInterfaceTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Synoptic.Service\Synoptic.Service.csproj">
+      <Project>{EFE2EC15-61CC-4426-901C-D8C948965F92}</Project>
+      <Name>Synoptic.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Synoptic\Synoptic.csproj">
       <Project>{9B88A638-99DE-4A8C-80DD-6434812E27B7}</Project>
       <Name>Synoptic</Name>

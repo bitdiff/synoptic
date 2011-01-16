@@ -10,7 +10,7 @@ namespace Synoptic.Service
 {
     public sealed class WindowsService : ServiceBase
     {
-        private const string LoggerName = "WindowsService";
+        private const string LogName = "WindowsService";
         private readonly IDaemon _daemon;
         private readonly ILogger _logger;
         private readonly IWindowsServiceConfiguration _configuration;
@@ -33,46 +33,49 @@ namespace Synoptic.Service
         protected override void OnStart(string[] args)
         {
             base.OnStart(args);
-            _logger.LogInfo(LoggerName, "starting service {0}", ServiceName);
+            _logger.LogInfo(LogName, "Starting service {0}..", ServiceName);
             try
             {
                 _daemon.Start();
             }
             catch (Exception e)
             {
-                _logger.LogException(LoggerName, e, "starting service {0}", ServiceName);
+                _logger.LogException(LogName, e, "Error starting service {0}", ServiceName);
                 throw;
             }
+            _logger.LogInfo(LogName, "Started {0}", ServiceName);
         }
 
         protected override void OnStop()
         {
             base.OnStop();
-            _logger.LogInfo(LoggerName, "stopping service {0}", ServiceName);
+            _logger.LogInfo(LogName, "Stopping service {0}..", ServiceName);
             try
             {
                 _daemon.Stop();
             }
             catch (Exception e)
             {
-                _logger.LogException(LoggerName, e, "error stopping server");
+                _logger.LogException(LogName, e, "Error stopping service {0}", ServiceName);
                 throw;
             }
+            _logger.LogInfo(LogName, "Stopped service {0}", ServiceName);
         }
 
         protected override void OnShutdown()
         {
             base.OnShutdown();
-            _logger.LogInfo(LoggerName, "system is shuttingdown.. stopping service {0}", ServiceName);
+            _logger.LogInfo(LogName, "System is shuttingdown. Stopping service {0}..", ServiceName);
             try
             {
                 _daemon.Stop();
             }
             catch (Exception e)
             {
-                _logger.LogException(LoggerName, e, "error stopping server during shutdown");
+                _logger.LogException(LogName, e, "Error stopping service {0} during shutdown", ServiceName);
                 throw;
             }
+            _logger.LogInfo(LogName, "Stopped service {0}", ServiceName);
         }
 
         public bool IsInstalled()
@@ -82,7 +85,8 @@ namespace Synoptic.Service
 
         public void Install()
         {
-            _logger.LogInfo(LoggerName, "installing service {0}", ServiceName);
+            _logger.LogInfo(LogName, "Installing service {0}..", ServiceName);
+
             using (var installer = new TransactedInstaller())
             {
                 SetInstallers(installer);
@@ -91,6 +95,8 @@ namespace Synoptic.Service
                 installer.AfterInstall += ModifyImagePath;
                 installer.Install(new Hashtable());
             }
+
+            _logger.LogInfo(LogName, "Installed service {0}", ServiceName);
         }
 
         private void ModifyImagePath(object sender, InstallEventArgs e)
@@ -98,21 +104,26 @@ namespace Synoptic.Service
             string exe = Process.GetCurrentProcess().MainModule.FileName;
             string path = string.Format("\"{0}\" {1}", exe, _configuration.CommandLineArguments);
 
-            _logger.LogInfo(LoggerName, "patching registry for service {0}", ServiceName);
+            _logger.LogInfo(LogName, "Patching registry for service {0}..", ServiceName);
             
             Registry.LocalMachine.OpenSubKey("System\\CurrentControlSet\\Services")
                 .OpenSubKey(_configuration.ServiceName, true)
                 .SetValue("ImagePath", path);
+
+            _logger.LogInfo(LogName, "Patched registry for service {0}", ServiceName);
         }
 
         public void Uninstall()
         {
-            _logger.LogInfo(LoggerName, "uninstalling service {0}", ServiceName);
+            _logger.LogInfo(LogName, "Uninstalling service {0}..", ServiceName);
+
             using (var installer = new TransactedInstaller())
             {
                 SetInstallers(installer);
                 installer.Uninstall(null);
             }
+
+            _logger.LogInfo(LogName, "Uninstalled service {0}", ServiceName);
         }
 
         private void SetInstallers(Installer installer)

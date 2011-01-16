@@ -40,6 +40,11 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="ISkinnyUdpServerConfiguration.cs" />
+    <Compile Include="IWindowsServiceConfiguration.cs" />
+    <Compile Include="SkinnyUdpServer.cs" />
+    <Compile Include="IWorker.cs" />
+    <Compile Include="SkinnyUdpServerConfiguration.cs" />
     <Compile Include="WindowsService.cs">
       <SubType>Component</SubType>
     </Compile>

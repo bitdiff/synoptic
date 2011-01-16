@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandSet.cs" />
+    <Compile Include="ConsoleWriterWorker.cs" />
     <Compile Include="MyDaemon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
