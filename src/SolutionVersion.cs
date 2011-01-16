@@ -13,5 +13,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCultureAttribute("")]
 
 // <major>.<minor>.<revision>.<YMMDD>
-[assembly: AssemblyVersionAttribute("0.0.0.10101")]
+[assembly: AssemblyVersionAttribute("0.1.0.10116")]
 
