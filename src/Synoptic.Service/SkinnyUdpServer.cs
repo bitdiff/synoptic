@@ -8,11 +8,25 @@ namespace Synoptic.Service
 {
     public class SkinnyUdpServer : IDaemon
     {
-        public EventHandler<EventArgs> OnStarting = (s, e) => { };
-        public EventHandler<EventArgs> OnStarted = (s, e) => { };
-        public EventHandler<EventArgs> OnStopping = (s, e) => { };
-        public EventHandler<EventArgs> OnStopped = (s, e) => { };
-        public EventHandler<ErrorEventArgs> OnError = (s, e) => { };
+        public event EventHandler<EventArgs> Starting = (s, e) => { };
+        public event EventHandler<EventArgs> Started = (s, e) => { };
+        public event EventHandler<EventArgs> Stopping = (s, e) => { };
+        public event EventHandler<EventArgs> Stopped = (s, e) => { };
+        public event EventHandler<ErrorEventArgs> Error = (s, e) => { };
+        public event EventHandler<ErrorEventArgs> SocketError = (s, e) => { };
+
+
+        private void OnEvent(EventHandler<ErrorEventArgs> handle, ErrorEventArgs e)
+        {
+            if (handle != null)
+                handle(this, e);
+        }
+        
+        private void OnEvent(EventHandler<EventArgs> handle, EventArgs e)
+        {
+            if (handle != null)
+                handle(this, e);
+        }
 
         private readonly ManualResetEvent _resetEvent;
         private readonly IPEndPoint _ipEndPoint;
@@ -30,13 +44,13 @@ namespace Synoptic.Service
 
         public void Start()
         {
-            OnStarting(this, new EventArgs());
+            OnEvent(Starting, new EventArgs());
 
             _resetEvent.Reset();
             _serviceThread = new Thread(StartService);
             _serviceThread.Start();
 
-            OnStarted(this, new EventArgs());
+            OnEvent(Started, new EventArgs());
         }
 
         public void Stop()
@@ -44,12 +58,12 @@ namespace Synoptic.Service
             if (_serviceThread == null)
                 return;
 
-            OnStopping(this, new EventArgs());
+            OnEvent(Stopping, new EventArgs());
 
             _resetEvent.Set();
             _serviceThread.Join();
 
-            OnStopped(this, new EventArgs());
+            OnEvent(Stopped, new EventArgs());
         }
 
         private void StartService()
@@ -92,9 +106,17 @@ namespace Synoptic.Service
                 if (msgLen > 0)
                     _worker.Run(Encoding.UTF8.GetString(buf, 0, msgLen));
             }
+            catch(ObjectDisposedException e)
+            {
+                OnEvent(SocketError, new ErrorEventArgs(e));
+            }
+            catch(SocketException e)
+            {
+                OnEvent(SocketError, new ErrorEventArgs(e));
+            }
             catch (Exception e)
             {
-                OnError(this, new ErrorEventArgs(e));
+                OnEvent(Error, new ErrorEventArgs(e));
             }
             finally
             {

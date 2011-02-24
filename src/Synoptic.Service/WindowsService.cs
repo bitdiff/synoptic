@@ -10,11 +10,23 @@ namespace Synoptic.Service
 {
     public sealed class WindowsService : ServiceBase
     {
-        public EventHandler<WindowsServiceEventArgs> OnStarting = (s, e) => { };
-        public EventHandler<WindowsServiceEventArgs> OnStarted = (s, e) => { };
-        public EventHandler<WindowsServiceEventArgs> OnStopping = (s, e) => { };
-        public EventHandler<WindowsServiceEventArgs> OnStopped = (s, e) => { };
-        public EventHandler<ErrorEventArgs> OnError = (s, e) => { };
+        public event EventHandler<WindowsServiceEventArgs> Starting = (s, e) => { };
+        public event EventHandler<WindowsServiceEventArgs> Started = (s, e) => { };
+        public event EventHandler<WindowsServiceEventArgs> Stopping = (s, e) => { };
+        public event EventHandler<WindowsServiceEventArgs> Stopped = (s, e) => { };
+        public event EventHandler<ErrorEventArgs> Error = (s, e) => { };
+
+        private void OnEvent(EventHandler<WindowsServiceEventArgs> handle, WindowsServiceEventArgs e)
+        {
+            if (handle != null)
+                handle(this, e);
+        }
+
+        private void OnEvent(EventHandler<ErrorEventArgs> handle, ErrorEventArgs e)
+        {
+            if (handle != null)
+                handle(this, e);
+        }
 
         private readonly IDaemon _daemon;
         private readonly IWindowsServiceConfiguration _configuration;
@@ -36,7 +48,7 @@ namespace Synoptic.Service
         protected override void OnStart(string[] args)
         {
             base.OnStart(args);
-            OnStarting(this, new WindowsServiceEventArgs(ServiceName));
+            OnEvent(Starting, new WindowsServiceEventArgs(ServiceName));
 
             try
             {
@@ -44,18 +56,18 @@ namespace Synoptic.Service
             }
             catch (Exception e)
             {
-                OnError(this, new ErrorEventArgs(new DaemonException(String.Format("Error starting service {0}", ServiceName), e)));
+                OnEvent(Error, new ErrorEventArgs(new DaemonException(String.Format("Error starting service {0}", ServiceName), e)));
                 throw;
             }
 
-            OnStarted(this, new WindowsServiceEventArgs(ServiceName));
+            OnEvent(Started, new WindowsServiceEventArgs(ServiceName));
         }
 
         protected override void OnStop()
         {
             base.OnStop();
 
-            OnStopping(this, new WindowsServiceEventArgs(ServiceName));
+            OnEvent(Stopping, new WindowsServiceEventArgs(ServiceName));
 
             try
             {
@@ -63,11 +75,11 @@ namespace Synoptic.Service
             }
             catch (Exception e)
             {
-                OnError(this, new ErrorEventArgs(new DaemonException(String.Format("Error stopping service {0}", ServiceName), e)));
+                OnEvent(Error, new ErrorEventArgs(new DaemonException(String.Format("Error stopping service {0}", ServiceName), e)));
                 throw;
             }
 
-            OnStopped(this, new WindowsServiceEventArgs(ServiceName));
+            OnEvent(Stopped, new WindowsServiceEventArgs(ServiceName));
         }
 
         protected override void OnShutdown()
