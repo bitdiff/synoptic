@@ -40,19 +40,20 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="DaemonException.cs" />
     <Compile Include="ISkinnyUdpServerConfiguration.cs" />
     <Compile Include="IWindowsServiceConfiguration.cs" />
     <Compile Include="SkinnyUdpServer.cs" />
     <Compile Include="IWorker.cs" />
     <Compile Include="SkinnyUdpServerConfiguration.cs" />
+    <Compile Include="ErrorEventArgs.cs" />
     <Compile Include="WindowsService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="IDaemon.cs" />
-    <Compile Include="ILogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleLogger.cs" />
     <Compile Include="WindowsServiceConfiguration.cs" />
+    <Compile Include="WindowsServiceEventArgs.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

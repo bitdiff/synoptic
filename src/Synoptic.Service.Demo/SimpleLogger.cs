@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Synoptic.Service
+namespace Synoptic.Service.Demo
 {
     public class SimpleLogger : ILogger
     {

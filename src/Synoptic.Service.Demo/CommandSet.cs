@@ -20,7 +20,7 @@ namespace Synoptic.Service.Demo
             _logger = new SimpleLogger();
             _daemon = new MyDaemon(_logger, _resetEvent);
             var config = new WindowsServiceConfiguration("aa1") { CommandLineArguments = "windows-service --start" };
-            _service = new WindowsService(_daemon, _logger, config);
+            _service = new WindowsService(_daemon, config);
         }
 
         [Command]
@@ -49,7 +49,7 @@ namespace Synoptic.Service.Demo
         public void RunSkinnyUdpServer()
         {
             Console.CancelKeyPress += (s, e) => { e.Cancel = true; _resetEvent.Set(); };
-            var udpServer = new SkinnyUdpServer(new ConsoleWriterWorker(), _logger, new SkinnyUdpServerConfiguration(new IPEndPoint(IPAddress.Any, 12345)));
+            var udpServer = new SkinnyUdpServer(new ConsoleWriterWorker(), new SkinnyUdpServerConfiguration(new IPEndPoint(IPAddress.Any, 12345)));
             udpServer.Start();
             _resetEvent.WaitOne();
             udpServer.Stop();

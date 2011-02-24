@@ -24,13 +24,14 @@ namespace Synoptic.Tests
                                                         typeof (IWindowsServiceConfiguration),
                                                         typeof (WindowsServiceConfiguration),
                                                         typeof (WindowsService),
-                                                        typeof (ILogger),
                                                         typeof (IDaemon),
-                                                        typeof (SimpleLogger),
                                                         typeof (IWorker<object>),
                                                         typeof (SkinnyUdpServer),
                                                         typeof (ISkinnyUdpServerConfiguration),
-                                                        typeof (SkinnyUdpServerConfiguration),
+                                                        typeof (ErrorEventArgs),
+                                                        typeof (WindowsServiceEventArgs),
+                                                        typeof (DaemonException),
+                                                        typeof (SkinnyUdpServerConfiguration)
                                                     };
         [Test]
         public void should_list_public_interfaces()
@@ -38,7 +39,7 @@ namespace Synoptic.Tests
             var publicTypes = new List<Type>();
 
             Assembly assembly1 = Assembly.GetAssembly(typeof(CommandRunner));
-            Assembly assembly2 = Assembly.GetAssembly(typeof(ILogger));
+            Assembly assembly2 = Assembly.GetAssembly(typeof(IDaemon));
 
             foreach (var type in assembly1.GetTypes().Union(assembly2.GetTypes()))
             {

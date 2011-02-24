@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Synoptic.Service
+namespace Synoptic.Service.Demo
 {
     public interface ILogger
     {
