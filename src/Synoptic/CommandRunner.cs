@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using Synoptic.HelpUtilities;
 
@@ -7,6 +8,8 @@ namespace Synoptic
 {
     public class CommandRunner
     {
+        private readonly TextWriter _error = Console.Error;
+
         private readonly CommandManifest _manifest = new CommandManifest();
         private readonly ICommandFinder _finder;
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
@@ -42,7 +45,7 @@ namespace Synoptic
 
             if (_manifest.Commands.Count == 0)
             {
-                Console.WriteLine("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic.");
+                _error.WriteLine("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic.");
                 return;
             }
 
@@ -86,28 +89,26 @@ namespace Synoptic
             }
         }
 
-        private static void ShowErrorMessage(Exception exception)
+        private void ShowErrorMessage(Exception exception)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(exception.Message);
-            Console.ResetColor();
+            _error.WriteLine(exception.Message);
         }
 
         private void ShowHelp()
         {
-            Console.WriteLine();
-            Console.WriteLine("Usage: {0} <command> [options]", Process.GetCurrentProcess().ProcessName);
-            Console.WriteLine();
+            _error.WriteLine();
+            _error.WriteLine("Usage: {0} <command> [options]", Process.GetCurrentProcess().ProcessName);
+            _error.WriteLine();
 
             foreach (var command in _help.Commands)
             {
-                Console.WriteLine(command.FormattedLine);
+                _error.WriteLine(command.FormattedLine);
                 foreach (var parameter in command.Parameters)
                 {
-                    Console.WriteLine(parameter.FormattedLine);
+                    _error.WriteLine(parameter.FormattedLine);
                 }
 
-                Console.WriteLine();
+                _error.WriteLine();
             }
         }
     }
