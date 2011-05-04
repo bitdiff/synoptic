@@ -32,7 +32,7 @@ namespace Synoptic.Service
         private readonly IWindowsServiceConfiguration _configuration;
 
         public WindowsService(string serviceName, IDaemon daemon, Action<WindowsServiceConfiguration> configure) : 
-            this(serviceName, daemon, SetConfiguration(serviceName, configure))
+            this(daemon, SetConfiguration(serviceName, configure))
         {
         }
 
@@ -44,13 +44,17 @@ namespace Synoptic.Service
             return configuration;
         }
 
-        public WindowsService(string serviceName, IDaemon daemon, IWindowsServiceConfiguration configuration)
+        public WindowsService(string serviceName, IDaemon daemon) : this(daemon, new WindowsServiceConfiguration(serviceName))
         {
-            if(String.IsNullOrEmpty(serviceName))
-                throw new ArgumentNullException("serviceName");
+        }
 
+        public WindowsService(IDaemon daemon, IWindowsServiceConfiguration configuration)
+        {
             if(configuration == null)
                 throw new ArgumentNullException("configuration");
+
+            if(configuration.ServiceName == null)
+                throw new ArgumentNullException("configuration.ServiceName");
 
             _daemon = daemon;
             _configuration = configuration;

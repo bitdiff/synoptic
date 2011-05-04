@@ -20,7 +20,7 @@ namespace Synoptic.Service.Demo
             _logger = new SimpleLogger();
             _daemon = new MyDaemon(_logger, _resetEvent);
             var config = new WindowsServiceConfiguration("aa1") { CommandLineArguments = "windows-service --start" };
-            _service = new WindowsService("aa1", _daemon, config);
+            _service = new WindowsService(_daemon, config);
         }
 
         [Command]
