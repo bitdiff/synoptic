@@ -46,7 +46,7 @@
     <Compile Include="ISkinnyUdpServerConfiguration.cs" />
     <Compile Include="IWindowsServiceConfiguration.cs" />
     <Compile Include="LoopyDaemon.cs" />
-    <Compile Include="ServiceControllerify.cs" />
+    <Compile Include="SafeServiceController.cs" />
     <Compile Include="SkinnyUdpServer.cs" />
     <Compile Include="IWorker.cs" />
     <Compile Include="SkinnyUdpServerConfiguration.cs" />
