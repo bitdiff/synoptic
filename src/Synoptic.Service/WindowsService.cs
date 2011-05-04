@@ -31,9 +31,25 @@ namespace Synoptic.Service
         private readonly IDaemon _daemon;
         private readonly IWindowsServiceConfiguration _configuration;
 
-        public WindowsService(IDaemon daemon, IWindowsServiceConfiguration configuration)
+        public WindowsService(string serviceName, IDaemon daemon, Action<WindowsServiceConfiguration> configure) : 
+            this(serviceName, daemon, SetConfiguration(serviceName, configure))
         {
-            if (configuration == null)
+        }
+
+        private static IWindowsServiceConfiguration SetConfiguration(string serviceName, Action<WindowsServiceConfiguration> configure)
+        {
+            var configuration = new WindowsServiceConfiguration(serviceName);
+            configure(configuration);
+
+            return configuration;
+        }
+
+        public WindowsService(string serviceName, IDaemon daemon, IWindowsServiceConfiguration configuration)
+        {
+            if(String.IsNullOrEmpty(serviceName))
+                throw new ArgumentNullException("serviceName");
+
+            if(configuration == null)
                 throw new ArgumentNullException("configuration");
 
             _daemon = daemon;
@@ -111,10 +127,10 @@ namespace Synoptic.Service
             string path = string.Format("\"{0}\" {1}", exe, _configuration.CommandLineArguments);
 
             RegistryKey key = Registry.LocalMachine.OpenSubKey("System\\CurrentControlSet\\Services");
-            if(key != null)
+            if (key != null)
             {
                 RegistryKey subKey = key.OpenSubKey(_configuration.ServiceName, true);
-                if(subKey != null)
+                if (subKey != null)
                     subKey.SetValue("ImagePath", path);
             }
         }

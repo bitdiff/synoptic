@@ -29,11 +29,11 @@ namespace Synoptic.Tests
                                                         typeof (SafeServiceController),
                                                         typeof (DaemonEvent),
                                                         typeof (UdpDaemon),
-                                                        typeof (ISkinnyUdpServerConfiguration),
+                                                        typeof (IUdpDaemonConfiguration),
                                                         typeof (ErrorEventArgs),
                                                         typeof (WindowsServiceEventArgs),
                                                         typeof (DaemonException),
-                                                        typeof (SkinnyUdpServerConfiguration)
+                                                        typeof (UdpDaemonConfiguration)
                                                     };
         [Test]
         public void should_list_public_interfaces()

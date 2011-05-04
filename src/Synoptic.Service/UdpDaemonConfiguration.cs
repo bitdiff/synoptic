@@ -2,9 +2,9 @@
 
 namespace Synoptic.Service
 {
-    public class SkinnyUdpServerConfiguration : ISkinnyUdpServerConfiguration
+    public class UdpDaemonConfiguration : IUdpDaemonConfiguration
     {
-        public SkinnyUdpServerConfiguration(IPEndPoint endPoint)
+        public UdpDaemonConfiguration(IPEndPoint endPoint)
         {
             EndPoint = endPoint;
         }

@@ -34,7 +34,7 @@ namespace Synoptic.Service
         private Socket _udpSock;
         private int _requestCount;
 
-        public UdpDaemon(Action<string> action, ISkinnyUdpServerConfiguration configuration)
+        public UdpDaemon(Action<string> action, IUdpDaemonConfiguration configuration)
         {
             _action = action;
 
@@ -42,14 +42,14 @@ namespace Synoptic.Service
             _resetEvent = new ManualResetEvent(false);
         }
 
-        public UdpDaemon(Action<string> action, Action<SkinnyUdpServerConfiguration> configure) : 
+        public UdpDaemon(Action<string> action, Action<UdpDaemonConfiguration> configure) : 
             this(action, SetConfiguration(configure))
         {
         }
 
-        private static ISkinnyUdpServerConfiguration SetConfiguration(Action<SkinnyUdpServerConfiguration> configure)
+        private static IUdpDaemonConfiguration SetConfiguration(Action<UdpDaemonConfiguration> configure)
         {
-            var configuration = new SkinnyUdpServerConfiguration(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 50000));
+            var configuration = new UdpDaemonConfiguration(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 50000));
             configure(configuration);
 
             return configuration;

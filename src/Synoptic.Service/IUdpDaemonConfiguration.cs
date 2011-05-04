@@ -2,7 +2,7 @@
 
 namespace Synoptic.Service
 {
-    public interface ISkinnyUdpServerConfiguration
+    public interface IUdpDaemonConfiguration
     {
         IPEndPoint EndPoint { get; }
     }

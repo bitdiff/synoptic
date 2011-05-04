@@ -43,12 +43,12 @@
     <Compile Include="ComboDaemon.cs" />
     <Compile Include="DaemonEvent.cs" />
     <Compile Include="DaemonException.cs" />
-    <Compile Include="ISkinnyUdpServerConfiguration.cs" />
+    <Compile Include="IUdpDaemonConfiguration.cs" />
     <Compile Include="IWindowsServiceConfiguration.cs" />
     <Compile Include="LoopyDaemon.cs" />
     <Compile Include="SafeServiceController.cs" />
     <Compile Include="UdpDaemon.cs" />
-    <Compile Include="SkinnyUdpServerConfiguration.cs" />
+    <Compile Include="UdpDaemonConfiguration.cs" />
     <Compile Include="ErrorEventArgs.cs" />
     <Compile Include="WindowsService.cs">
       <SubType>Component</SubType>
