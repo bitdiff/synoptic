@@ -9,6 +9,6 @@ namespace Synoptic.Service
             EndPoint = endPoint;
         }
 
-        public IPEndPoint EndPoint { get; private set; }
+        public IPEndPoint EndPoint { get; set; }
     }
 }

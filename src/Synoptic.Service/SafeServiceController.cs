@@ -10,7 +10,8 @@ namespace Synoptic.Service
             var service = new ServiceController(name);
             if (service.Status == ServiceControllerStatus.Stopped)
                 return;
-
+            
+            service.Stop();
             service.WaitForStatus(ServiceControllerStatus.Stopped, new TimeSpan(0, 0, 0, 30));
         }
 
