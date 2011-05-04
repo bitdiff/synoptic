@@ -49,7 +49,13 @@ namespace Synoptic.Service.Demo
         public void RunSkinnyUdpServer()
         {
             Console.CancelKeyPress += (s, e) => { e.Cancel = true; _resetEvent.Set(); };
-            var udpServer = new SkinnyUdpServer(new ConsoleWriterWorker(), new SkinnyUdpServerConfiguration(new IPEndPoint(IPAddress.Any, 12345)));
+            var udpServer = new UdpDaemon(message =>
+                                              {
+                                                  Console.WriteLine("MESSAGE: " + message);
+                                                  Thread.Sleep(5000);
+                                                  Console.WriteLine("DONE");
+                                              },
+                                              new SkinnyUdpServerConfiguration(new IPEndPoint(IPAddress.Any, 12345)));
             udpServer.Start();
             _resetEvent.WaitOne();
             udpServer.Stop();

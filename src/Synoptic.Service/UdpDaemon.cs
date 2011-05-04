@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -7,15 +6,15 @@ using System.Threading;
 
 namespace Synoptic.Service
 {
-    public class SkinnyUdpServer : IDaemon
+    public class UdpDaemon : IDaemon
     {
+        private readonly Action<string> _action;
         public event EventHandler<EventArgs> Starting = (s, e) => { };
         public event EventHandler<EventArgs> Started = (s, e) => { };
         public event EventHandler<EventArgs> Stopping = (s, e) => { };
         public event EventHandler<EventArgs> Stopped = (s, e) => { };
         public event EventHandler<ErrorEventArgs> Error = (s, e) => { };
         public event EventHandler<ErrorEventArgs> SocketError = (s, e) => { };
-
 
         private void OnEvent(EventHandler<ErrorEventArgs> handle, ErrorEventArgs e)
         {
@@ -31,16 +30,29 @@ namespace Synoptic.Service
 
         private readonly ManualResetEvent _resetEvent;
         private readonly IPEndPoint _ipEndPoint;
-        private readonly IWorker<string> _worker;
         private Thread _serviceThread;
         private Socket _udpSock;
         private int _requestCount;
 
-        public SkinnyUdpServer(IWorker<string> worker, ISkinnyUdpServerConfiguration configuration)
+        public UdpDaemon(Action<string> action, ISkinnyUdpServerConfiguration configuration)
         {
-            _worker = worker;
+            _action = action;
+
             _ipEndPoint = configuration.EndPoint;
             _resetEvent = new ManualResetEvent(false);
+        }
+
+        public UdpDaemon(Action<string> action, Action<SkinnyUdpServerConfiguration> configure) : 
+            this(action, SetConfiguration(configure))
+        {
+        }
+
+        private static ISkinnyUdpServerConfiguration SetConfiguration(Action<SkinnyUdpServerConfiguration> configure)
+        {
+            var configuration = new SkinnyUdpServerConfiguration(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 50000));
+            configure(configuration);
+
+            return configuration;
         }
 
         public void Start()
@@ -105,7 +117,9 @@ namespace Synoptic.Service
 
                 int msgLen = _udpSock.EndReceiveFrom(iar, ref remoteEndPoint);
                 if (msgLen > 0)
-                    _worker.Run(Encoding.UTF8.GetString(buf, 0, msgLen));
+                {
+                    _action(Encoding.ASCII.GetString(buf, 0, msgLen));
+                }
             }
             catch(ObjectDisposedException e)
             {

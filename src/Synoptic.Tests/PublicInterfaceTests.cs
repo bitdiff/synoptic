@@ -1,5 +1,4 @@
-﻿//using System;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -25,8 +24,11 @@ namespace Synoptic.Tests
                                                         typeof (WindowsServiceConfiguration),
                                                         typeof (WindowsService),
                                                         typeof (IDaemon),
-                                                        typeof (IWorker<object>),
-                                                        typeof (SkinnyUdpServer),
+                                                        typeof (ComboDaemon),
+                                                        typeof (LoopyDaemon),
+                                                        typeof (SafeServiceController),
+                                                        typeof (DaemonEvent),
+                                                        typeof (UdpDaemon),
                                                         typeof (ISkinnyUdpServerConfiguration),
                                                         typeof (ErrorEventArgs),
                                                         typeof (WindowsServiceEventArgs),

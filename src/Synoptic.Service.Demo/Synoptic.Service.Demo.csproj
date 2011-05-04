@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandSet.cs" />
-    <Compile Include="ConsoleWriterWorker.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="MyDaemon.cs" />
     <Compile Include="Program.cs" />

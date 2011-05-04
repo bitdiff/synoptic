@@ -47,8 +47,7 @@
     <Compile Include="IWindowsServiceConfiguration.cs" />
     <Compile Include="LoopyDaemon.cs" />
     <Compile Include="SafeServiceController.cs" />
-    <Compile Include="SkinnyUdpServer.cs" />
-    <Compile Include="IWorker.cs" />
+    <Compile Include="UdpDaemon.cs" />
     <Compile Include="SkinnyUdpServerConfiguration.cs" />
     <Compile Include="ErrorEventArgs.cs" />
     <Compile Include="WindowsService.cs">
