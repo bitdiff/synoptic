@@ -33,7 +33,8 @@ namespace Synoptic.Tests
                                                         typeof (ErrorEventArgs),
                                                         typeof (WindowsServiceEventArgs),
                                                         typeof (DaemonException),
-                                                        typeof (UdpDaemonConfiguration)
+                                                        typeof (UdpDaemonConfiguration),
+                                                        typeof (TraceSourceExtensions)
                                                     };
         [Test]
         public void should_list_public_interfaces()

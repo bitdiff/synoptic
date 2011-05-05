@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -8,25 +9,9 @@ namespace Synoptic.Service
 {
     public class UdpDaemon : IDaemon
     {
-        private readonly Action<string> _action;
-        public event EventHandler<EventArgs> Starting = (s, e) => { };
-        public event EventHandler<EventArgs> Started = (s, e) => { };
-        public event EventHandler<EventArgs> Stopping = (s, e) => { };
-        public event EventHandler<EventArgs> Stopped = (s, e) => { };
-        public event EventHandler<ErrorEventArgs> Error = (s, e) => { };
-        public event EventHandler<ErrorEventArgs> SocketError = (s, e) => { };
+        private readonly static TraceSource Trace = new TraceSource("Synoptic.Service");
 
-        private void OnEvent(EventHandler<ErrorEventArgs> handle, ErrorEventArgs e)
-        {
-            if (handle != null)
-                handle(this, e);
-        }
-        
-        private void OnEvent(EventHandler<EventArgs> handle, EventArgs e)
-        {
-            if (handle != null)
-                handle(this, e);
-        }
+        private readonly Action<string> _action;
 
         private readonly ManualResetEvent _resetEvent;
         private readonly IPEndPoint _ipEndPoint;
@@ -57,13 +42,13 @@ namespace Synoptic.Service
 
         public void Start()
         {
-            OnEvent(Starting, new EventArgs());
+            Trace.Start("UdpDaemon starting..");
 
             _resetEvent.Reset();
             _serviceThread = new Thread(StartService);
             _serviceThread.Start();
 
-            OnEvent(Started, new EventArgs());
+            Trace.Information("UdpDaemon started");
         }
 
         public void Stop()
@@ -71,12 +56,12 @@ namespace Synoptic.Service
             if (_serviceThread == null)
                 return;
 
-            OnEvent(Stopping, new EventArgs());
+            Trace.Information("UdpDaemon stopping..");
 
             _resetEvent.Set();
             _serviceThread.Join();
 
-            OnEvent(Stopped, new EventArgs());
+            Trace.Stop("UdpDaemon stopped");
         }
 
         private void StartService()
@@ -123,15 +108,15 @@ namespace Synoptic.Service
             }
             catch(ObjectDisposedException e)
             {
-                OnEvent(SocketError, new ErrorEventArgs(e));
+                Trace.Information("UdpDaemon socket error '{0}'", e.Message);
             }
             catch(SocketException e)
             {
-                OnEvent(SocketError, new ErrorEventArgs(e));
+                Trace.Information("UdpDaemon socket error '{0}'", e.Message);
             }
             catch (Exception e)
             {
-                OnEvent(Error, new ErrorEventArgs(e));
+                Trace.Error("UdpDaemon error '{0}'", e.Message);
             }
             finally
             {

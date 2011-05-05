@@ -58,6 +58,12 @@
     <Compile Include="WindowsServiceConfiguration.cs" />
     <Compile Include="WindowsServiceEventArgs.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Synoptic\Synoptic.csproj">
+      <Project>{9B88A638-99DE-4A8C-80DD-6434812E27B7}</Project>
+      <Name>Synoptic</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
