@@ -46,9 +46,20 @@ namespace Synoptic.Tests
         }
 
         [Test]
-        public void should_allow_common_properties()
+        public void should_allow_custom_command_set_creation()
         {
-            new CommandRunner().WithCommandsFromType<RunnerTest>().WithCommandSetInstance(new RunnerTest()).Run(null);
+            new CommandRunner().WithCommandSet<RunnerTest>(p => new RunnerTest(p)).Run(new[] { "CommandWithBool", "--param1", "someotherparam" });
+        }
+
+        [Test]
+        public void should_allow_args_pre_processor()
+        {
+            new CommandRunner().WithArgsPreProcessor(args =>
+                                                         {
+                                                             Console.WriteLine(args.Count());
+                                                             Console.WriteLine("Took first param out: " + args[0]);
+                                                             return args.Skip(1).ToArray();
+                                                         }).Run(new[] { "CommandWithBool", "some first param", "--param1", "someotherparam" });
         }
 
         [Test]
@@ -62,6 +73,14 @@ namespace Synoptic.Tests
         {
             public volatile static Action<MethodBase, object[]> TestAction = (m, a) => { };
 
+            public RunnerTest(CommandLineParseResult commandLineParseResult)
+            {
+            }
+
+            public RunnerTest()
+            {
+            }
+
             [Command]
             public void TestCommand(string param1)
             {
@@ -73,7 +92,7 @@ namespace Synoptic.Tests
             {
                 Dump(param1);
             }
-            
+
             [Command]
             public void MultipleParamsToHyphen(string paramOne, string paramTwo, string paramThree)
             {

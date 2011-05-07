@@ -14,6 +14,8 @@ namespace Synoptic
         private readonly ICommandFinder _finder = new CommandFinder();
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
         private CommandLineHelp _help;
+        private Func<CommandLineParseResult, object> _commandSetInstantiator;
+        private Func<string[], string[]> _preProcessor;
 
         public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
         {
@@ -56,11 +58,15 @@ namespace Synoptic
             try
             {
                 ICommandLineParser parser = new CommandLineParser();
-                CommandLineParseResult parseResult = parser.Parse(_manifest, args);
+                
+                CommandLineParseResult parseResult = parser.Parse(_manifest, args, _preProcessor);
                 if (!parseResult.WasSuccessfullyParsed)
                     throw new CommandException(parseResult.Message);
 
-                parseResult.Command.Run(_resolver, parseResult);
+                if (_commandSetInstantiator != null)
+                    parseResult.Command.Run(_commandSetInstantiator(parseResult), parseResult);
+                else
+                    parseResult.Command.Run(_resolver, parseResult);
             }
             catch (CommandException commandException)
             {
@@ -106,9 +112,17 @@ namespace Synoptic
             }
         }
 
-        public CommandRunner WithCommandSetInstance(object commandSetInstance)
+        public CommandRunner WithCommandSet<T>(Func<CommandLineParseResult, object> commandSetInstantiator)
         {
-            _manifest.Commands.AddRange(_finder.FindInType(commandSetInstance.GetType()).Commands);
+            _manifest.Commands.AddRange(_finder.FindInType(typeof(T)).Commands);
+            _commandSetInstantiator = commandSetInstantiator;
+
+            return this;
+        }
+
+        public CommandRunner WithArgsPreProcessor(Func<string[], string[]> preProcessor)
+        {
+            _preProcessor = preProcessor;
             return this;
         }
     }

@@ -7,7 +7,7 @@ namespace Synoptic
 {
     internal class CommandLineParser : ICommandLineParser
     {
-        public CommandLineParseResult Parse(CommandManifest manifest, string[] args)
+        public CommandLineParseResult Parse(CommandManifest manifest, string[] args, Func<string[], string[]> preProcessor)
         {
             if (args == null || args.Length == 0)
             {
@@ -16,6 +16,9 @@ namespace Synoptic
 
             string commandName = args[0];
             args = args.Skip(1).ToArray();
+
+            if (preProcessor != null)
+                args = preProcessor(args);
 
             Command command = new CommandResolver().Resolve(manifest, commandName);
 

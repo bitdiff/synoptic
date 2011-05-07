@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace Synoptic
 {
@@ -9,11 +8,14 @@ namespace Synoptic
     {
         internal static void Run(this Command command, IDependencyResolver resolver, CommandLineParseResult parseResult)
         {
-            MethodInfo methodToInvoke = command.LinkedToMethod;
-            object[] parameterValues = GetCommandParameterValues(command.Parameters, parseResult);
+            var instance = resolver.Resolve(command.LinkedToMethod.DeclaringType);
+            Run(command, instance,parseResult);
+        }
 
-            object instance = resolver.Resolve(methodToInvoke.DeclaringType);
-            methodToInvoke.Invoke(instance, parameterValues);
+        internal static void Run(this Command command, object instance, CommandLineParseResult parseResult)
+        {
+            object[] parameterValues = GetCommandParameterValues(command.Parameters, parseResult);
+            command.LinkedToMethod.Invoke(instance, parameterValues);
         }
 
         private static object[] GetCommandParameterValues(IEnumerable<ParameterInfoWrapper> parameters, CommandLineParseResult parseResult)
