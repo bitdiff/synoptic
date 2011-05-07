@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Synoptic
+﻿namespace Synoptic
 {
     internal interface ICommandLineParser
     {

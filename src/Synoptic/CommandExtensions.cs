@@ -10,10 +10,10 @@ namespace Synoptic
         internal static void Run(this Command command, IDependencyResolver resolver, CommandLineParseResult parseResult)
         {
             MethodInfo methodToInvoke = command.LinkedToMethod;
-            object[] objects = GetCommandParameterValues(command.Parameters, parseResult);
+            object[] parameterValues = GetCommandParameterValues(command.Parameters, parseResult);
 
             object instance = resolver.Resolve(methodToInvoke.DeclaringType);
-            methodToInvoke.Invoke(instance, objects);
+            methodToInvoke.Invoke(instance, parameterValues);
         }
 
         private static object[] GetCommandParameterValues(IEnumerable<ParameterInfoWrapper> parameters, CommandLineParseResult parseResult)

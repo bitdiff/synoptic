@@ -46,6 +46,12 @@ namespace Synoptic.Tests
         }
 
         [Test]
+        public void should_allow_common_properties()
+        {
+            new CommandRunner().WithCommandsFromType<RunnerTest>().WithCommandSetInstance(new RunnerTest()).Run(null);
+        }
+
+        [Test]
         public void should_handle_bool()
         {
             new CommandRunner().WithCommandsFromType<RunnerTest>().Run(new[] { "CommandWithBool", "--param1" });

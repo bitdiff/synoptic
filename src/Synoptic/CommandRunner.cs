@@ -11,14 +11,9 @@ namespace Synoptic
         private readonly TextWriter _error = Console.Error;
 
         private readonly CommandManifest _manifest = new CommandManifest();
-        private readonly ICommandFinder _finder;
+        private readonly ICommandFinder _finder = new CommandFinder();
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
         private CommandLineHelp _help;
-
-        public CommandRunner()
-        {
-            _finder = new CommandFinder();
-        }
 
         public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
         {
@@ -62,7 +57,6 @@ namespace Synoptic
             {
                 ICommandLineParser parser = new CommandLineParser();
                 CommandLineParseResult parseResult = parser.Parse(_manifest, args);
-
                 if (!parseResult.WasSuccessfullyParsed)
                     throw new CommandException(parseResult.Message);
 
@@ -110,6 +104,12 @@ namespace Synoptic
 
                 _error.WriteLine();
             }
+        }
+
+        public CommandRunner WithCommandSetInstance(object commandSetInstance)
+        {
+            _manifest.Commands.AddRange(_finder.FindInType(commandSetInstance.GetType()).Commands);
+            return this;
         }
     }
 }
