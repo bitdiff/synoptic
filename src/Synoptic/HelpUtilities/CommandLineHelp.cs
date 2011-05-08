@@ -9,7 +9,7 @@ namespace Synoptic.HelpUtilities
         private readonly List<CommandHelp> _commands = new List<CommandHelp>();
         private const int SpacingWidth = 3;
 
-        public CommandLineHelp(IEnumerable<Command> commands)
+        public CommandLineHelp(IEnumerable<CommandAction> commands)
         {
             var spacer = new string(' ', SpacingWidth);
             MaximumCommandNameLength = commands.Count() > 0 ? commands.Max(c => c.Name.ToHyphened().Length) : 0;

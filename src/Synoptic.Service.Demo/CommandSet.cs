@@ -23,7 +23,7 @@ namespace Synoptic.Service.Demo
             _service = new WindowsService(_daemon, config);
         }
 
-        [Command]
+        [CommandAction]
         public void WindowsService(bool start, bool install, bool remove)
         {
             if (start)
@@ -33,10 +33,10 @@ namespace Synoptic.Service.Demo
             else if (remove)
                 _service.Uninstall();
             else
-                throw new CommandException("You must specify at least one option");
+                throw new CommandActionException("You must specify at least one option");
         }
 
-        [Command]
+        [CommandAction]
         public void StartAsConsoleService()
         {
             Console.CancelKeyPress += (s, e) => { e.Cancel = true; _resetEvent.Set(); };
@@ -45,7 +45,7 @@ namespace Synoptic.Service.Demo
             _daemon.Stop();
         }
 
-        [Command]
+        [CommandAction]
         public void RunSkinnyUdpServer()
         {
             Console.CancelKeyPress += (s, e) => { e.Cancel = true; _resetEvent.Set(); };
@@ -61,7 +61,7 @@ namespace Synoptic.Service.Demo
             udpServer.Stop();
         }
 
-        [Command]
+        [CommandAction]
         public void SendUdpMessage(string message)
         {
             var dgram = Encoding.UTF8.GetBytes(message ?? "");

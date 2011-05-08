@@ -81,19 +81,19 @@ namespace Synoptic.Tests
             {
             }
 
-            [Command]
+            [CommandAction]
             public void TestCommand(string param1)
             {
                 Dump(param1);
             }
 
-            [Command]
+            [CommandAction]
             public void CommandWithBool(bool param1)
             {
                 Dump(param1);
             }
 
-            [Command]
+            [CommandAction]
             public void MultipleParamsToHyphen(string paramOne, string paramTwo, string paramThree)
             {
                 Dump(paramOne, paramTwo, paramThree);

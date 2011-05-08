@@ -10,17 +10,17 @@ namespace Synoptic.Tests
         [Test]
         public void shoud_resolve_command()
         {
-            CommandManifest manifest = new CommandFinder().FindInType(typeof(Test1));
+            CommandActionManifest actionManifest = new CommandActionActionFinder().FindInType(typeof(Test1));
 
-            Command command = new CommandResolver().Resolve(manifest, "my-command");
+            CommandAction commandAction = new CommandResolver().Resolve(actionManifest, "my-command");
 
-            Assert.IsNotNull(command);
-            Assert.That(command.Name, Is.EqualTo("MyCommand"));
+            Assert.IsNotNull(commandAction);
+            Assert.That(commandAction.Name, Is.EqualTo("MyCommand"));
         }
 
         public class Test1
         {
-            [Command]
+            [CommandAction]
             public void MyCommand()
             {
             }

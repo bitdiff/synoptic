@@ -5,16 +5,16 @@ namespace Synoptic
 {
     public class CommandLineParseResult
     {
-        public CommandLineParseResult(Command command, IEnumerable<CommandLineParameter> parsedParameters, string[] additionalParameters) : this(command, parsedParameters, additionalParameters, null) {}
-        public CommandLineParseResult(Command command, IEnumerable<CommandLineParameter> parsedParameters, string[] additionalParameters, string message)
+        public CommandLineParseResult(CommandAction commandAction, IEnumerable<CommandLineParameter> parsedParameters, string[] additionalParameters) : this(commandAction, parsedParameters, additionalParameters, null) {}
+        public CommandLineParseResult(CommandAction commandAction, IEnumerable<CommandLineParameter> parsedParameters, string[] additionalParameters, string message)
         {
-            Command = command;
+            CommandAction = commandAction;
             ParsedParameters = parsedParameters;
             AdditionalParameters = additionalParameters;
             Message = message;
         }
 
-        public Command Command { get; private set; }
+        public CommandAction CommandAction { get; private set; }
         public IEnumerable<CommandLineParameter> ParsedParameters { get; private set; }
         public string[] AdditionalParameters { get; private set; }
         public string Message { get; set; }

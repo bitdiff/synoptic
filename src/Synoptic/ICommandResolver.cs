@@ -2,6 +2,6 @@
 {
     internal interface ICommandResolver
     {
-        Command Resolve(CommandManifest manifest, string commandName);
+        CommandAction Resolve(CommandActionManifest actionManifest, string commandName);
     }
 }

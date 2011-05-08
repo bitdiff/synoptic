@@ -11,7 +11,7 @@ namespace Synoptic
 
         public CommandParameterAttribute(string prototype)
         {
-            Prototype = prototype;  
+            Prototype = prototype;
         }
 
         public CommandParameterAttribute(string prototype, string description)
@@ -23,5 +23,6 @@ namespace Synoptic
         public string Prototype { get; set; }
         public string Description { get; set; }
         public object DefaultValue { get; set; }
+        public bool IsRequired { get; set; }
     }
 }

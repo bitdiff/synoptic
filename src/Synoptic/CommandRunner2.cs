@@ -6,60 +6,65 @@ using Synoptic.HelpUtilities;
 
 namespace Synoptic
 {
-    public class CommandRunner
+    public class CommandRunner2
     {
         private readonly TextWriter _error = Console.Error;
 
-        private readonly CommandActionManifest _actionManifest = new CommandActionManifest();
+        private readonly CommandManifest _commandManifest = new CommandManifest();
         private readonly ICommandActionFinder _actionFinder = new CommandActionActionFinder();
+        private readonly CommandFinder _commandFinder = new CommandFinder();
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
         private CommandLineHelp _help;
         private Func<CommandLineParseResult, object> _commandSetInstantiator;
         private Func<string[], string[]> _preProcessor;
 
-        public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
+        public CommandRunner2 WithDependencyResolver(IDependencyResolver resolver)
         {
             _resolver = resolver;
             return this;
         }
 
-        public CommandRunner WithCommandsFromType<T>()
+//        public CommandRunner2 WithCommandsFromType<T>()
+//        {
+//            _commandManifest.Commands.AddRange(_actionFinder.FindInType(typeof(T)).Commands);
+//            return this;
+//        }
+//
+        public CommandRunner2 WithCommandsFromAssembly(Assembly assembly)
         {
-            _actionManifest.Commands.AddRange(_actionFinder.FindInType(typeof(T)).Commands);
-            return this;
-        }
-
-        public CommandRunner WithCommandsFromAssembly(Assembly assembly)
-        {
-            _actionManifest.Commands.AddRange(_actionFinder.FindInAssembly(assembly).Commands);
+            _commandManifest.Commands.AddRange(_commandFinder.FindInAssembly(assembly).Commands);
             return this;
         }
 
         public void Run(string[] args)
         {
-            if (_actionManifest.Commands.Count == 0)
+            if (_commandManifest.Commands.Count == 0)
                 WithCommandsFromAssembly(Assembly.GetCallingAssembly());
 
-            if (_actionManifest.Commands.Count == 0)
+            if (_commandManifest.Commands.Count == 0)
             {
                 _error.WriteLine("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic.");
                 return;
             }
 
-            if (_help == null)
-                _help = CommandLineHelpGenerator.Generate(_actionManifest);
+//            if (_help == null)
+//                _help = CommandLineHelpGenerator.Generate(_commandManifest);
 
             if (args == null || args.Length == 0)
             {
-                ShowHelp();
+                ShowCommands();
                 return;
             }
 
             try
             {
-                ICommandLineParser parser = new CommandLineParser();
-                
-                CommandLineParseResult parseResult = parser.Parse(_actionManifest, args, _preProcessor);
+                var commandSelector = new CommandSelector(_commandManifest.Commands);
+                var command = commandSelector.Select(ref args);
+
+                var parser = new CommandLineParser2();
+
+                CommandLineParseResult parseResult =  parser.Parse(command, args);
+                _help = new CommandLineHelp(new[] { parseResult.CommandAction});
                 if (!parseResult.WasSuccessfullyParsed)
                     throw new CommandActionException(parseResult.Message);
 
@@ -112,18 +117,31 @@ namespace Synoptic
             }
         }
 
-        public CommandRunner WithCommandSet<T>(Func<CommandLineParseResult, object> commandSetInstantiator)
+        private void ShowCommands()
         {
-            _actionManifest.Commands.AddRange(_actionFinder.FindInType(typeof(T)).Commands);
-            _commandSetInstantiator = commandSetInstantiator;
+            _error.WriteLine();
+            _error.WriteLine("Usage: {0} <command> [options]", Process.GetCurrentProcess().ProcessName);
+            _error.WriteLine();
 
-            return this;
+            foreach (var command in _commandManifest.Commands)
+            {
+                _error.WriteLine(command.Name + "    " + command.Description);
+                _error.WriteLine();
+            }
         }
 
-        public CommandRunner WithArgsPreProcessor(Func<string[], string[]> preProcessor)
-        {
-            _preProcessor = preProcessor;
-            return this;
-        }
+//        public CommandRunner2 WithCommandSet<T>(Func<CommandLineParseResult, object> commandSetInstantiator)
+//        {
+//            _commandManifest.Commands.AddRange(_actionFinder.FindInType(typeof(T)).Commands);
+//            _commandSetInstantiator = commandSetInstantiator;
+//
+//            return this;
+//        }
+//
+//        public CommandRunner2 WithArgsPreProcessor(Func<string[], string[]> preProcessor)
+//        {
+//            _preProcessor = preProcessor;
+//            return this;
+//        }
     }
 }

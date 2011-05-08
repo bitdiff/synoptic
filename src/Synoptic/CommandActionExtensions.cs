@@ -4,18 +4,18 @@ using System.Linq;
 
 namespace Synoptic
 {
-    internal static class CommandExtensions
+    internal static class CommandActionExtensions
     {
-        internal static void Run(this Command command, IDependencyResolver resolver, CommandLineParseResult parseResult)
+        internal static void Run(this CommandAction commandAction, IDependencyResolver resolver, CommandLineParseResult parseResult)
         {
-            var instance = resolver.Resolve(command.LinkedToMethod.DeclaringType);
-            Run(command, instance,parseResult);
+            var instance = resolver.Resolve(commandAction.LinkedToMethod.DeclaringType);
+            Run(commandAction, instance,parseResult);
         }
 
-        internal static void Run(this Command command, object instance, CommandLineParseResult parseResult)
+        internal static void Run(this CommandAction commandAction, object instance, CommandLineParseResult parseResult)
         {
-            object[] parameterValues = GetCommandParameterValues(command.Parameters, parseResult);
-            command.LinkedToMethod.Invoke(instance, parameterValues);
+            object[] parameterValues = GetCommandParameterValues(commandAction.Parameters, parseResult);
+            commandAction.LinkedToMethod.Invoke(instance, parameterValues);
         }
 
         private static object[] GetCommandParameterValues(IEnumerable<ParameterInfoWrapper> parameters, CommandLineParseResult parseResult)
@@ -32,6 +32,10 @@ namespace Synoptic
                     if (parameter.DefaultValue != null)
                     {
                         value = parameter.DefaultValue;
+                    }
+                    else if(parameter.IsRequired)
+                    {
+                        throw new CommandActionException(String.Format("The parameter {0} is required.", parameter.Name));
                     }
                 }
                 else
@@ -53,7 +57,7 @@ namespace Synoptic
 
         private static object GetConvertedParameterValue(ParameterInfoWrapper parameter, object value)
         {
-            if (!parameter.IsOptionValueRequired)
+            if (!parameter.IsValueRequiredWhenOptionIsPresent)
                 value = value != null;
 
             return Convert.ChangeType(value, parameter.Type);

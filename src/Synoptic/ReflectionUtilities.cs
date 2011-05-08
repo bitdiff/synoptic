@@ -22,5 +22,17 @@ namespace Synoptic
                     yield return method;
             }
         }
+
+        public static IEnumerable<Type> RetrieveTypesWithAttribute<TAttribute>(Assembly assembly) 
+            where TAttribute : Attribute
+        {
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
+                {
+                    yield return type;
+                }
+            }
+        }
     }
 }

@@ -19,16 +19,18 @@ namespace Synoptic
 
                 Description = Description.GetNewIfValid(commandParameter.Description);
                 DefaultValue = commandParameter.DefaultValue;
+                IsRequired = commandParameter.IsRequired;
             }
 
-            IsOptionValueRequired = parameter.ParameterType != typeof(bool);
+            IsValueRequiredWhenOptionIsPresent = parameter.ParameterType != typeof(bool);
         }
 
+        public bool IsRequired { get; set; }
         public string Name { get; private set; }
         public Type Type { get; private set; }
         public string Description { get; private set; }
         public string Prototype { get; private set; }
-        public bool IsOptionValueRequired { get; private set; }
+        public bool IsValueRequiredWhenOptionIsPresent { get; private set; }
         public object DefaultValue { get; set; }
 
         public string GetOptionPrototype()
@@ -38,7 +40,7 @@ namespace Synoptic
         
         public string GetOptionPrototypeHelp()
         {
-            var valueHelp = (IsOptionValueRequired ? "<VALUE" + (DefaultValue != null ? "|" + DefaultValue : String.Empty) + ">" : String.Empty);
+            var valueHelp = (IsValueRequiredWhenOptionIsPresent ? "<VALUE" + (DefaultValue != null ? "|" + DefaultValue : String.Empty) + ">" : String.Empty);
             return GetOptionPrototype() + valueHelp;
         }
     }

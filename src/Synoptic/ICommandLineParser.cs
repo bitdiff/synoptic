@@ -4,6 +4,6 @@ namespace Synoptic
 {
     internal interface ICommandLineParser
     {
-        CommandLineParseResult Parse(CommandManifest manifest, string[] args, Func<string[], string[]> preProcessor);
+        CommandLineParseResult Parse(CommandActionManifest actionManifest, string[] args, Func<string[], string[]> preProcessor);
     }
 }

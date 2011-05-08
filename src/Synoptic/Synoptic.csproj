@@ -40,23 +40,28 @@
     </Compile>
     <Compile Include="ActivatorDependencyResolver.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="CommandAttribute.cs" />
-    <Compile Include="CommandException.cs" />
-    <Compile Include="CommandExtensions.cs" />
+    <Compile Include="CommandAction.cs" />
+    <Compile Include="CommandActionAttribute.cs" />
+    <Compile Include="CommandActionException.cs" />
+    <Compile Include="CommandActionExtensions.cs" />
+    <Compile Include="CommandActionActionFinder.cs" />
     <Compile Include="CommandFinder.cs" />
     <Compile Include="CommandInvocationException.cs" />
     <Compile Include="CommandLineParameter.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="CommandLineParseResult.cs" />
+    <Compile Include="CommandActionManifest.cs" />
     <Compile Include="CommandManifest.cs" />
     <Compile Include="CommandParameterAttribute.cs" />
     <Compile Include="CommandResolver.cs" />
     <Compile Include="CommandRunner.cs" />
+    <Compile Include="CommandRunner2.cs" />
+    <Compile Include="CommandTypeWrapper.cs" />
     <Compile Include="HelpUtilities\CommandHelp.cs" />
     <Compile Include="HelpUtilities\CommandLineHelp.cs" />
     <Compile Include="HelpUtilities\CommandLineHelpGenerator.cs" />
     <Compile Include="HelpUtilities\ParameterHelp.cs" />
-    <Compile Include="ICommandFinder.cs" />
+    <Compile Include="ICommandActionFinder.cs" />
     <Compile Include="ICommandLineParser.cs" />
     <Compile Include="ICommandResolver.cs" />
     <Compile Include="IDependencyResolver.cs" />
@@ -66,6 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PrototypeGenerator.cs" />
     <Compile Include="ReflectionUtilities.cs" />
+    <Compile Include="Response.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="TraceSourceExtensions.cs" />
   </ItemGroup>

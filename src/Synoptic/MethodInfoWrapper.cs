@@ -11,10 +11,10 @@ namespace Synoptic
 
             Name = method.Name;
 
-            var attributes = method.GetCustomAttributes(typeof(CommandAttribute), true);
+            var attributes = method.GetCustomAttributes(typeof(CommandActionAttribute), true);
             if (attributes.Length > 0)
             {
-                var commandParameter = (CommandAttribute)attributes.First();
+                var commandParameter = (CommandActionAttribute)attributes.First();
 
                 Description = Description.GetNewIfValid(commandParameter.Description);
                 Name = Name.GetNewIfValid(commandParameter.Name);

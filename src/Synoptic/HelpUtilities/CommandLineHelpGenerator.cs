@@ -2,9 +2,9 @@
 {
     internal class CommandLineHelpGenerator
     {
-        public static CommandLineHelp Generate(CommandManifest manifest)
+        public static CommandLineHelp Generate(CommandActionManifest actionManifest)
         {
-            return new CommandLineHelp(manifest.Commands);
+            return new CommandLineHelp(actionManifest.Commands);
         }
     }
 }
