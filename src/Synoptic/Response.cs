@@ -26,6 +26,8 @@ namespace Synoptic
 
         public int ExitCode { get; set; }
 
+        public bool Cancel { get; set; }
+
         public StringBuilder Stdout { get; set; }
         public StringBuilder Stderr { get; set; }
         public TextWriter Out { get { return new StringWriter(Stdout); } }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Synoptic
 {
@@ -12,10 +13,9 @@ namespace Synoptic
 
     internal class CommandResolver2
     {
-        public CommandAction Resolve(Command command, string action)
+        public CommandAction Resolve(List<CommandAction> actions, string actionName)
         {
-            var actionManifest = new CommandActionActionFinder().FindInType(command.LinkedToType);
-            return actionManifest.Commands.FirstOrDefault(c => c.Name.SimilarTo(action));
+            return actions.FirstOrDefault(c => c.Name.SimilarTo(actionName));
         }
     }
 }
