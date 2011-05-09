@@ -1,10 +1,12 @@
-﻿namespace Synoptic.HelpUtilities
+﻿using System.Collections.Generic;
+
+namespace Synoptic.HelpUtilities
 {
     internal class CommandLineHelpGenerator
     {
-        public static CommandLineHelp Generate(CommandActionManifest actionManifest)
+        public static CommandLineHelp Generate(IEnumerable<CommandAction> commandActions)
         {
-            return new CommandLineHelp(actionManifest.Commands);
+            return new CommandLineHelp(commandActions);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Synoptic.HelpUtilities;
 
@@ -10,12 +12,13 @@ namespace Synoptic
     {
         private readonly TextWriter _error = Console.Error;
 
-        private readonly CommandActionManifest _actionManifest = new CommandActionManifest();
-        private readonly ICommandActionFinder _actionFinder = new CommandActionActionFinder();
+        private readonly List<Command> _commands = new List<Command>();
+        private readonly ICommandActionFinder _actionFinder = new CommandActionFinder();
+        private readonly CommandFinder _commandFinder = new CommandFinder();
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
         private CommandLineHelp _help;
-        private Func<CommandLineParseResult, object> _commandSetInstantiator;
         private Func<string[], string[]> _preProcessor;
+        private IMiddleware<Request, Response>[] _middleware;
 
         public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
         {
@@ -23,50 +26,66 @@ namespace Synoptic
             return this;
         }
 
-        public CommandRunner WithCommandsFromType<T>()
-        {
-            _actionManifest.Commands.AddRange(_actionFinder.FindInType(typeof(T)).Commands);
-            return this;
-        }
-
+        //        public CommandRunner2 WithCommandsFromType<T>()
+        //        {
+        //            _commandManifest.Commands.AddRange(_actionFinder.FindInType(typeof(T)).Commands);
+        //            return this;
+        //        }
+        //
         public CommandRunner WithCommandsFromAssembly(Assembly assembly)
         {
-            _actionManifest.Commands.AddRange(_actionFinder.FindInAssembly(assembly).Commands);
+            _commands.AddRange(_commandFinder.FindInAssembly(assembly));
             return this;
         }
 
         public void Run(string[] args)
         {
-            if (_actionManifest.Commands.Count == 0)
+            var arguments = new List<string>(args);
+
+            if (_commands.Count == 0)
                 WithCommandsFromAssembly(Assembly.GetCallingAssembly());
 
-            if (_actionManifest.Commands.Count == 0)
+            if (_commands.Count == 0)
             {
                 _error.WriteLine("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic.");
                 return;
             }
 
-            if (_help == null)
-                _help = CommandLineHelpGenerator.Generate(_actionManifest);
+            //            if (_help == null)
+            //                _help = CommandLineHelpGenerator.Generate(_commandManifest);
 
-            if (args == null || args.Length == 0)
+            if (arguments.Count == 0)
             {
-                ShowHelp();
+                ShowCommands();
                 return;
             }
 
             try
             {
-                ICommandLineParser parser = new CommandLineParser();
-                
-                CommandLineParseResult parseResult = parser.Parse(_actionManifest, args, _preProcessor);
+                var pipeline = new Pipeline<Request, Response>();
+                foreach (var m in _middleware)
+                {
+                    pipeline.Add(m);
+
+                }
+
+                var response = pipeline.Execute(new Request(arguments.ToArray()));
+                response.Execute(false);
+
+                var firstArg = arguments.First();
+                arguments.RemoveAt(0);
+                args = arguments.ToArray();
+                var commandSelector = new CommandSelector();
+                var command = commandSelector.Select(firstArg, _commands);
+
+                var parser = new CommandLineParser();
+
+                CommandLineParseResult parseResult = parser.Parse(command, args);
+                _help = new CommandLineHelp(new[] { parseResult.CommandAction });
                 if (!parseResult.WasSuccessfullyParsed)
                     throw new CommandActionException(parseResult.Message);
 
-                if (_commandSetInstantiator != null)
-                    parseResult.CommandAction.Run(_commandSetInstantiator(parseResult), parseResult);
-                else
-                    parseResult.CommandAction.Run(_resolver, parseResult);
+                parseResult.CommandAction.Run(_resolver, parseResult);
             }
             catch (CommandActionException commandException)
             {
@@ -100,29 +119,35 @@ namespace Synoptic
             _error.WriteLine("Usage: {0} <command> [options]", Process.GetCurrentProcess().ProcessName);
             _error.WriteLine();
 
-            foreach (var command in _help.Commands)
-            {
-                _error.WriteLine(command.FormattedLine);
-                foreach (var parameter in command.Parameters)
-                {
-                    _error.WriteLine(parameter.FormattedLine);
-                }
+            _error.WriteLine("Help goes here...");
+            //            foreach (var command in _help.Commands)
+            //            {
+            //                _error.WriteLine(command.FormattedLine);
+            //                foreach (var parameter in command.Parameters)
+            //                {
+            //                    _error.WriteLine(parameter.FormattedLine);
+            //                }
+            //
+            //                _error.WriteLine();
+            //            }
+        }
 
+        private void ShowCommands()
+        {
+            _error.WriteLine();
+            _error.WriteLine("Usage: {0} <command> [options]", Process.GetCurrentProcess().ProcessName);
+            _error.WriteLine();
+
+            foreach (var command in _commands)
+            {
+                _error.WriteLine(command.Name + "    " + command.Description);
                 _error.WriteLine();
             }
         }
-
-        public CommandRunner WithCommandSet<T>(Func<CommandLineParseResult, object> commandSetInstantiator)
+        
+        public CommandRunner WithMiddleware(params IMiddleware<Request, Response>[] middleware)
         {
-            _actionManifest.Commands.AddRange(_actionFinder.FindInType(typeof(T)).Commands);
-            _commandSetInstantiator = commandSetInstantiator;
-
-            return this;
-        }
-
-        public CommandRunner WithArgsPreProcessor(Func<string[], string[]> preProcessor)
-        {
-            _preProcessor = preProcessor;
+            _middleware = middleware;
             return this;
         }
     }

@@ -18,9 +18,11 @@ namespace Synoptic
 
                 Description = Description.GetNewIfValid(commandParameter.Description);
                 Name = Name.GetNewIfValid(commandParameter.Name);
+                IsDefault = commandParameter.IsDefault;
             }
         }
 
+        public bool IsDefault { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public MethodInfo LinkedToMethod { get; set; }

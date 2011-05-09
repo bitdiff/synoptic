@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Synoptic
+﻿namespace Synoptic
 {
     internal interface ICommandLineParser
     {
-        CommandLineParseResult Parse(CommandActionManifest actionManifest, string[] args, Func<string[], string[]> preProcessor);
+        CommandLineParseResult Parse(Command command, string[] args);
     }
 }

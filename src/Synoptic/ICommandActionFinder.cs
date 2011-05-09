@@ -1,11 +1,9 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Collections.Generic;
 
 namespace Synoptic
 {
     internal interface ICommandActionFinder
     {
-        CommandActionManifest FindInAssembly(Assembly assembly);
-        CommandActionManifest FindInType(Type type);
+        IEnumerable<CommandAction> FindInCommand(Command command);
     }
 }

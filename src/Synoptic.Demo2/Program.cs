@@ -8,7 +8,7 @@ namespace Synoptic.Demo2
     {
         static void Main(string[] args)
         {
-            new CommandRunner2().WithMiddleware(new MyFirstMiddleware(), new MyLastMiddleware())
+            new CommandRunner().WithMiddleware(new MyFirstMiddleware(), new MyLastMiddleware())
                .Run(args);
         }
     }
@@ -16,7 +16,7 @@ namespace Synoptic.Demo2
     [Command(Name = "windows-service", Description = "Windows service")]
     public class WindowsServiceCommand
     {
-        [CommandAction(Name = "install", Description = "Installs the service")]
+        [CommandAction(IsDefault = true, Name = "install", Description = "Installs the service")]
         public void Install([CommandParameterAttribute(IsRequired = true)] string input)
         {
             Console.WriteLine("Install to " + input);
@@ -34,9 +34,7 @@ namespace Synoptic.Demo2
             Console.WriteLine("Console");
         }
     }
-
-
-
+    
     [Middleware(First = true)]
     public class MyFirstMiddleware : IMiddleware<Request, Response>
     {
@@ -46,7 +44,7 @@ namespace Synoptic.Demo2
                 .Add("master|m=", "Master name", m => request.Context["masterName"] = m).Parse(request.Arguments);
             
             request.Arguments = result.ToArray();
-            return executeNext(request);
+            return executeNext(request).Append("ssssssssss");
             //return new Response("ow");
         }
     }

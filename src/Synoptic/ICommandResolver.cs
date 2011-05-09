@@ -1,7 +1,9 @@
-﻿namespace Synoptic
+﻿using System.Collections.Generic;
+
+namespace Synoptic
 {
     internal interface ICommandResolver
     {
-        CommandAction Resolve(CommandActionManifest actionManifest, string commandName);
+        CommandAction Resolve(IEnumerable<CommandAction> actionManifest, string commandName);
     }
 }

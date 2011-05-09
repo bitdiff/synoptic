@@ -5,17 +5,9 @@ namespace Synoptic
 {
     internal class CommandResolver : ICommandResolver
     {
-        public CommandAction Resolve(CommandActionManifest actionManifest, string commandName)
+        public CommandAction Resolve(IEnumerable<CommandAction> availableActions, string actionName)
         {
-            return actionManifest.Commands.FirstOrDefault(c => c.Name.SimilarTo(commandName));
-        }
-    }
-
-    internal class CommandResolver2
-    {
-        public CommandAction Resolve(List<CommandAction> actions, string actionName)
-        {
-            return actions.FirstOrDefault(c => c.Name.SimilarTo(actionName));
+            return availableActions.FirstOrDefault(c => c.Name.SimilarTo(actionName));
         }
     }
 }

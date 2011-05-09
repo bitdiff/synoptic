@@ -9,11 +9,6 @@ namespace Synoptic
         internal static void Run(this CommandAction commandAction, IDependencyResolver resolver, CommandLineParseResult parseResult)
         {
             var instance = resolver.Resolve(commandAction.LinkedToMethod.DeclaringType);
-            Run(commandAction, instance,parseResult);
-        }
-
-        internal static void Run(this CommandAction commandAction, object instance, CommandLineParseResult parseResult)
-        {
             object[] parameterValues = GetCommandParameterValues(commandAction.Parameters, parseResult);
             commandAction.LinkedToMethod.Invoke(instance, parameterValues);
         }
@@ -23,7 +18,9 @@ namespace Synoptic
             var args = new List<object>();
             foreach (var parameter in parameters)
             {
-                CommandLineParameter commandLineParameter = parseResult.ParsedParameters.FirstOrDefault(p => p.Name.SimilarTo(parameter.Name));
+                CommandLineParameter commandLineParameter = 
+                    parseResult.ParsedParameters.FirstOrDefault(p => p.Name.SimilarTo(parameter.Name));
+                
                 object value = null;
 
                 // Method has parameter which was not supplied.
@@ -35,7 +32,7 @@ namespace Synoptic
                     }
                     else if(parameter.IsRequired)
                     {
-                        throw new CommandActionException(String.Format("The parameter {0} is required.", parameter.Name));
+                        throw new CommandActionException(String.Format("The parameter '{0}' is required.", parameter.Name));
                     }
                 }
                 else
