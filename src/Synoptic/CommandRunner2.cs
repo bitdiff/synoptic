@@ -68,8 +68,6 @@ namespace Synoptic
 
                 }
 
-                pipeline.Finally(pipeline.Execute);
-
                 var response = pipeline.Execute(new Request(args));
                 response.Execute(false);
 
