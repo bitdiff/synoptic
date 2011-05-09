@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Synoptic
@@ -26,13 +27,7 @@ namespace Synoptic
         public static IEnumerable<Type> RetrieveTypesWithAttribute<TAttribute>(Assembly assembly) 
             where TAttribute : Attribute
         {
-            foreach (Type type in assembly.GetTypes())
-            {
-                if (type.GetCustomAttributes(typeof(TAttribute), true).Length > 0)
-                {
-                    yield return type;
-                }
-            }
+            return assembly.GetTypes().Where(type => type.GetCustomAttributes(typeof(TAttribute), true).Length > 0);
         }
     }
 }

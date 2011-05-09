@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Synoptic
@@ -8,12 +10,13 @@ namespace Synoptic
         public IEnumerable<Command> FindInAssembly(Assembly assembly)
         {
             var commandTypes = ReflectionUtilities.RetrieveTypesWithAttribute<CommandAttribute>(assembly);
+            return commandTypes.Select(FindInType);
+        }
 
-            foreach (var type in commandTypes)
-            {
-                var typeInfo = new CommandTypeWrapper(type);
-                yield return new Command(typeInfo.Name, typeInfo.Description, typeInfo.LinkedToType);
-            }
+        public Command FindInType(Type type)
+        {
+            var typeInfo = new CommandTypeWrapper(type);
+            return new Command(typeInfo.Name, typeInfo.Description, typeInfo.LinkedToType);
         }
     }
 }

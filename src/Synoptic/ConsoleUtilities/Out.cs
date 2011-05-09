@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Synoptic
+namespace Synoptic.ConsoleUtilities
 {
     public static class Out
     {
-        /// <summary>
-        /// Writes <paramref name="val" /> to standard output with word wrap.
-        /// Each line is indented by <paramref name="indent" /> characters,
-        /// and is prefixed by the string specified by <paramref name="prefix"/>.
-        /// </summary>
         public static void WordWrap(string val, int indent, string prefix)
         {
             int max = Console.WindowWidth;
@@ -38,20 +33,11 @@ namespace Synoptic
             }
         }
 
-        /// <summary>
-        /// Writes <paramref name="val"/> to the standard output
-        /// with word wrap. Each line is indented by
-        /// <paramref name="indent"/> characters.
-        /// </summary>
         public static void WordWrap(string val, int indent)
         {
             WordWrap(val, indent, string.Empty);
         }
 
-        /// <summary>
-        /// Writes <paramref name="val"/> to the standard output
-        /// with word wrap.
-        /// </summary>
         public static void WordWrap(string val)
         {
             WordWrap(val, 0);

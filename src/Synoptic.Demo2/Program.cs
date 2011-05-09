@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mono.Options;
+using Synoptic.ConsoleUtilities;
+using Synoptic.Pipeline;
 
 namespace Synoptic.Demo2
 {
@@ -8,7 +10,16 @@ namespace Synoptic.Demo2
     {
         static void Main(string[] args)
         {
-            new CommandRunner().WithMiddleware(new MyFirstMiddleware(), new MyLastMiddleware())
+            Console.WriteLine(Console.WindowWidth);
+            ProgressBar progress = new ProgressBar();
+            for (int i = 0; i < 101; i++)
+            {
+                progress.Update(i);
+                System.Threading.Thread.Sleep(75);
+            }
+
+            return;
+            new CommandRunner().WithMiddleware(new MyFirstFilter(), new MyLastFilter())
                .Run(args);
         }
     }
@@ -36,7 +47,7 @@ namespace Synoptic.Demo2
     }
     
     [Middleware(First = true)]
-    public class MyFirstMiddleware : IMiddleware<Request, Response>
+    public class MyFirstFilter : IFilter<Request, Response>
     {
         public Response Process(Request request, Func<Request,Response> executeNext)
         {
@@ -50,7 +61,7 @@ namespace Synoptic.Demo2
     }
 
     [Middleware(Last = true)]
-    public class MyLastMiddleware : IMiddleware<Request,Response>
+    public class MyLastFilter : IFilter<Request,Response>
     {
         public Response Process(Request request, Func<Request,Response> executeNext)
         {

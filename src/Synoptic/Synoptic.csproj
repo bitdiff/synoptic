@@ -54,9 +54,10 @@
     <Compile Include="CommandParameterAttribute.cs" />
     <Compile Include="CommandResolver.cs" />
     <Compile Include="CommandRunner.cs" />
-    <Compile Include="CommandRunner2.cs" />
+    <Compile Include="Pipeline\PipelineExtensions.cs" />
     <Compile Include="CommandSelector.cs" />
-    <Compile Include="Out.cs" />
+    <Compile Include="ConsoleUtilities\Out.cs" />
+    <Compile Include="ConsoleUtilities\ProgressBar.cs" />
     <Compile Include="PartialMatchSelector.cs" />
     <Compile Include="CommandTypeWrapper.cs" />
     <Compile Include="HelpUtilities\CommandHelp.cs" />
@@ -71,6 +72,9 @@
     <Compile Include="MiddlewareAttribute.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="ParameterInfoWrapper.cs" />
+    <Compile Include="Pipeline\EndOfChainException.cs" />
+    <Compile Include="Pipeline\IFilter.cs" />
+    <Compile Include="Pipeline\Pipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PrototypeGenerator.cs" />
     <Compile Include="ReflectionUtilities.cs" />

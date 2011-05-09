@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Synoptic.HelpUtilities;
+using Synoptic.Pipeline;
 
 namespace Synoptic
 {
@@ -17,26 +18,6 @@ namespace Synoptic
         private readonly CommandFinder _commandFinder = new CommandFinder();
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
         private CommandLineHelp _help;
-        private Func<string[], string[]> _preProcessor;
-        private IMiddleware<Request, Response>[] _middleware;
-
-        public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
-        {
-            _resolver = resolver;
-            return this;
-        }
-
-        //        public CommandRunner2 WithCommandsFromType<T>()
-        //        {
-        //            _commandManifest.Commands.AddRange(_actionFinder.FindInType(typeof(T)).Commands);
-        //            return this;
-        //        }
-        //
-        public CommandRunner WithCommandsFromAssembly(Assembly assembly)
-        {
-            _commands.AddRange(_commandFinder.FindInAssembly(assembly));
-            return this;
-        }
 
         public void Run(string[] args)
         {
@@ -62,12 +43,12 @@ namespace Synoptic
 
             try
             {
-                var pipeline = new Pipeline<Request, Response>();
-                foreach (var m in _middleware)
-                {
-                    pipeline.Add(m);
-
-                }
+                var pipeline = new Pipeline<Request, Response>(_resolver);
+//                foreach (var m in _filter)
+//                {
+//                    pipeline.Add(m);
+//
+//                }
 
                 var response = pipeline.Execute(new Request(arguments.ToArray()));
                 response.Execute(false);
@@ -144,10 +125,28 @@ namespace Synoptic
                 _error.WriteLine();
             }
         }
-        
-        public CommandRunner WithMiddleware(params IMiddleware<Request, Response>[] middleware)
+
+        public CommandRunner WithMiddleware(params IFilter<Request, Response>[] filter)
         {
-            _middleware = middleware;
+//            _filter = filter;
+            return this;
+        }
+
+        public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
+        {
+            _resolver = resolver;
+            return this;
+        }
+
+        public CommandRunner WithCommandsFromType<T>()
+        {
+            _commands.Add(_commandFinder.FindInType(typeof(T)));
+            return this;
+        }
+
+        public CommandRunner WithCommandsFromAssembly(Assembly assembly)
+        {
+            _commands.AddRange(_commandFinder.FindInAssembly(assembly));
             return this;
         }
     }
