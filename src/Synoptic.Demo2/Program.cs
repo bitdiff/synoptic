@@ -58,7 +58,7 @@ namespace Synoptic.Demo2
         {
             if (request.Context.ContainsKey("masterName"))
                 Console.WriteLine(request.Context["masterName"]);
-            return new Response("BMC");
+            return new Response("last");
         }
     }
 }

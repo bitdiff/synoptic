@@ -62,13 +62,14 @@ namespace Synoptic
             try
             {
                 var pipeline = new Pipeline<Request, Response>();
-                foreach(var m in _middleware)
+                foreach (var m in _middleware)
                 {
                     pipeline.Add(m);
+
                 }
 
-//                pipeline.Finally(pipeline.Execute);
-                
+                pipeline.Finally(pipeline.Execute);
+
                 var response = pipeline.Execute(new Request(args));
                 response.Execute(false);
 
@@ -82,10 +83,7 @@ namespace Synoptic
                 if (!parseResult.WasSuccessfullyParsed)
                     throw new CommandActionException(parseResult.Message);
 
-                if (_commandSetInstantiator != null)
-                    parseResult.CommandAction.Run(_commandSetInstantiator(parseResult), parseResult);
-                else
-                    parseResult.CommandAction.Run(_resolver, parseResult);
+                parseResult.CommandAction.Run(_resolver, parseResult);
             }
             catch (CommandActionException commandException)
             {
@@ -118,18 +116,18 @@ namespace Synoptic
             _error.WriteLine();
             _error.WriteLine("Usage: {0} <command> [options]", Process.GetCurrentProcess().ProcessName);
             _error.WriteLine();
-            
+
             _error.WriteLine("Help goes here...");
-//            foreach (var command in _help.Commands)
-//            {
-//                _error.WriteLine(command.FormattedLine);
-//                foreach (var parameter in command.Parameters)
-//                {
-//                    _error.WriteLine(parameter.FormattedLine);
-//                }
-//
-//                _error.WriteLine();
-//            }
+            //            foreach (var command in _help.Commands)
+            //            {
+            //                _error.WriteLine(command.FormattedLine);
+            //                foreach (var parameter in command.Parameters)
+            //                {
+            //                    _error.WriteLine(parameter.FormattedLine);
+            //                }
+            //
+            //                _error.WriteLine();
+            //            }
         }
 
         private void ShowCommands()
@@ -172,7 +170,7 @@ namespace Synoptic
         private int _current;
 
         public Pipeline()
-//            : this(new ActivatorServiceProvider())
+        //            : this(new ActivatorServiceProvider())
         { }
 
         public Pipeline<T, TOut> Add(Type filterType)
