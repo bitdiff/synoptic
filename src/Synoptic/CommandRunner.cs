@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Synoptic.ConsoleUtilities;
 using Synoptic.HelpUtilities;
 using Synoptic.Pipeline;
 
@@ -32,12 +33,9 @@ namespace Synoptic
                 return;
             }
 
-            //            if (_help == null)
-            //                _help = CommandLineHelpGenerator.Generate(_commandManifest);
-
             if (arguments.Count == 0)
             {
-                ShowCommands();
+                ShowCommandHelp();
                 return;
             }
 
@@ -49,9 +47,11 @@ namespace Synoptic
 //                    pipeline.Add(m);
 //
 //                }
-
-                var response = pipeline.Execute(new Request(arguments.ToArray()));
-                response.Execute(false);
+                if(pipeline.Count>0)
+                {
+                    var response = pipeline.Execute(new Request(arguments.ToArray()));
+                    response.Execute(false);
+                }
 
                 var firstArg = arguments.First();
                 arguments.RemoveAt(0);
@@ -97,7 +97,7 @@ namespace Synoptic
         private void ShowHelp()
         {
             _error.WriteLine();
-            _error.WriteLine("Usage: {0} <command> [options]", Process.GetCurrentProcess().ProcessName);
+            _error.WriteLine("Usage: {0} <command> <action> [options]", Process.GetCurrentProcess().ProcessName);
             _error.WriteLine();
 
             _error.WriteLine("Help goes here...");
@@ -113,20 +113,28 @@ namespace Synoptic
             //            }
         }
 
-        private void ShowCommands()
+        private void ShowCommandHelp()
         {
+            _error.WriteLine("Usage: {0} COMMAND ACTION [ARGS]", Process.GetCurrentProcess().ProcessName);
             _error.WriteLine();
-            _error.WriteLine("Usage: {0} <command> [options]", Process.GetCurrentProcess().ProcessName);
-            _error.WriteLine();
+
+            int SpacingWidth = 3;
+
+            var spacer = new string(' ', SpacingWidth);
+            var maximumCommandNameLength = _commands.Count() > 0 ? _commands.Max(c => c.Name.Length) : 0;
+
+            Out.WordWrap("The available commands are:\n");
 
             foreach (var command in _commands)
             {
-                _error.WriteLine(command.Name + "    " + command.Description);
-                _error.WriteLine();
+                Out.WordWrap(String.Format("{0," + -maximumCommandNameLength + "}{1}", command.Name, spacer), spacer.Length);
+                Out.WordWrap(String.Format("{0}\n", command.Description), Console.CursorLeft);
+//                _error.WriteLine(command.Name + "    " + command.Description);
+//                _error.WriteLine();
             }
         }
 
-        public CommandRunner WithMiddleware(params IFilter<Request, Response>[] filter)
+        public CommandRunner WithArgumentFilters(params IFilter<Request, Response>[] filter)
         {
 //            _filter = filter;
             return this;

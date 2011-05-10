@@ -10,24 +10,30 @@ namespace Synoptic.Demo2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Console.WindowWidth);
-            ProgressBar progress = new ProgressBar();
-            for (int i = 0; i < 101; i++)
-            {
-                progress.Update(i);
-                System.Threading.Thread.Sleep(75);
-            }
-
-            return;
-            new CommandRunner().WithMiddleware(new MyFirstFilter(), new MyLastFilter())
+//            Console.WriteLine(Console.WindowWidth);
+//            ProgressBar progress = new ProgressBar();
+//            for (int i = 0; i < 101; i++)
+//            {
+//                progress.Update(i);
+//                System.Threading.Thread.Sleep(75);
+//            }
+//
+//            return;
+            new CommandRunner().WithArgumentFilters(new MyFirstFilter(), new MyLastFilter())
                .Run(args);
         }
     }
 
-    [Command(Name = "windows-service", Description = "Windows service")]
+    [Command(Name="this is a really long name", Description = "This is another command. Testing the wrapping of the description")]
+    public class SomeOtherCommand
+    {
+        
+    }
+
+    [Command(Name = "windows-service", Description = "Allows the configuration of a windows service.")]
     public class WindowsServiceCommand
     {
-        [CommandAction(IsDefault = true, Name = "install", Description = "Installs the service")]
+        [CommandAction(Name = "install", Description = "Installs the service")]
         public void Install([CommandParameterAttribute(IsRequired = true)] string input)
         {
             Console.WriteLine("Install to " + input);
@@ -39,7 +45,7 @@ namespace Synoptic.Demo2
             Console.WriteLine("Uninstall");
         }
 
-        [CommandAction(Name = "console", Description = "Runs the service in console mode")]
+        [CommandAction(IsDefault = true, Name = "run", Description = "Runs the service in console mode")]
         public void Run()
         {
             Console.WriteLine("Console");
