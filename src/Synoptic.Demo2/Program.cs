@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Mono.Options;
-using Synoptic.ConsoleUtilities;
-using Synoptic.Pipeline;
 
 namespace Synoptic.Demo2
 {
@@ -10,24 +7,41 @@ namespace Synoptic.Demo2
     {
         static void Main(string[] args)
         {
-//            Console.WriteLine(Console.WindowWidth);
-//            ProgressBar progress = new ProgressBar();
-//            for (int i = 0; i < 101; i++)
-//            {
-//                progress.Update(i);
-//                System.Threading.Thread.Sleep(75);
-//            }
-//
-//            return;
-            new CommandRunner().WithArgumentFilters(new MyFirstFilter(), new MyLastFilter())
+            //            Console.WriteLine(Console.WindowWidth);
+            //            ProgressBar progress = new ProgressBar();
+            //            for (int i = 0; i < 101; i++)
+            //            {
+            //                progress.Update(i);
+            //                System.Threading.Thread.Sleep(75);
+            //            }
+            //
+            //            return;
+            var optionSet = new OptionSet
+                                {
+                                    { "h|help", v => { GlobalOptions.Help = v; } },
+                                    { "m|master=", v => { GlobalOptions.Help = v; } },
+                                };
+            new CommandRunner().WithGlobalOptions(optionSet)
                .Run(args);
         }
+
+        public static MyGlobalOptions GlobalOptions = new MyGlobalOptions();
     }
 
-    [Command(Name="this is a really long name", Description = "This is another command. Testing the wrapping of the description")]
+    public class MyGlobalOptions
+    {
+        public string Help { get; set; }
+    }
+
+    [Command(Name = "this is a really long name", Description = "This is another command. Testing the wrapping of the description")]
     public class SomeOtherCommand
     {
-        
+        [CommandAction(IsDefault = true)]
+        public void Crank()
+        {
+            Console.WriteLine("Cranking...");
+            Console.WriteLine(Program.GlobalOptions.Help);
+        }
     }
 
     [Command(Name = "windows-service", Description = "Allows the configuration of a windows service.")]
@@ -49,31 +63,6 @@ namespace Synoptic.Demo2
         public void Run()
         {
             Console.WriteLine("Console");
-        }
-    }
-    
-    [Middleware(First = true)]
-    public class MyFirstFilter : IFilter<Request, Response>
-    {
-        public Response Process(Request request, Func<Request,Response> executeNext)
-        {
-            List<string> result = new OptionSet()
-                .Add("master|m=", "Master name", m => request.Context["masterName"] = m).Parse(request.Arguments);
-            
-            request.Arguments = result.ToArray();
-            return executeNext(request).Append("ssssssssss");
-            //return new Response("ow");
-        }
-    }
-
-    [Middleware(Last = true)]
-    public class MyLastFilter : IFilter<Request,Response>
-    {
-        public Response Process(Request request, Func<Request,Response> executeNext)
-        {
-            if (request.Context.ContainsKey("masterName"))
-                Console.WriteLine(request.Context["masterName"]);
-            return new Response("last");
         }
     }
 }

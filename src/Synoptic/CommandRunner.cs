@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Mono.Options;
 using Synoptic.ConsoleUtilities;
 using Synoptic.HelpUtilities;
-using Synoptic.Pipeline;
 
 namespace Synoptic
 {
@@ -19,9 +19,16 @@ namespace Synoptic
         private readonly CommandFinder _commandFinder = new CommandFinder();
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
         private CommandLineHelp _help;
+        private OptionSet _optionSet;
 
         public void Run(string[] args)
         {
+            if (_optionSet != null)
+            {
+                _optionSet.WriteOptionDescriptions(Console.Out);
+                args = _optionSet.Parse(args).ToArray();
+            }
+
             var arguments = new List<string>(args);
 
             if (_commands.Count == 0)
@@ -41,18 +48,6 @@ namespace Synoptic
 
             try
             {
-                var pipeline = new Pipeline<Request, Response>(_resolver);
-//                foreach (var m in _filter)
-//                {
-//                    pipeline.Add(m);
-//
-//                }
-                if(pipeline.Count>0)
-                {
-                    var response = pipeline.Execute(new Request(arguments.ToArray()));
-                    response.Execute(false);
-                }
-
                 var firstArg = arguments.First();
                 arguments.RemoveAt(0);
                 args = arguments.ToArray();
@@ -129,15 +124,9 @@ namespace Synoptic
             {
                 Out.WordWrap(String.Format("{0," + -maximumCommandNameLength + "}{1}", command.Name, spacer), spacer.Length);
                 Out.WordWrap(String.Format("{0}\n", command.Description), Console.CursorLeft);
-//                _error.WriteLine(command.Name + "    " + command.Description);
-//                _error.WriteLine();
+                //                _error.WriteLine(command.Name + "    " + command.Description);
+                //                _error.WriteLine();
             }
-        }
-
-        public CommandRunner WithArgumentFilters(params IFilter<Request, Response>[] filter)
-        {
-//            _filter = filter;
-            return this;
         }
 
         public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
@@ -155,6 +144,12 @@ namespace Synoptic
         public CommandRunner WithCommandsFromAssembly(Assembly assembly)
         {
             _commands.AddRange(_commandFinder.FindInAssembly(assembly));
+            return this;
+        }
+
+        public CommandRunner WithGlobalOptions(OptionSet optionSet)
+        {
+            _optionSet = optionSet;
             return this;
         }
     }

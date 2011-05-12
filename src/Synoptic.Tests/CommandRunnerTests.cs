@@ -69,7 +69,7 @@ namespace Synoptic.Tests
 //            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(new[] { "CommandWithBool" });
         }
 
-        public class RunnerTest
+        internal class RunnerTest
         {
             public volatile static Action<MethodBase, object[]> TestAction = (m, a) => { };
 

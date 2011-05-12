@@ -2,7 +2,7 @@
 
 namespace Synoptic
 {
-    public class Command
+    internal class Command
     {
         public Command(string name, string description, Type linkedToType)
         {

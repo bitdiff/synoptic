@@ -1,6 +1,6 @@
 ﻿namespace Synoptic
 {
-    public class CommandLineParameter
+    internal class CommandLineParameter
     {
         public CommandLineParameter(string name,
                                     string value)

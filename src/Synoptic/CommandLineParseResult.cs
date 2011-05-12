@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Synoptic
 {
-    public class CommandLineParseResult
+    internal class CommandLineParseResult
     {
         public CommandLineParseResult(CommandAction commandAction, IEnumerable<CommandLineParameter> parsedParameters, string[] additionalParameters) : this(commandAction, parsedParameters, additionalParameters, null) {}
         public CommandLineParseResult(CommandAction commandAction, IEnumerable<CommandLineParameter> parsedParameters, string[] additionalParameters, string message)
