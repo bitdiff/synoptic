@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Mono.Options;
 using Synoptic.ConsoleUtilities;
 using Synoptic.HelpUtilities;
@@ -14,7 +15,7 @@ namespace Synoptic
     {
         private readonly TextWriter _error = Console.Error;
 
-        private readonly List<Command> _commands = new List<Command>();
+        private readonly List<Command> _availableCommands = new List<Command>();
         private readonly ICommandActionFinder _actionFinder = new CommandActionFinder();
         private readonly CommandFinder _commandFinder = new CommandFinder();
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
@@ -23,26 +24,25 @@ namespace Synoptic
 
         public void Run(string[] args)
         {
+            List<string> arguments = new List<string>(args);
+
             if (_optionSet != null)
             {
-                _optionSet.WriteOptionDescriptions(Console.Out);
-                args = _optionSet.Parse(args).ToArray();
+                arguments = _optionSet.Parse(arguments);
             }
 
-            var arguments = new List<string>(args);
-
-            if (_commands.Count == 0)
+            if (_availableCommands.Count == 0)
                 WithCommandsFromAssembly(Assembly.GetCallingAssembly());
 
-            if (_commands.Count == 0)
+            if (_availableCommands.Count == 0)
             {
-                _error.WriteLine("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic.");
+                Out.WordWrap("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic using the [Command] attribute.");
                 return;
             }
 
             if (arguments.Count == 0)
             {
-                ShowCommandHelp();
+                ShowCommandHelp(_optionSet);
                 return;
             }
 
@@ -52,7 +52,7 @@ namespace Synoptic
                 arguments.RemoveAt(0);
                 args = arguments.ToArray();
                 var commandSelector = new CommandSelector();
-                var command = commandSelector.Select(firstArg, _commands);
+                var command = commandSelector.Select(firstArg, _availableCommands);
 
                 var parser = new CommandLineParser();
 
@@ -66,7 +66,6 @@ namespace Synoptic
             catch (CommandActionException commandException)
             {
                 ShowErrorMessage(commandException);
-                ShowHelp();
             }
             catch (TargetInvocationException targetInvocationException)
             {
@@ -77,7 +76,6 @@ namespace Synoptic
                 if (innerException is CommandActionException)
                 {
                     ShowErrorMessage(innerException);
-                    ShowHelp();
                 }
 
                 throw new CommandInvocationException("Error executing command", innerException);
@@ -89,43 +87,27 @@ namespace Synoptic
             _error.WriteLine(exception.Message);
         }
 
-        private void ShowHelp()
+        private void ShowCommandHelp(OptionSet optionSet)
         {
-            _error.WriteLine();
-            _error.WriteLine("Usage: {0} <command> <action> [options]", Process.GetCurrentProcess().ProcessName);
-            _error.WriteLine();
+            var processName = Process.GetCurrentProcess().ProcessName;
+            var usagePreamble = String.Format("Usage: {0} ", processName);
+            Out.WordWrap(usagePreamble);
+            
+            var usagePattern = GetUsagePattern(optionSet);
+            Out.WordWrap(usagePattern, usagePreamble.Length);
+            Console.WriteLine("\n");
 
-            _error.WriteLine("Help goes here...");
-            //            foreach (var command in _help.Commands)
-            //            {
-            //                _error.WriteLine(command.FormattedLine);
-            //                foreach (var parameter in command.Parameters)
-            //                {
-            //                    _error.WriteLine(parameter.FormattedLine);
-            //                }
-            //
-            //                _error.WriteLine();
-            //            }
-        }
+            const int spacingWidth = 3;
 
-        private void ShowCommandHelp()
-        {
-            _error.WriteLine("Usage: {0} COMMAND ACTION [ARGS]", Process.GetCurrentProcess().ProcessName);
-            _error.WriteLine();
-
-            int SpacingWidth = 3;
-
-            var spacer = new string(' ', SpacingWidth);
-            var maximumCommandNameLength = _commands.Count() > 0 ? _commands.Max(c => c.Name.Length) : 0;
+            var spacer = new string(' ', spacingWidth);
+            var maximumCommandNameLength = _availableCommands.Count() > 0 ? _availableCommands.Max(c => c.Name.Length) : 0;
 
             Out.WordWrap("The available commands are:\n");
 
-            foreach (var command in _commands)
+            foreach (var command in _availableCommands)
             {
                 Out.WordWrap(String.Format("{0," + -maximumCommandNameLength + "}{1}", command.Name, spacer), spacer.Length);
                 Out.WordWrap(String.Format("{0}\n", command.Description), Console.CursorLeft);
-                //                _error.WriteLine(command.Name + "    " + command.Description);
-                //                _error.WriteLine();
             }
         }
 
@@ -135,15 +117,40 @@ namespace Synoptic
             return this;
         }
 
+        public string GetUsagePattern(OptionSet optionSet)
+        {
+            var output = new StringBuilder();
+
+            // Generate usage.
+            if (optionSet != null)
+            {
+                foreach (Option o in _optionSet)
+                {
+                    if (o.OptionValueType == OptionValueType.None)
+                    {
+                        output.AppendFormat("[--{0}]", o.Prototype);
+                    }
+                    if (o.OptionValueType == OptionValueType.Required)
+                    {
+                        output.AppendFormat("[--{0}VALUE]", o.Prototype);
+                    }
+
+                    output.Append(" ");
+                }
+            }
+
+            return output.Append("COMMAND ACTION [ARGS]").ToString();
+        }
+
         public CommandRunner WithCommandsFromType<T>()
         {
-            _commands.Add(_commandFinder.FindInType(typeof(T)));
+            _availableCommands.Add(_commandFinder.FindInType(typeof(T)));
             return this;
         }
 
         public CommandRunner WithCommandsFromAssembly(Assembly assembly)
         {
-            _commands.AddRange(_commandFinder.FindInAssembly(assembly));
+            _availableCommands.AddRange(_commandFinder.FindInAssembly(assembly));
             return this;
         }
 

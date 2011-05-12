@@ -7,19 +7,12 @@ namespace Synoptic.Demo2
     {
         static void Main(string[] args)
         {
-            //            Console.WriteLine(Console.WindowWidth);
-            //            ProgressBar progress = new ProgressBar();
-            //            for (int i = 0; i < 101; i++)
-            //            {
-            //                progress.Update(i);
-            //                System.Threading.Thread.Sleep(75);
-            //            }
-            //
-            //            return;
             var optionSet = new OptionSet
                                 {
-                                    { "h|help", v => { GlobalOptions.Help = v; } },
+                                    { "h|help", "shows help",v => { GlobalOptions.Help = v; } },
                                     { "m|master=", v => { GlobalOptions.Help = v; } },
+                                    { "s=", v => { GlobalOptions.Help = v; } },
+                                    { "lll|llllll=", v => { GlobalOptions.Help = v; } },
                                 };
             new CommandRunner().WithGlobalOptions(optionSet)
                .Run(args);

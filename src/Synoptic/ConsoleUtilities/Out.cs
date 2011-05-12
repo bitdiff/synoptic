@@ -10,7 +10,7 @@ namespace Synoptic.ConsoleUtilities
             int max = Console.WindowWidth;
             string pad = new string(' ', indent) + prefix;
 
-            Regex r = new Regex(@"([\w\.\:\-]*(\s)?)");
+            Regex r = new Regex(@"([\w\.\:\-\=\|\[\]]*(\s)?)");
             Match words = r.Match(val);
 
             int count = Console.CursorLeft;
