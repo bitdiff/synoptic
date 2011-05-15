@@ -26,7 +26,7 @@ namespace Synoptic.Demo2
         public string Help { get; set; }
     }
 
-    [Command(Name = "this is a really long name", Description = "This is another command. Testing the wrapping of the description")]
+    [Command(Name = "this is a really long name", Description = "This is another command. Testing the wrapping of the description.")]
     public class SomeOtherCommand
     {
         [CommandAction(IsDefault = true)]
