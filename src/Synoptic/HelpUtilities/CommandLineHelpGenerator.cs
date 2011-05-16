@@ -44,10 +44,10 @@ namespace Synoptic.HelpUtilities
         {
             var processName = Process.GetCurrentProcess().ProcessName;
             var usagePreamble = String.Format("Usage: {0} ", processName);
-            Out.WordWrap(usagePreamble);
+            ConsoleFormatter.Write(usagePreamble);
 
             var usagePattern = GetUsagePattern(optionSet);
-            Out.WordWrap(usagePattern, usagePreamble.Length);
+            ConsoleFormatter.Write(usagePreamble.Length, usagePattern);
             Console.WriteLine("\n");
 
             const int spacingWidth = 3;
@@ -55,12 +55,12 @@ namespace Synoptic.HelpUtilities
             var spacer = new string(' ', spacingWidth);
             var maximumCommandNameLength = availableCommands.Count() > 0 ? availableCommands.Max(c => c.Name.Length) : 0;
 
-            Out.WordWrap("The available commands are:\n");
+            ConsoleFormatter.Write("The available commands are:\n");
 
             foreach (var command in availableCommands)
             {
-                Out.WordWrap(String.Format("{0," + -maximumCommandNameLength + "}{1}", command.Name, spacer), spacer.Length);
-                Out.WordWrap(String.Format("{0}\n", command.Description), Console.CursorLeft);
+                ConsoleFormatter.Write(spacer.Length, String.Format("{0," + -maximumCommandNameLength + "}{1}", command.Name, spacer));
+                ConsoleFormatter.Write(Console.CursorLeft, String.Format("{0}\n", command.Description));
             }
         }
     }

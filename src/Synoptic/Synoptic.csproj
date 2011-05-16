@@ -55,7 +55,7 @@
     <Compile Include="CommandResolver.cs" />
     <Compile Include="CommandRunner.cs" />
     <Compile Include="CommandSelector.cs" />
-    <Compile Include="ConsoleUtilities\Out.cs" />
+    <Compile Include="ConsoleUtilities\ConsoleFormatter.cs" />
     <Compile Include="ConsoleUtilities\ProgressBar.cs" />
     <Compile Include="PartialMatchSelector.cs" />
     <Compile Include="CommandTypeWrapper.cs" />

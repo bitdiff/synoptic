@@ -34,7 +34,7 @@ namespace Synoptic
 
             if (_availableCommands.Count == 0)
             {
-                Out.WordWrap("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic using the [Command] attribute.");
+                ConsoleFormatter.Write("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic using the [Command] attribute.");
                 return;
             }
 
