@@ -13,12 +13,15 @@ namespace Synoptic
                 return command;
 
             var message = String.Format("'{0}' is not a valid command.", commandName);
-            var possibleCommands = string.Join(" or ", 
-                availableCommands.Select(c => String.Format("'{0}'", c.Name.ToHyphened())).ToArray());
+
+            var possibleCommands = new MatchSelector<Command>().PartialMatch(commandName, availableCommands, c => c.Name);
 
             if (possibleCommands.Count() > 0)
             {
-                throw new CommandActionException(String.Format("{0}\n\nDid you mean:\n\t{1}?", message, possibleCommands));
+                var possibleCommandsFormatted = string.Join(" or ",
+                    possibleCommands.Select(c => String.Format("'{0}'", c.Name.ToHyphened())).ToArray());
+
+                throw new CommandActionException(String.Format("{0}\n\nDid you mean:\n\t{1}?", message, possibleCommandsFormatted));
             }
 
             throw new CommandActionException(message);
