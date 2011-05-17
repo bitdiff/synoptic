@@ -34,7 +34,7 @@ namespace Synoptic
                 result.Add(c);
             }
 
-            return new string(result.ToArray()).ToLowerInvariant();
+            return new string(result.ToArray()).Replace(" ", "-").ToLowerInvariant();
         }
     }
 }

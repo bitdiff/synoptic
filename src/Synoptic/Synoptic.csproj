@@ -57,7 +57,7 @@
     <Compile Include="CommandSelector.cs" />
     <Compile Include="ConsoleUtilities\ConsoleFormatter.cs" />
     <Compile Include="ConsoleUtilities\ProgressBar.cs" />
-    <Compile Include="PartialMatchSelector.cs" />
+    <Compile Include="MatchSelector.cs" />
     <Compile Include="CommandTypeWrapper.cs" />
     <Compile Include="HelpUtilities\CommandHelp.cs" />
     <Compile Include="HelpUtilities\CommandLineHelp.cs" />
