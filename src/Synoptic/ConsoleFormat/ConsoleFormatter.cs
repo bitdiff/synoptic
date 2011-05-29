@@ -24,11 +24,9 @@ namespace Synoptic.ConsoleFormat
                         var words = cell.GetWordsForLine(width);
 
                         Console.Write("{0,-" + cell.Padding + "}", String.Empty);
-                        // Prevent applying style to empty lines caused by other cells wrapping.
-//                        Console.Write("{0,-" + width + "}", words);
+                        
                         if (words.Length > 0)
                             SetConsoleStyle(cell.Style);
-
                         Console.Write("{0}", words);
                         Console.ResetColor();
 
