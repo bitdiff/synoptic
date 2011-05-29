@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mono.Options;
+using Synoptic.Exceptions;
 
 namespace Synoptic
 {
@@ -20,19 +21,15 @@ namespace Synoptic
                 );
             }
 
-            var extra = new List<string>();
-            string optionExceptionMessage = null;
-
             try
             {
-                extra = options.Parse(args);
+                var extra = options.Parse(args);
+                return new CommandLineParseResult(action, commandLineParameters, extra.ToArray());
             }
             catch (OptionException exception)
             {
-                optionExceptionMessage = exception.Message;
+                throw new CommandLineParseException(exception.Message, action);
             }
-
-            return new CommandLineParseResult(action, commandLineParameters, extra.ToArray(), optionExceptionMessage);
         }
     }
 }

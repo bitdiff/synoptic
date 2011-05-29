@@ -12,7 +12,7 @@ namespace Synoptic.Demo.Commands
         }
 
         [CommandAction(Name = "uninstall", Description = "Uninstalls the service")]
-        public void Uninstall()
+        public void Uninstall([CommandParameterAttribute(Description = "Another input field", IsRequired = true)] string input2, [CommandParameterAttribute(Description = "Yet another input field", IsRequired = true)] string input3)
         {
             Console.WriteLine("Uninstall");
         }

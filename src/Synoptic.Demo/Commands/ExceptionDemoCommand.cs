@@ -15,7 +15,7 @@ namespace Synoptic.Demo.Commands
         [CommandAction(Name = "cex", Description = "Generates a CommandException.")]
         public void GenerateCommandException()
         {
-            throw new CommandActionException("This is caught internally.");
+            throw new CommandParameterInvalidException("This is caught internally.");
         }
     }
 }

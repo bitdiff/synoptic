@@ -60,7 +60,8 @@ namespace Synoptic.ConsoleFormat
             get { return _text; }
             set
             {
-                _currentMatch = _wordExpression.Match(value);
+                _currentMatch = value == null ? Match.Empty : _wordExpression.Match(value);
+
                 HasMoreWords = _currentMatch.Success;
                 _text = value;
             }

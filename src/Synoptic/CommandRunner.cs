@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Mono.Options;
-using Synoptic.ConsoleFormat;
 using Synoptic.Exceptions;
-using Synoptic.HelpUtilities;
 
 namespace Synoptic
 {
@@ -16,6 +14,7 @@ namespace Synoptic
         private readonly List<Command> _availableCommands = new List<Command>();
         private readonly CommandFinder _commandFinder = new CommandFinder();
         private readonly HelpGenerator _helpGenerator = new HelpGenerator();
+        private readonly ICommandActionFinder _commandActionFinder = new CommandActionFinder();
 
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
         private OptionSet _optionSet;
@@ -35,7 +34,7 @@ namespace Synoptic
 
             if (arguments.Count == 0)
             {
-                _helpGenerator.ShowCommandHelp(_availableCommands, _optionSet);
+                _helpGenerator.ShowCommandUsage(_availableCommands, _optionSet);
                 return;
             }
 
@@ -47,34 +46,25 @@ namespace Synoptic
                 var command = commandSelector.Select(commandName, _availableCommands);
 
                 var actionName = arguments.Count > 0 ? arguments.Dequeue() : null;
-                
+                var availableActions = _commandActionFinder.FindInCommand(command);
+
+                if(actionName == null)
+                {
+                    _helpGenerator.ShowCommandHelp(command, availableActions);
+                    return;
+                }
+
                 var actionSelector = new ActionSelector();
-                var action = actionSelector.Select(actionName, command);
+                var action = actionSelector.Select(actionName, command, availableActions);
 
                 var parser = new CommandLineParser();
 
                 CommandLineParseResult parseResult = parser.Parse(action, arguments.ToArray());
-                if (!parseResult.WasSuccessfullyParsed)
-                    throw new CommandActionException(parseResult.Message);
-
                 parseResult.CommandAction.Run(_resolver, parseResult);
             }
-            catch (NoCommandsDefinedException)
+            catch (CommandParseExceptionBase exception)
             {
-                ConsoleFormatter.Write("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic using the [Command] attribute.");
-                return;
-            }
-            catch (CommandNotFoundException exception)
-            {
-                _helpGenerator.ShowExceptionHelp(exception);
-            }
-            catch (ActionNotFoundException exception)
-            {
-                _helpGenerator.ShowExceptionHelp(exception);
-            }
-            catch (CommandActionException commandException)
-            {
-                ShowErrorMessage(commandException);
+                exception.Render();
             }
             catch (TargetInvocationException targetInvocationException)
             {
@@ -82,7 +72,7 @@ namespace Synoptic
 
                 if (innerException == null) throw;
 
-                if (innerException is CommandActionException)
+                if (innerException is CommandLineParseException)
                 {
                     ShowErrorMessage(innerException);
                 }

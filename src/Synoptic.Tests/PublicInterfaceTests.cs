@@ -18,7 +18,7 @@ namespace Synoptic.Tests
                                                         typeof (CommandRunner),
                                                         typeof (CommandInvocationException),
                                                         typeof (IDependencyResolver),
-                                                        typeof (CommandActionException),
+                                                        typeof (CommandLineParseException),
                                                         typeof (CommandParameterAttribute),
                                                         typeof (CommandActionAttribute),
                                                         typeof (IWindowsServiceConfiguration),

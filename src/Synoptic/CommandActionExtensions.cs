@@ -11,19 +11,23 @@ namespace Synoptic
         {
             var instance = resolver.Resolve(commandAction.LinkedToMethod.DeclaringType);
             object[] parameterValues = GetCommandParameterValues(commandAction.Parameters, parseResult);
+            
             commandAction.LinkedToMethod.Invoke(instance, parameterValues);
         }
 
-        private static object[] GetCommandParameterValues(IEnumerable<ParameterInfoWrapper> parameters, CommandLineParseResult parseResult)
+        private static object[] GetCommandParameterValues(IEnumerable<ParameterInfoWrapper> parameters, 
+            CommandLineParseResult parseResult)
         {
             var args = new List<object>();
             foreach (var parameter in parameters)
             {
-                CommandLineParameter commandLineParameter = 
-                    parseResult.ParsedParameters.FirstOrDefault(p => p.Name.SimilarTo(parameter.Name));
+                var parameterName = parameter.Name;
+
+                CommandLineParameter commandLineParameter =
+                    parseResult.ParsedParameters.FirstOrDefault(p => p.Name.SimilarTo(parameterName));
                 
                 object value = null;
-
+                
                 // Method has parameter which was not supplied.
                 if (commandLineParameter == null || commandLineParameter.Value == null)
                 {
@@ -33,7 +37,7 @@ namespace Synoptic
                     }
                     else if(parameter.IsRequired)
                     {
-                        throw new CommandActionException(String.Format("The parameter '{0}' is required.", parameter.Name));
+                        throw new CommandParameterInvalidException(String.Format("The parameter '{0}' is required.", parameter.Name));
                     }
                 }
                 else

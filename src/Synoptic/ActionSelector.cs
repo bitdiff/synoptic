@@ -1,21 +1,21 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Synoptic.Exceptions;
 
 namespace Synoptic
 {
     internal class ActionSelector
     {
-        private readonly ICommandActionFinder _commandActionFinder = new CommandActionFinder();
 
-        public CommandAction Select(string actionName, Command command)
+        public CommandAction Select(string actionName, Command command, IEnumerable<CommandAction> availableActions)
         {
-            var availableActions = _commandActionFinder.FindInCommand(command);
             CommandAction action = new MatchSelector<CommandAction>().Match(actionName, availableActions, c => c.Name) ??
                                    availableActions.FirstOrDefault(a => a.IsDefault);
 
             if (action != null)
                 return action;
 
-            var exception = new ActionNotFoundException(actionName, command);
+            var exception = new CommandActionNotFoundException(actionName, command);
             exception.AvailableActions.AddRange(availableActions);
 
             var possibleActions = new MatchSelector<CommandAction>().PartialMatch(actionName, availableActions, c => c.Name);

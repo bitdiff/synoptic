@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Synoptic.ConsoleFormat;
 
 namespace Synoptic.Exceptions
 {
-    internal class CommandNotFoundException : ApplicationException
+    internal class CommandNotFoundException : CommandParseExceptionBase
     {
         private readonly string _commandName;
         private readonly List<Command> _possibleCommands = new List<Command>();
@@ -30,10 +32,30 @@ namespace Synoptic.Exceptions
         {
             get { return _possibleCommands; }
         }
-        
+
         public List<Command> AvailableCommands
         {
             get { return _availableCommands; }
+        }
+
+        public override void Render()
+        {
+            ConsoleFormatter.Write(new ConsoleTable(
+                                           new ConsoleCell("'{0}' is not a valid command.",
+                                                           CommandName).WithPadding(0)));
+
+            var formattedCommandList = string.Join(" or ",
+                                                   (PossibleCommands.Count > 0
+                                                        ? PossibleCommands
+                                                        : AvailableCommands).Select(
+                                                            c => String.Format("'{0}'", c.Name)).ToArray());
+
+            ConsoleFormatter.Write(new ConsoleTable()
+                                       .AddEmptyRow()
+                                       .AddRow(
+                                           new ConsoleCell("Did you mean:").WithPadding(0))
+                                       .AddRow(
+                                           new ConsoleCell(formattedCommandList)));
         }
     }
 }

@@ -39,12 +39,12 @@
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
     <Compile Include="ActionSelector.cs" />
-    <Compile Include="Exceptions\ActionNotFoundException.cs" />
+    <Compile Include="Exceptions\CommandActionNotFoundException.cs" />
     <Compile Include="ActivatorDependencyResolver.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandAction.cs" />
     <Compile Include="CommandActionAttribute.cs" />
-    <Compile Include="Exceptions\CommandActionException.cs" />
+    <Compile Include="Exceptions\CommandLineParseException.cs" />
     <Compile Include="CommandActionExtensions.cs" />
     <Compile Include="CommandActionFinder.cs" />
     <Compile Include="CommandAttribute.cs" />
@@ -63,10 +63,12 @@
     <Compile Include="ConsoleFormat\ConsoleStyle.cs" />
     <Compile Include="ConsoleFormat\ConsoleTable.cs" />
     <Compile Include="ConsoleFormat\ProgressBar.cs" />
+    <Compile Include="Exceptions\CommandParameterInvalidException.cs" />
+    <Compile Include="Exceptions\CommandParseExceptionBase.cs" />
     <Compile Include="Exceptions\NoCommandsDefinedException.cs" />
     <Compile Include="MatchSelector.cs" />
     <Compile Include="CommandTypeWrapper.cs" />
-    <Compile Include="HelpUtilities\HelpGenerator.cs" />
+    <Compile Include="HelpGenerator.cs" />
     <Compile Include="ICommandActionFinder.cs" />
     <Compile Include="ICommandLineParser.cs" />
     <Compile Include="IDependencyResolver.cs" />

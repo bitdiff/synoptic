@@ -34,7 +34,7 @@ namespace Synoptic.Service.Demo
             else if (remove)
                 _service.Uninstall();
             else
-                throw new CommandActionException("You must specify at least one option");
+                throw new CommandParameterInvalidException("You must specify at least one option");
         }
 
         [CommandAction]
