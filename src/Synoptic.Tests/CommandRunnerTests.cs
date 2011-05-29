@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
+using Synoptic.ConsoleFormat;
 
 namespace Synoptic.Tests
 {
@@ -12,6 +13,18 @@ namespace Synoptic.Tests
         [Test]
         public void should_display_help_for_one_class()
         {
+            ConsoleTable t  = new ConsoleTable();
+            var row = new ConsoleRow();
+            var cell = new ConsoleCell()
+                           {
+                               Text = "sad sa dasd a dasd ad a dsa das d sad"
+                           };
+
+            row.AddCell(cell);
+            t.AddRow(row);
+
+            ConsoleFormatter.Write(t);
+            
 //            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(null);
         }
 

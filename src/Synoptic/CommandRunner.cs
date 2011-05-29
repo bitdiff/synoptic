@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Mono.Options;
-using Synoptic.ConsoleUtilities;
+using Synoptic.ConsoleFormat;
 using Synoptic.HelpUtilities;
 
 namespace Synoptic

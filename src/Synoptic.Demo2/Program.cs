@@ -1,5 +1,6 @@
 ﻿using System;
 using Mono.Options;
+using Synoptic.ConsoleFormat;
 
 namespace Synoptic.Demo2
 {
@@ -7,6 +8,38 @@ namespace Synoptic.Demo2
     {
         static void Main(string[] args)
         {
+//            Console.ResetColor();
+//            
+//            ConsoleTable t = new ConsoleTable();
+//            var row = new ConsoleRow();
+//            var cell = new ConsoleCell()
+//                           {
+//                Text = "111111111111111111111111111111 this is the first column aaa aaa aaa this is still the first column aaa aaa ZZZ ZZZ x x x x x x x x x x x x x x x x x x x x x x x x x x"
+//            };
+//            var cell2 = new ConsoleCell()
+//                            {
+//                Text = "this is the second column bbb bbb bbb"
+//            };
+//            cell2.Style.ForegroundColor = ConsoleColor.Yellow;
+//            
+//            var cell3 = new ConsoleCell()
+//                            {
+//                
+//                Text = "this is the third column ccc ccc ccc long columns are being tested here especially when there is a middle column that is shorter than the others"
+//            };
+//
+//            cell3.Style.BackgroundColor = ConsoleColor.DarkGreen;
+//            row.AddCells(cell, cell2, cell3);
+//            t.AddRows(row);
+//
+//            new ConsoleFormatter().Write(t);
+//            return;
+            
+            
+            
+            
+            
+            
             var optionSet = new OptionSet
                                 {
                                     { "h|help", "shows help",v => { GlobalOptions.Help = v; } },

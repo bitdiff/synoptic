@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Synoptic.ConsoleUtilities
+namespace Synoptic.ConsoleFormat
 {
     public class ProgressBar
     {

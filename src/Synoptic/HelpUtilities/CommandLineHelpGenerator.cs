@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Mono.Options;
-using Synoptic.ConsoleUtilities;
+using Synoptic.ConsoleFormat;
 
 namespace Synoptic.HelpUtilities
 {
@@ -15,11 +15,9 @@ namespace Synoptic.HelpUtilities
             return new CommandLineHelp(commandActions);
         }
 
-        private string GetUsagePattern(IEnumerable<Option> optionSet)
+        private string GenerateUsagePattern(IEnumerable<Option> optionSet)
         {
             var output = new StringBuilder();
-
-            // Generate usage.
             if (optionSet != null)
             {
                 foreach (Option o in optionSet)
@@ -44,24 +42,33 @@ namespace Synoptic.HelpUtilities
         {
             var processName = Process.GetCurrentProcess().ProcessName;
             var usagePreamble = String.Format("Usage: {0} ", processName);
-            ConsoleFormatter.Write(usagePreamble);
+            var usagePattern = GenerateUsagePattern(optionSet);
 
-            var usagePattern = GetUsagePattern(optionSet);
-            ConsoleFormatter.Write(usagePreamble.Length, usagePattern);
-            Console.WriteLine("\n");
+            ConsoleFormatter.Write(
+                new ConsoleTable(
+                    new ConsoleRow(
+                        new ConsoleCell(usagePreamble) { Width = usagePreamble.Length, Padding = 0 },
+                        new ConsoleCell(usagePattern) { Padding = 0 })));
 
-            const int spacingWidth = 3;
-
-            var spacer = new string(' ', spacingWidth);
             var maximumCommandNameLength = availableCommands.Count() > 0 ? availableCommands.Max(c => c.Name.Length) : 0;
 
-            ConsoleFormatter.Write("The available commands are:\n");
+            var commandTable = new ConsoleTable("\nThe available commands are:");
 
             foreach (var command in availableCommands)
             {
-                ConsoleFormatter.Write(spacer.Length, String.Format("{0," + -maximumCommandNameLength + "}{1}", command.Name, spacer));
-                ConsoleFormatter.Write(Console.CursorLeft, String.Format("{0}\n", command.Description));
+                commandTable.AddRow(
+                    new ConsoleRow(
+                        new ConsoleCell(command.Name.ToHyphened()) { Width = maximumCommandNameLength },
+                        new ConsoleCell(command.Description)));
             }
+
+            foreach(var row in commandTable.Rows.Skip(1))
+            {
+                row.Cells.ElementAt(0).Style.ForegroundColor = ConsoleColor.Black;
+                row.Cells.ElementAt(0).Style.BackgroundColor = ConsoleColor.Blue;
+            }
+
+            ConsoleFormatter.Write(commandTable);
         }
     }
 }

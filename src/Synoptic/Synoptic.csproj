@@ -55,8 +55,12 @@
     <Compile Include="CommandResolver.cs" />
     <Compile Include="CommandRunner.cs" />
     <Compile Include="CommandSelector.cs" />
-    <Compile Include="ConsoleUtilities\ConsoleFormatter.cs" />
-    <Compile Include="ConsoleUtilities\ProgressBar.cs" />
+    <Compile Include="ConsoleFormat\ConsoleCell.cs" />
+    <Compile Include="ConsoleFormat\ConsoleFormatter.cs" />
+    <Compile Include="ConsoleFormat\ConsoleRow.cs" />
+    <Compile Include="ConsoleFormat\ConsoleStyle.cs" />
+    <Compile Include="ConsoleFormat\ConsoleTable.cs" />
+    <Compile Include="ConsoleFormat\ProgressBar.cs" />
     <Compile Include="MatchSelector.cs" />
     <Compile Include="CommandTypeWrapper.cs" />
     <Compile Include="HelpUtilities\CommandHelp.cs" />
