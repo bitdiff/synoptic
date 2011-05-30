@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Mono.Options;
 using Synoptic.ConsoleFormat;
+using Synoptic.Exceptions;
 using Synoptic.HelpUtilities;
 
 namespace Synoptic
@@ -14,57 +14,63 @@ namespace Synoptic
         private readonly TextWriter _error = Console.Error;
 
         private readonly List<Command> _availableCommands = new List<Command>();
-        private readonly ICommandActionFinder _actionFinder = new CommandActionFinder();
         private readonly CommandFinder _commandFinder = new CommandFinder();
+        private readonly HelpGenerator _helpGenerator = new HelpGenerator();
+
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
-        private CommandLineHelp _help;
         private OptionSet _optionSet;
 
         public void Run(string[] args)
         {
-            List<string> arguments = new List<string>(args);
+            Queue<string> arguments = new Queue<string>(args);
 
             if (_optionSet != null)
-            {
-                arguments = _optionSet.Parse(arguments);
-            }
+                arguments = new Queue<string>(_optionSet.Parse(args));
 
             if (_availableCommands.Count == 0)
                 WithCommandsFromAssembly(Assembly.GetCallingAssembly());
 
             if (_availableCommands.Count == 0)
-            {
-                ConsoleFormatter.Write("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic using the [Command] attribute.");
-                return;
-            }
+                throw new NoCommandsDefinedException();
 
             if (arguments.Count == 0)
             {
-                new CommandLineHelpGenerator().ShowCommandHelp(_availableCommands, _optionSet);
+                _helpGenerator.ShowCommandHelp(_availableCommands, _optionSet);
                 return;
             }
 
             try
             {
-                var firstArg = arguments.First();
-                arguments.RemoveAt(0);
-                args = arguments.ToArray();
+                var commandName = arguments.Dequeue();
+                
                 var commandSelector = new CommandSelector();
-                var command = commandSelector.Select(firstArg, _availableCommands);
+                var command = commandSelector.Select(commandName, _availableCommands);
+
+                var actionName = arguments.Count > 0 ? arguments.Dequeue() : null;
+                
+                var actionSelector = new ActionSelector();
+                var action = actionSelector.Select(actionName, command);
 
                 var parser = new CommandLineParser();
 
-                CommandLineParseResult parseResult = parser.Parse(command, args);
-                _help = new CommandLineHelp(new[] { parseResult.CommandAction });
+                CommandLineParseResult parseResult = parser.Parse(action, arguments.ToArray());
                 if (!parseResult.WasSuccessfullyParsed)
                     throw new CommandActionException(parseResult.Message);
 
                 parseResult.CommandAction.Run(_resolver, parseResult);
             }
+            catch (NoCommandsDefinedException)
+            {
+                ConsoleFormatter.Write("There are currently no commands defined.\nPlease ensure commands are correctly defined and registered within Synoptic using the [Command] attribute.");
+                return;
+            }
+            catch (CommandNotFoundException exception)
+            {
+                _helpGenerator.ShowExceptionHelp(exception);
+            }
             catch (ActionNotFoundException exception)
             {
-                new CommandLineHelpGenerator().ShowCommandHelp(exception.Command, exception.AvailableActions);
-
+                _helpGenerator.ShowExceptionHelp(exception);
             }
             catch (CommandActionException commandException)
             {
@@ -89,7 +95,6 @@ namespace Synoptic
         {
             _error.WriteLine(exception.Message);
         }
-
 
         public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
         {

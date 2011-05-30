@@ -2,6 +2,6 @@
 {
     internal interface ICommandLineParser
     {
-        CommandLineParseResult Parse(Command command, string[] args);
+        CommandLineParseResult Parse(CommandAction action,  string[] args);
     }
 }

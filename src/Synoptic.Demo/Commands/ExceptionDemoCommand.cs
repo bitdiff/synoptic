@@ -1,4 +1,5 @@
 ﻿using System;
+using Synoptic.Exceptions;
 
 namespace Synoptic.Demo.Commands
 {

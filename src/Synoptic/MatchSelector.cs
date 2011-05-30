@@ -8,6 +8,9 @@ namespace Synoptic
     {
         public IEnumerable<T> PartialMatch(string query, IEnumerable<T> items, Func<T, string> source)
         {
+            if (query == null)
+                return Enumerable.Empty<T>();
+            
             var exactMatch = items.FirstOrDefault(item => source(item).Equals(query, StringComparison.OrdinalIgnoreCase));
             if (exactMatch != null)
                 return new[] { exactMatch };
@@ -17,6 +20,9 @@ namespace Synoptic
 
         public T Match(string query, IEnumerable<T> items, Func<T, string> source)
         {
+            if (query == null)
+                return null;
+
             return items.FirstOrDefault(item => source(item).Equals(query, StringComparison.OrdinalIgnoreCase));
         }
     }

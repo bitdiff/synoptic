@@ -26,6 +26,12 @@ namespace Synoptic.ConsoleFormat
             return this;
         }
 
+        public ConsoleTable AddEmptyRow()
+        {
+            _rows.Add(new ConsoleRow(string.Empty));
+            return this;
+        }
+
         public IEnumerable<ConsoleRow> Rows
         {
             get { return _rows; }

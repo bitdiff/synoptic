@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
+using Synoptic.Exceptions;
 
 namespace Synoptic.Service.Demo
 {

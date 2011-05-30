@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using Synoptic.Exceptions;
 using Synoptic.Service;
 
 namespace Synoptic.Tests

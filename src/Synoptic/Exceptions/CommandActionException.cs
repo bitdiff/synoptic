@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Synoptic
+namespace Synoptic.Exceptions
 {
     public class CommandActionException : Exception
     {

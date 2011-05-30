@@ -20,6 +20,9 @@ namespace Synoptic.ConsoleFormat
             Text = text;
         }
 
+        public ConsoleCell(string format, params string[] args)
+            : this(String.Format(format,args)) { }
+
         public ConsoleCell()
         {
             Padding = 3;

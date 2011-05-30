@@ -13,19 +13,19 @@ namespace Synoptic.Tests
         [Test]
         public void should_display_help_for_one_class()
         {
-            ConsoleTable t  = new ConsoleTable();
+            ConsoleTable t = new ConsoleTable();
             var row = new ConsoleRow();
             var cell = new ConsoleCell()
                            {
                                Text = "sad sa dasd a dasd ad a dsa das d sad"
                            };
 
-//            row.AddCell(cell);
-//            t.AddRow(row);
+            //            row.AddCell(cell);
+            //            t.AddRow(row);
 
             ConsoleFormatter.Write(t);
-            
-//            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(null);
+
+            //            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(null);
         }
 
         [Test]
@@ -42,14 +42,14 @@ namespace Synoptic.Tests
                                             Assert.That(a[2], Is.EqualTo("three"));
                                         };
 
-//            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(new[] {
-//                "multiple-params-to-hyphen",
-//                "--param-one=one", 
-//                "--param-two=two",
-//                "--param-three=three"
-//            });
-//
-//            Assert.That(hasRun);
+            //            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(new[] {
+            //                "multiple-params-to-hyphen",
+            //                "--param-one=one", 
+            //                "--param-two=two",
+            //                "--param-three=three"
+            //            });
+            //
+            Assert.That(hasRun);
         }
 
         [Test]
@@ -61,25 +61,25 @@ namespace Synoptic.Tests
         [Test]
         public void should_allow_custom_command_set_creation()
         {
-//            new CommandRunner().WithCommandSet<RunnerTest>(p => new RunnerTest(p)).Run(new[] { "CommandWithBool", "--param1", "someotherparam" });
+            //            new CommandRunner().WithCommandSet<RunnerTest>(p => new RunnerTest(p)).Run(new[] { "CommandWithBool", "--param1", "someotherparam" });
         }
 
         [Test]
         public void should_allow_args_pre_processor()
         {
-//            new CommandRunner().WithArgsPreProcessor(args =>
-//                                                         {
-//                                                             Console.WriteLine(args.Count());
-//                                                             Console.WriteLine("Took first param out: " + args[0]);
-//                                                             return args.Skip(1).ToArray();
-//                                                         }).Run(new[] { "CommandWithBool", "some first param", "--param1", "someotherparam" });
+            //            new CommandRunner().WithArgsPreProcessor(args =>
+            //                                                         {
+            //                                                             Console.WriteLine(args.Count());
+            //                                                             Console.WriteLine("Took first param out: " + args[0]);
+            //                                                             return args.Skip(1).ToArray();
+            //                                                         }).Run(new[] { "CommandWithBool", "some first param", "--param1", "someotherparam" });
         }
 
         [Test]
         public void should_handle_bool()
         {
-//            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(new[] { "CommandWithBool", "--param1" });
-//            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(new[] { "CommandWithBool" });
+            //            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(new[] { "CommandWithBool", "--param1" });
+            //            new CommandRunner().WithCommandsFromType<RunnerTest>().Run(new[] { "CommandWithBool" });
         }
 
         internal class RunnerTest

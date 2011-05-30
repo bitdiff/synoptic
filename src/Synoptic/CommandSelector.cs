@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using Synoptic.Exceptions;
 
 namespace Synoptic
 {
@@ -12,19 +11,13 @@ namespace Synoptic
             if (command != null)
                 return command;
 
-            var message = String.Format("'{0}' is not a valid command.", commandName);
+            var exception = new CommandNotFoundException(commandName);
+            exception.AvailableCommands.AddRange(availableCommands);
 
             var possibleCommands = new MatchSelector<Command>().PartialMatch(commandName, availableCommands, c => c.Name);
+            exception.PossibleCommands.AddRange(possibleCommands);
 
-            if (possibleCommands.Count() > 0)
-            {
-                var possibleCommandsFormatted = string.Join(" or ",
-                    possibleCommands.Select(c => String.Format("'{0}'", c.Name.ToHyphened())).ToArray());
-
-                throw new CommandActionException(String.Format("{0}\n\nDid you mean:\n\t{1}?", message, possibleCommandsFormatted));
-            }
-
-            throw new CommandActionException(message);
+            throw exception;
         }
     }
 }
