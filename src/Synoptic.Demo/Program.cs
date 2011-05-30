@@ -1,4 +1,5 @@
-﻿using Mono.Options;
+﻿using System;
+using Mono.Options;
 using StructureMap;
 using Synoptic.Demo.Services;
 

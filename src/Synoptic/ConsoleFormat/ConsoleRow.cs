@@ -42,7 +42,7 @@ namespace Synoptic.ConsoleFormat
                 if (cell.Width.HasValue)
                     yield return cell.Width.Value;
                 else
-                    yield return (availableWidth / flexibleWidthCells.Count()) - cell.Padding;
+                    yield return (availableWidth / flexibleWidthCells.Count());
             }
         }
 

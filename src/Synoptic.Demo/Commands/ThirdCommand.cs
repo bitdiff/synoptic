@@ -2,7 +2,7 @@
 
 namespace Synoptic.Demo.Commands
 {
-    [Command(Name = "third", Description = "Demonstrates some of the command action attributes.")]
+    [Command(Name = "third", Description = "Demonstrates some of the command action attributes. It will also wrap.")]
     internal class ThirdCommand
     {
         [CommandAction(Description = "A test command that demonstrates command parameters.")]

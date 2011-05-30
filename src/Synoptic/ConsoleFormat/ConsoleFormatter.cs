@@ -8,7 +8,7 @@ namespace Synoptic.ConsoleFormat
     {
         public static void Write(ConsoleTable table)
         {
-            var maxWidth = table.Width ?? 75;
+            var maxWidth = table.Width ?? Console.WindowWidth - 3;
 
             foreach (var row in table.Rows)
             {
@@ -27,10 +27,11 @@ namespace Synoptic.ConsoleFormat
 
                         if (words.Length > 0)
                             SetConsoleStyle(cell.Style);
-                        Console.Write("{0}", words);
+                        Console.Write("{0}", words.TrimEnd());
                         Console.ResetColor();
-
-                        Console.Write("{0}", new string(' ', width - words.Length));
+                        
+                        if(i != row.Cells.Count() - 1)
+                            Console.Write("{0}", new string(' ', width - words.Length));
                     }
 
                     WriteLine();
