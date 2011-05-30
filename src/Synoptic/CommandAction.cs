@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Synoptic
@@ -9,8 +10,8 @@ namespace Synoptic
 
         public CommandAction(string name, string description, MethodInfo linkedToMethod, bool isDefault)
         {
-            Name = name;
-            Description = description;
+            Name = name.ToHyphened();
+            Description = description ?? String.Empty;
             LinkedToMethod = linkedToMethod;
             IsDefault = isDefault;
 

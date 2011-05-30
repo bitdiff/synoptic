@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Synoptic.ConsoleFormat
@@ -10,8 +11,8 @@ namespace Synoptic.ConsoleFormat
         private Match _currentMatch;
         private string _text;
 
-        public int Padding { get; set; }
-        public int? Width { get; set; }
+        internal int Padding { get; set; }
+        internal int? Width { get; set; }
 
         public ConsoleCell(string text)
             : this()
@@ -22,6 +23,30 @@ namespace Synoptic.ConsoleFormat
         public ConsoleCell()
         {
             Padding = 3;
+        }
+
+        public ConsoleCell WithPadding(int padding)
+        {
+            Padding = padding;
+            return this;
+        }
+
+        public ConsoleCell WithWidth(int width)
+        {
+            Width = width;
+            return this;
+        }
+
+        public ConsoleCell WithForegroundColor(ConsoleColor color)
+        {
+            Style.ForegroundColor = color;
+            return this;
+        }
+
+        public ConsoleCell WithBackgroundColor(ConsoleColor color)
+        {
+            Style.BackgroundColor = color;
+            return this;
         }
 
         public ConsoleStyle Style { get { return _style; } }

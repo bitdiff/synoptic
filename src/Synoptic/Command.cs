@@ -6,8 +6,8 @@ namespace Synoptic
     {
         public Command(string name, string description, Type linkedToType)
         {
-            Name = name;
-            Description = description;
+            Name = name.ToHyphened();
+            Description = description ?? String.Empty;
             LinkedToType = linkedToType;
         }
 

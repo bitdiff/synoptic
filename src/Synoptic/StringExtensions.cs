@@ -23,7 +23,7 @@ namespace Synoptic
         internal static string ToHyphened(this string input)
         {
             if (String.IsNullOrEmpty(input))
-                return input;
+                return String.Empty;
 
             var chars = input.ToCharArray();
             var result = new List<char>(chars.Take(1));

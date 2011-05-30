@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Mono.Options;
 using StructureMap;
+using Synoptic.Demo.Services;
 
 namespace Synoptic.Demo
 {
@@ -15,50 +16,20 @@ namespace Synoptic.Demo
 
             var resolver = new StructureMapDependencyResolver(ObjectFactory.Container);
 
+            var optionSet = new OptionSet
+                                {
+                                    { "h|help", "shows help",v => { GlobalOptions.Help = v; } },
+                                    { "m|master=", v => { GlobalOptions.Help = v; } },
+                                    { "s=", v => { GlobalOptions.Help = v; } },
+                                    { "lll|llllll=", v => { GlobalOptions.Help = v; } },
+                                };
+            
             new CommandRunner()
                 .WithDependencyResolver(resolver)
+                .WithGlobalOptions(optionSet)
                 .Run(args);
         }
-    }
 
-    internal class MyService : IMyService
-    {
-        public string Hello(string message)
-        {
-            return "Hello " + message;
-        }
-    }
-
-    internal interface IMyService
-    {
-        String Hello(string message);
-    }
-
-    internal class MyService2 : IMyService2
-    {
-        public string Hello2(string message)
-        {
-            return "Hello2 " + message;
-        }
-    }
-
-    internal interface IMyService2
-    {
-        String Hello2(string message);
-    }
-
-    public class StructureMapDependencyResolver : IDependencyResolver
-    {
-        private readonly IContainer _container;
-
-        public StructureMapDependencyResolver(IContainer container)
-        {
-            _container = container;
-        }
-
-        public object Resolve(Type serviceType)
-        {
-            return _container.GetInstance(serviceType);
-        }
+        public static MyGlobalOptions GlobalOptions = new MyGlobalOptions();
     }
 }

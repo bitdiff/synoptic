@@ -5,6 +5,40 @@ using Mono.Options;
 
 namespace Synoptic
 {
+    internal class AmbiguousResolutionException : ApplicationException
+    {
+        private readonly string _input;
+        private readonly string[] _possibleMatches;
+
+        public AmbiguousResolutionException(string input, string[] possibleMatches)
+        {
+            _input = input;
+            _possibleMatches = possibleMatches;
+        }
+    }
+
+    internal class ActionNotFoundException : ApplicationException
+    {
+        private readonly Command _command;
+        private readonly IEnumerable<CommandAction> _availableActions;
+
+        public ActionNotFoundException(Command command, IEnumerable<CommandAction> availableActions)
+        {
+            _command = command;
+            _availableActions = availableActions;
+        }
+
+        public Command Command
+        {
+            get { return _command; }
+        }
+
+        public IEnumerable<CommandAction> AvailableActions
+        {
+            get { return _availableActions; }
+        }
+    }
+
     internal class CommandLineParser : ICommandLineParser
     {
         private readonly ICommandActionFinder _commandActionFinder = new CommandActionFinder();
@@ -28,8 +62,9 @@ namespace Synoptic
                 
             if (selectedAction == null)
             {
-                throw new CommandActionException(String.Format("One of the following actions is required for command '{0}': {1}.", 
-                    command.Name, String.Join(", ", availableActions.Select(a => a.Name).ToArray())));
+//                throw new ActionNotFoundException( ) CommandActionException(String.Format("One of the following actions is required for command '{0}': {1}.", 
+//                    command.Name, String.Join(", ", availableActions.Select(a => a.Name).ToArray())));
+                throw new ActionNotFoundException(command, availableActions);
             }
 
             var options = new OptionSet();

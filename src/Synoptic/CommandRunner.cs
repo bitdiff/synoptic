@@ -61,6 +61,11 @@ namespace Synoptic
 
                 parseResult.CommandAction.Run(_resolver, parseResult);
             }
+            catch (ActionNotFoundException exception)
+            {
+                new CommandLineHelpGenerator().ShowCommandHelp(exception.Command, exception.AvailableActions);
+
+            }
             catch (CommandActionException commandException)
             {
                 ShowErrorMessage(commandException);

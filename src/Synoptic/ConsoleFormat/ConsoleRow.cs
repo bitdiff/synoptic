@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Synoptic.ConsoleFormat
@@ -30,7 +29,7 @@ namespace Synoptic.ConsoleFormat
             _cells.Add(cell);
         }
 
-        public IEnumerable<int> CalculateCellWidths(int tableWidth)
+        internal IEnumerable<int> CalculateCellWidths(int tableWidth)
         {
             var flexibleWidthCells = _cells.Where(c => !c.Width.HasValue);
             var availableWidth = tableWidth - _cells.Sum(c => c.Width ?? 0 + c.Padding);
@@ -43,13 +42,11 @@ namespace Synoptic.ConsoleFormat
                 if (cell.Width.HasValue)
                     yield return cell.Width.Value;
                 else
-                {
                     yield return availableWidth / flexibleWidthCells.Count();
-                }
             }
         }
 
-        public bool HasMoreLines()
+        internal bool HasMoreLines()
         {
             return _cells.Any(c => c.HasMoreWords);
         }

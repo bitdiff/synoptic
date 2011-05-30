@@ -20,8 +20,8 @@ namespace Synoptic.Tests
                                Text = "sad sa dasd a dasd ad a dsa das d sad"
                            };
 
-            row.AddCell(cell);
-            t.AddRow(row);
+//            row.AddCell(cell);
+//            t.AddRow(row);
 
             ConsoleFormatter.Write(t);
             

@@ -45,9 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyCommands.cs" />
+    <Compile Include="Commands\ExceptionDemoCommand.cs" />
+    <Compile Include="Commands\ServiceDemoCommand.cs" />
+    <Compile Include="Commands\ThirdCommand.cs" />
+    <Compile Include="Commands\WindowsServiceCommand.cs" />
+    <Compile Include="MyGlobalOptions.cs" />
+    <Compile Include="Services\IMyService.cs" />
+    <Compile Include="Services\IMyService2.cs" />
+    <Compile Include="Services\MyService.cs" />
+    <Compile Include="Services\MyService2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructureMapDependencyResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Synoptic\Synoptic.csproj">

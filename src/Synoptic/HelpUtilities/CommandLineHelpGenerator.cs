@@ -45,30 +45,43 @@ namespace Synoptic.HelpUtilities
             var usagePattern = GenerateUsagePattern(optionSet);
 
             ConsoleFormatter.Write(
-                new ConsoleTable(
-                    new ConsoleRow(
-                        new ConsoleCell(usagePreamble) { Width = usagePreamble.Length, Padding = 0 },
-                        new ConsoleCell(usagePattern) { Padding = 0 })));
+                new ConsoleTable().AddRow(
+                        new ConsoleCell(usagePreamble).WithWidth(usagePreamble.Length).WithPadding(0),
+                        new ConsoleCell(usagePattern).WithPadding(0)));
 
             var maximumCommandNameLength = availableCommands.Count() > 0 ? availableCommands.Max(c => c.Name.Length) : 0;
 
-            var commandTable = new ConsoleTable("\nThe available commands are:");
+            ConsoleFormatter.WriteLine();
 
+            var commandTable = new ConsoleTable().AddRow(
+                new ConsoleCell("The available commands are:").WithPadding(0));
+            
             foreach (var command in availableCommands)
             {
                 commandTable.AddRow(
-                    new ConsoleRow(
-                        new ConsoleCell(command.Name.ToHyphened()) { Width = maximumCommandNameLength },
-                        new ConsoleCell(command.Description)));
-            }
-
-            foreach(var row in commandTable.Rows.Skip(1))
-            {
-                row.Cells.ElementAt(0).Style.ForegroundColor = ConsoleColor.Black;
-                row.Cells.ElementAt(0).Style.BackgroundColor = ConsoleColor.Blue;
+                        new ConsoleCell(command.Name).WithWidth(maximumCommandNameLength),
+                        new ConsoleCell(command.Description));
             }
 
             ConsoleFormatter.Write(commandTable);
+        }
+
+        public void ShowCommandHelp(Command command, IEnumerable<CommandAction> availableActions)
+        {
+            var maximumActionNameLength = availableActions.Count() > 0 ? availableActions.Max(c => c.Name.Length) : 0;
+
+            var actionTable = 
+                new ConsoleTable().AddRow(
+                    new ConsoleCell(String.Format("The available actions for command '{0}' are:", command.Name)).WithPadding(0));
+
+            foreach (var action in availableActions)
+            {
+                actionTable.AddRow(
+                        new ConsoleCell(action.Name).WithWidth(maximumActionNameLength),
+                        new ConsoleCell(action.Description));
+            }
+
+            ConsoleFormatter.Write(actionTable);
         }
     }
 }

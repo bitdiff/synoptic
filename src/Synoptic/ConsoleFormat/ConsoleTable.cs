@@ -20,14 +20,10 @@ namespace Synoptic.ConsoleFormat
             _rows.AddRange(rows);
         }
 
-        public ConsoleTable(params ConsoleCell[] cells)
+        public ConsoleTable AddRow(params ConsoleCell[] cells)
         {
             _rows.Add(new ConsoleRow(cells));
-        }
-
-        public void AddRow(ConsoleRow row)
-        {
-            _rows.Add(row);
+            return this;
         }
 
         public IEnumerable<ConsoleRow> Rows
