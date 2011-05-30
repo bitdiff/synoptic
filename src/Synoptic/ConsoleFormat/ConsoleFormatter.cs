@@ -84,44 +84,4 @@ namespace Synoptic.ConsoleFormat
                 Console.BackgroundColor = style.BackgroundColor.Value;
         }
     }
-
-    public static class ConsoleTableExtensions
-    {
-//        public static ConsoleRow AddRow(this ConsoleTable table)
-//        {
-//            if (table == null)
-//                throw new ArgumentNullException("table");
-//
-//            ConsoleRow row = new ConsoleRow();
-//            table.Rows.AddRow(row);
-//            return row;
-//        }
-
-
-        public static ConsoleCell AddCell(this ConsoleRow row)
-        {
-            if (row == null)
-                throw new ArgumentNullException("row");
-
-            ConsoleCell cell = new ConsoleCell();
-            row.AddCell(cell);
-
-            return cell;
-        }
-
-        //        public static class GenericWebControlExtensions
-        //        {
-        //            public static T SetFontSize<T>(this T control, FontUnit fontSize) where T : WebControl
-        //            {
-        //                control.Font.Size = fontSize;
-        //                return control;
-        //            }
-        //
-        //            public static T SetFontBold<T>(this T control, bool isbold) where T : WebControl
-        //            {
-        //                control.Font.Bold = isbold;
-        //                return control;
-        //            }
-        //        }
-    }
 }
