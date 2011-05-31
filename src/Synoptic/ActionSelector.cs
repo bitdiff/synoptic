@@ -6,7 +6,6 @@ namespace Synoptic
 {
     internal class ActionSelector
     {
-
         public CommandAction Select(string actionName, Command command, IEnumerable<CommandAction> availableActions)
         {
             CommandAction action = new MatchSelector<CommandAction>().Match(actionName, availableActions, c => c.Name) ??

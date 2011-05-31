@@ -8,15 +8,14 @@ namespace Synoptic
         public CommandTypeWrapper(Type type)
         {
             LinkedToType = type;
-            
-            var attributes = type.GetCustomAttributes(typeof(CommandAttribute), true);
-            if (attributes.Length > 0)
-            {
-                var commandAttribute = (CommandAttribute)attributes.First();
+            Name = type.Name.ToHyphened();
 
-                Description = Description.GetNewIfValid(commandAttribute.Description);
-                Name = Name.GetNewIfValid(commandAttribute.Name);
-            }
+            var attributes = type.GetCustomAttributes(typeof(CommandAttribute), true);
+            if (attributes.Length <= 0) return;
+            
+            var commandAttribute = (CommandAttribute)attributes.First();
+            Description = Description.GetNewIfValid(commandAttribute.Description);
+            Name = Name.GetNewIfValid(commandAttribute.Name);
         }
 
         public string Name { get; set; }

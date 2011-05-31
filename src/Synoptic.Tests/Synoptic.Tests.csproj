@@ -46,8 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandExtensionsTests.cs" />
-    <Compile Include="CommandResolverTests.cs" />
+    <Compile Include="CommandActionFinderTests.cs" />
+    <Compile Include="CommandFinderTests.cs" />
+    <Compile Include="ActionSelectorTests.cs" />
     <Compile Include="CommandRunnerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PrototypeGeneratorTests.cs" />

@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Synoptic</RootNamespace>
-    <AssemblyName>Synoptic</AssemblyName>
+    <AssemblyName>synoptic</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,6 +39,7 @@
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
     <Compile Include="ActionSelector.cs" />
+    <Compile Include="ConsoleFormat\ConsoleWriter.cs" />
     <Compile Include="Exceptions\CommandActionNotFoundException.cs" />
     <Compile Include="ActivatorDependencyResolver.cs" />
     <Compile Include="Command.cs" />

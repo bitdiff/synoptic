@@ -21,6 +21,9 @@ namespace Synoptic
 
         public void Run(string[] args)
         {
+            if(args == null)
+                args = new string[0];
+            
             Queue<string> arguments = new Queue<string>(args);
 
             if (_optionSet != null)
