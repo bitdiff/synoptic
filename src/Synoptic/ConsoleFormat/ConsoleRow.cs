@@ -7,7 +7,7 @@ namespace Synoptic.ConsoleFormat
     {
         private readonly List<ConsoleCell> _cells = new List<ConsoleCell>();
 
-        public IEnumerable<ConsoleCell> Cells
+        public List<ConsoleCell> Cells
         {
             get { return _cells; }
         }
@@ -29,10 +29,13 @@ namespace Synoptic.ConsoleFormat
             _cells.Add(cell);
         }
 
-        internal IEnumerable<int> CalculateCellWidths(int tableWidth)
+        internal IEnumerable<int> CalculateCellTextWidths(int tableWidth)
         {
-            var flexibleWidthCells = _cells.Where(c => !c.Width.HasValue);
-            var availableWidth = tableWidth - _cells.Sum(c => c.Width ?? 0 + c.Padding);
+            var flexibleWidthCells = _cells.Where(c => !c.Width.HasValue).ToList();
+            var paddingTotal = _cells.Sum(c => c.Padding);
+
+            // Padding is not available for text.
+            var availableWidth = tableWidth - _cells.Sum(c => (c.Width ?? 0)) - paddingTotal;
 
             if (availableWidth <= 0)
                 availableWidth = tableWidth;

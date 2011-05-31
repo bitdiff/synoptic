@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Synoptic.ConsoleFormat
@@ -8,30 +9,34 @@ namespace Synoptic.ConsoleFormat
     {
         public static void Write(ConsoleTable table)
         {
-            var maxWidth = table.Width ?? Console.WindowWidth - 3;
+            var maxWidth = table.Width ?? Console.WindowWidth;
+            maxWidth -= 1;
 
             foreach (var row in table.Rows)
             {
-                var cellWidths = row.CalculateCellWidths(maxWidth);
+                var cellTextWidths = row.CalculateCellTextWidths(maxWidth).ToList();
 
                 while (row.HasMoreLines())
                 {
-                    for (int i = 0; i < row.Cells.Count(); i++)
+                    foreach (var cell in row.Cells)
                     {
-                        var cell = row.Cells.ElementAt(i);
+                        var index = row.Cells.IndexOf(cell);
+                        var textWidth = cellTextWidths[index];
+                        var words = cell.GetWordsForLine(textWidth).TrimEnd();
 
-                        var width = cellWidths.ElementAt(i);
-                        var words = cell.GetWordsForLine(width);
+                        if (words.Length == 0)
+                        {
+                            Console.Write("{0}", new string(' ', textWidth + cell.Padding));
+                            continue;
+                        }
 
                         Console.Write("{0,-" + cell.Padding + "}", String.Empty);
 
-                        if (words.Length > 0)
-                            SetConsoleStyle(cell.Style);
-                        Console.Write("{0}", words.TrimEnd());
+                        SetConsoleStyle(cell.Style);
+                        Console.Write("{0}", words);
                         Console.ResetColor();
-                        
-                        if(i != row.Cells.Count() - 1)
-                            Console.Write("{0}", new string(' ', width - words.Length));
+
+                        Console.Write("{0}", new string(' ', textWidth - words.Length));
                     }
 
                     WriteLine();

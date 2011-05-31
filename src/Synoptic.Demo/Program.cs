@@ -1,6 +1,7 @@
 ﻿using System;
 using Mono.Options;
 using StructureMap;
+using Synoptic.ConsoleFormat;
 using Synoptic.Demo.Services;
 
 namespace Synoptic.Demo
@@ -9,6 +10,16 @@ namespace Synoptic.Demo
     {
         static void Main(string[] args)
         {
+//            var consoleTable = new ConsoleTable(
+//
+//                new ConsoleRow(
+//                    new ConsoleCell(new string('A', 40)).WithPadding(0).WithWidth(40), new ConsoleCell("Lorem ipsum dolor sit amet cras amet Lorem ipsum dolor sit amet cras amet. Lorem ipsum dolor sit amet cras amet.").WithPadding(3).WithWidth(40)), 
+//                    new ConsoleRow(new ConsoleCell(new string('Y', 80)).WithPadding(0)));
+//
+//            ConsoleFormatter.Write(consoleTable);
+//            
+//            return;
+
             ObjectFactory.Initialize(service =>
             {
                 service.For<IMyService>().Use<MyService>();
