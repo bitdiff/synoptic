@@ -60,7 +60,7 @@ namespace Synoptic
             new ConsoleFormatter(ConsoleWriter.Default).Write(commandTable);
         }
 
-        public void ShowCommandHelp(Command command, IEnumerable<CommandAction> availableActions)
+        public void ShowCommandHelp(Command command, List<CommandAction> availableActions)
         {
             var maximumActionNameLength = availableActions.Count() > 0 ? availableActions.Max(c => c.Name.Length) : 0;
 
@@ -70,9 +70,9 @@ namespace Synoptic
 
             int maximumPrototypeLength = 0;
 
-            foreach(var action in availableActions)
+            foreach (var action in availableActions)
             {
-                if(action.Parameters.Count > 0)
+                if (action.Parameters.Count > 0)
                 {
                     var prototypeLength = action.Parameters
                         .Max(c => c.GetOptionPrototypeHelp().Length);
@@ -98,7 +98,8 @@ namespace Synoptic
                     }
                 }
 
-                actionTable.AddEmptyRow();
+                if (availableActions.Last() != action)
+                    actionTable.AddEmptyRow();
             }
 
             new ConsoleFormatter(ConsoleWriter.Default).Write(actionTable);

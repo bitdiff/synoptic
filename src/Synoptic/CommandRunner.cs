@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Mono.Options;
 using Synoptic.Exceptions;
@@ -50,7 +51,7 @@ namespace Synoptic
 
                 if(actionName == null)
                 {
-                    _helpGenerator.ShowCommandHelp(command, availableActions);
+                    _helpGenerator.ShowCommandHelp(command, availableActions.ToList());
                     return;
                 }
 

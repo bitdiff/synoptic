@@ -16,7 +16,7 @@ namespace Synoptic.ConsoleFormat
         public void Write(ConsoleTable table)
         {
             var maxWidth = table.Width ?? _consoleWriter.GetWidth();
-            maxWidth -= 1;
+            //maxWidth -= 1;
 
             foreach (var row in table.Rows)
             {
@@ -36,10 +36,9 @@ namespace Synoptic.ConsoleFormat
                         _consoleWriter.Write("{0}", words);
                         _consoleWriter.ResetStyle();
 
+                        // Filling the line exactly causes it to wrap so no "WriteLine" is necessary.
                         _consoleWriter.Write("{0}", new string(' ', textWidth - words.Length));
                     }
-
-                    _consoleWriter.WriteLine();
                 }
             }
         }
