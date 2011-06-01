@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using Mono.Options;
 using Synoptic.Exceptions;
@@ -9,14 +8,12 @@ namespace Synoptic
 {
     public class CommandRunner
     {
-        private readonly TextWriter _error = Console.Error;
-
+        private IDependencyResolver _resolver = new ActivatorDependencyResolver();
+        
         private readonly List<Command> _availableCommands = new List<Command>();
         private readonly CommandFinder _commandFinder = new CommandFinder();
-        private readonly HelpGenerator _helpGenerator = new HelpGenerator();
         private readonly ICommandActionFinder _commandActionFinder = new CommandActionFinder();
-
-        private IDependencyResolver _resolver = new ActivatorDependencyResolver();
+        private readonly HelpGenerator _helpGenerator = new HelpGenerator();
         private OptionSet _optionSet;
 
         public void Run(string[] args)
@@ -69,24 +66,19 @@ namespace Synoptic
             {
                 exception.Render();
             }
-            catch (TargetInvocationException targetInvocationException)
+            catch (TargetInvocationException exception)
             {
-                Exception innerException = targetInvocationException.InnerException;
-
+                Exception innerException = exception.InnerException;
                 if (innerException == null) throw;
 
-                if (innerException is CommandLineParseException)
+                if (innerException is CommandParseExceptionBase)
                 {
-                    ShowErrorMessage(innerException);
+                    ((CommandParseExceptionBase)exception.InnerException).Render();
+                    return;
                 }
 
                 throw new CommandInvocationException("Error executing command", innerException);
             }
-        }
-
-        private void ShowErrorMessage(Exception exception)
-        {
-            _error.WriteLine(exception.Message);
         }
 
         public CommandRunner WithDependencyResolver(IDependencyResolver resolver)

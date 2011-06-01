@@ -53,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PrototypeGeneratorTests.cs" />
     <Compile Include="PublicInterfaceTests.cs" />
+    <Compile Include="TestConsoleWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Synoptic.Service\Synoptic.Service.csproj">

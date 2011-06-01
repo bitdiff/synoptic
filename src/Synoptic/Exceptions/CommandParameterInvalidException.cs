@@ -14,7 +14,7 @@ namespace Synoptic.Exceptions
         public override void Render()
         {
             ConsoleFormatter.Write(new ConsoleTable(
-                                       new ConsoleCell("Unable to run action with supplied parameters: ").WithPadding(0))
+                                       new ConsoleCell("Unable to run action with supplied parameters.").WithPadding(0))
                                        .AddEmptyRow()
                                        .AddRow(new ConsoleCell(_message).WithPadding(0)));
         }

@@ -1,8 +1,9 @@
 ﻿using System;
+using Synoptic.ConsoleFormat;
 
-namespace Synoptic.ConsoleFormat
+namespace Synoptic.Tests
 {
-    public class ConsoleWriter : IConsoleWriter
+    public class TestConsoleWriter : IConsoleWriter
     {
         public void WriteLine()
         {
@@ -16,25 +17,20 @@ namespace Synoptic.ConsoleFormat
 
         public void SetStyle(ConsoleStyle style)
         {
-            if (style.ForegroundColor.HasValue)
-                Console.ForegroundColor = style.ForegroundColor.Value;
-            if (style.BackgroundColor.HasValue)
-                Console.BackgroundColor = style.BackgroundColor.Value;
         }
 
         public void ResetStyle()
         {
-            Console.ResetColor();           
         }
 
         public int GetWidth()
         {
-            return Console.WindowWidth;
+            return 80;
         }
 
         public int GetCursorColumnPosition()
         {
-            return Console.CursorLeft;
+            return 0;
         }
     }
 }

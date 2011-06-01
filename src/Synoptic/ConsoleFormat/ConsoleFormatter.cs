@@ -6,9 +6,16 @@ namespace Synoptic.ConsoleFormat
 {
     public class ConsoleFormatter
     {
+        private static IConsoleWriter _writer = new ConsoleWriter();
+
+        public static void SetWriter(IConsoleWriter writer)
+        {
+            _writer = writer;
+        }
+
         public static void Write(ConsoleTable table)
         {
-            var maxWidth = table.Width ?? Console.WindowWidth;
+            var maxWidth = table.Width ?? _writer.GetWidth();
             maxWidth -= 1;
 
             foreach (var row in table.Rows)
@@ -25,41 +32,36 @@ namespace Synoptic.ConsoleFormat
 
                         if (words.Length == 0)
                         {
-                            Console.Write("{0}", new string(' ', textWidth + cell.Padding));
+                            _writer.Write("{0}", new string(' ', textWidth + cell.Padding));
                             continue;
                         }
 
-                        Console.Write("{0,-" + cell.Padding + "}", String.Empty);
+                        _writer.Write("{0,-" + cell.Padding + "}", String.Empty);
 
-                        SetConsoleStyle(cell.Style);
-                        Console.Write("{0}", words);
-                        Console.ResetColor();
+                        _writer.SetStyle(cell.Style);
+                        _writer.Write("{0}", words);
+                        _writer.ResetStyle();
 
-                        Console.Write("{0}", new string(' ', textWidth - words.Length));
+                        _writer.Write("{0}", new string(' ', textWidth - words.Length));
                     }
 
-                    WriteLine();
+                    _writer.WriteLine();
                 }
             }
         }
 
-        public static void WriteLine()
-        {
-            Console.WriteLine();
-        }
-
         public static void Write(int indent, string format, params string[] args)
         {
-            int max = Console.WindowWidth;
+            int max = _writer.GetWidth();
             string pad = new string(' ', indent);
 
             Regex regex = new Regex(@"(\S*(\s)?)");
             Match words = regex.Match(String.Format(format, args));
 
-            int count = Console.CursorLeft;
+            int count = _writer.GetCursorColumnPosition();
 
-            Console.Write(count == 0 ? pad : String.Empty);
-            count = Console.CursorLeft;
+            _writer.Write(count == 0 ? pad : String.Empty);
+            count = _writer.GetCursorColumnPosition();
 
             while (words.Success)
             {
@@ -67,11 +69,11 @@ namespace Synoptic.ConsoleFormat
                 count += word.Length;
                 if (count >= max - 1)
                 {
-                    WriteLine();
-                    Console.Write(pad);
+                    _writer.WriteLine();
+                    _writer.Write(pad);
                     count = word.Length + pad.Length;
                 }
-                Console.Write(word);
+                _writer.Write(word);
                 words = words.NextMatch();
             }
         }
@@ -79,14 +81,6 @@ namespace Synoptic.ConsoleFormat
         public static void Write(string format, params string[] args)
         {
             Write(0, format, args);
-        }
-
-        private static void SetConsoleStyle(ConsoleStyle style)
-        {
-            if (style.ForegroundColor.HasValue)
-                Console.ForegroundColor = style.ForegroundColor.Value;
-            if (style.BackgroundColor.HasValue)
-                Console.BackgroundColor = style.BackgroundColor.Value;
         }
     }
 }

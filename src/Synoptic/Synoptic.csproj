@@ -40,6 +40,7 @@
     </Compile>
     <Compile Include="ActionSelector.cs" />
     <Compile Include="ConsoleFormat\ConsoleWriter.cs" />
+    <Compile Include="ConsoleFormat\IConsoleWriter.cs" />
     <Compile Include="Exceptions\CommandActionNotFoundException.cs" />
     <Compile Include="ActivatorDependencyResolver.cs" />
     <Compile Include="Command.cs" />
