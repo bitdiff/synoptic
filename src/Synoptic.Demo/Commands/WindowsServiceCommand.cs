@@ -17,7 +17,7 @@ namespace Synoptic.Demo.Commands
             Console.WriteLine("Uninstall");
         }
 
-        [CommandAction(IsDefault = true, Name = "run", Description = "Runs the service in console mode")]
+        [CommandAction(Name = "run", Description = "Runs the service in console mode")]
         public void Run()
         {
             Console.WriteLine("Console");

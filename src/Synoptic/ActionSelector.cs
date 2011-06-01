@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Synoptic.Exceptions;
 
 namespace Synoptic
@@ -8,8 +7,7 @@ namespace Synoptic
     {
         public CommandAction Select(string actionName, Command command, IEnumerable<CommandAction> availableActions)
         {
-            CommandAction action = new MatchSelector<CommandAction>().Match(actionName, availableActions, c => c.Name) ??
-                                   availableActions.FirstOrDefault(a => a.IsDefault);
+            CommandAction action = new MatchSelector<CommandAction>().Match(actionName, availableActions, c => c.Name);
 
             if (action != null)
                 return action;

@@ -12,14 +12,12 @@ namespace Synoptic
             Name = method.Name;
 
             var attributes = method.GetCustomAttributes(typeof(CommandActionAttribute), true);
-            if (attributes.Length > 0)
-            {
-                var commandParameter = (CommandActionAttribute)attributes.First();
+            if (attributes.Length <= 0) return;
+            
+            var commandParameter = (CommandActionAttribute)attributes.First();
 
-                Description = Description.GetNewIfValid(commandParameter.Description);
-                Name = Name.GetNewIfValid(commandParameter.Name);
-                IsDefault = commandParameter.IsDefault;
-            }
+            Description = Description.GetNewIfValid(commandParameter.Description);
+            Name = Name.GetNewIfValid(commandParameter.Name);
         }
 
         public bool IsDefault { get; set; }

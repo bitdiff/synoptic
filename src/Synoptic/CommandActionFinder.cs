@@ -21,7 +21,7 @@ namespace Synoptic
         private CommandAction GetCommand(MethodInfo methodInfo)
         {
             var wrapper = new MethodInfoWrapper(methodInfo);
-            CommandAction commandAction = new CommandAction(wrapper.Name, wrapper.Description, wrapper.LinkedToMethod, wrapper.IsDefault);
+            CommandAction commandAction = new CommandAction(wrapper.Name, wrapper.Description, wrapper.LinkedToMethod);
 
             return commandAction;
         }
