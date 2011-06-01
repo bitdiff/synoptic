@@ -1,17 +1,41 @@
 ﻿using System;
+using System.IO;
 
 namespace Synoptic.ConsoleFormat
 {
     public class ConsoleWriter : IConsoleWriter
     {
+        private readonly TextWriter _writer;
+
+        public ConsoleWriter(TextWriter writer)
+        {
+            _writer = writer;
+        }
+
+        public static ConsoleWriter Default
+        {
+            get
+            {
+                return new ConsoleWriter(Console.Out);
+            }
+        }
+
+        public static ConsoleWriter Error
+        {
+            get
+            {
+                return new ConsoleWriter(Console.Error);
+            }
+        }
+
         public void WriteLine()
         {
-            Console.WriteLine();
+            _writer.WriteLine();
         }
 
         public void Write(string format, params string[] args)
         {
-            Console.Write(format, args);
+            _writer.Write(format, args);
         }
 
         public void SetStyle(ConsoleStyle style)
@@ -24,7 +48,7 @@ namespace Synoptic.ConsoleFormat
 
         public void ResetStyle()
         {
-            Console.ResetColor();           
+            Console.ResetColor();
         }
 
         public int GetWidth()

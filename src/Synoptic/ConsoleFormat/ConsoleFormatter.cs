@@ -6,16 +6,16 @@ namespace Synoptic.ConsoleFormat
 {
     public class ConsoleFormatter
     {
-        private static IConsoleWriter _writer = new ConsoleWriter();
+        private readonly IConsoleWriter _consoleWriter;
 
-        public static void SetWriter(IConsoleWriter writer)
+        public ConsoleFormatter(IConsoleWriter consoleWriter)
         {
-            _writer = writer;
+            _consoleWriter = consoleWriter;
         }
 
-        public static void Write(ConsoleTable table)
+        public void Write(ConsoleTable table)
         {
-            var maxWidth = table.Width ?? _writer.GetWidth();
+            var maxWidth = table.Width ?? _consoleWriter.GetWidth();
             maxWidth -= 1;
 
             foreach (var row in table.Rows)
@@ -30,38 +30,32 @@ namespace Synoptic.ConsoleFormat
                         var textWidth = cellTextWidths[index];
                         var words = cell.GetWordsForLine(textWidth).TrimEnd();
 
-                        if (words.Length == 0)
-                        {
-                            _writer.Write("{0}", new string(' ', textWidth + cell.Padding));
-                            continue;
-                        }
+                        _consoleWriter.Write("{0,-" + cell.Padding + "}", String.Empty);
 
-                        _writer.Write("{0,-" + cell.Padding + "}", String.Empty);
+                        _consoleWriter.SetStyle(cell.Style);
+                        _consoleWriter.Write("{0}", words);
+                        _consoleWriter.ResetStyle();
 
-                        _writer.SetStyle(cell.Style);
-                        _writer.Write("{0}", words);
-                        _writer.ResetStyle();
-
-                        _writer.Write("{0}", new string(' ', textWidth - words.Length));
+                        _consoleWriter.Write("{0}", new string(' ', textWidth - words.Length));
                     }
 
-                    _writer.WriteLine();
+                    _consoleWriter.WriteLine();
                 }
             }
         }
 
-        public static void Write(int indent, string format, params string[] args)
+        public void Write(int indent, string format, params string[] args)
         {
-            int max = _writer.GetWidth();
+            int max = _consoleWriter.GetWidth();
             string pad = new string(' ', indent);
 
             Regex regex = new Regex(@"(\S*(\s)?)");
             Match words = regex.Match(String.Format(format, args));
 
-            int count = _writer.GetCursorColumnPosition();
+            int count = _consoleWriter.GetCursorColumnPosition();
 
-            _writer.Write(count == 0 ? pad : String.Empty);
-            count = _writer.GetCursorColumnPosition();
+            _consoleWriter.Write(count == 0 ? pad : String.Empty);
+            count = _consoleWriter.GetCursorColumnPosition();
 
             while (words.Success)
             {
@@ -69,16 +63,16 @@ namespace Synoptic.ConsoleFormat
                 count += word.Length;
                 if (count >= max - 1)
                 {
-                    _writer.WriteLine();
-                    _writer.Write(pad);
+                    _consoleWriter.WriteLine();
+                    _consoleWriter.Write(pad);
                     count = word.Length + pad.Length;
                 }
-                _writer.Write(word);
+                _consoleWriter.Write(word);
                 words = words.NextMatch();
             }
         }
 
-        public static void Write(string format, params string[] args)
+        public void Write(string format, params string[] args)
         {
             Write(0, format, args);
         }

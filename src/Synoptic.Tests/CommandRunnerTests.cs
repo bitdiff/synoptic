@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
-using Synoptic.ConsoleFormat;
 
 namespace Synoptic.Tests
 {
@@ -13,7 +12,7 @@ namespace Synoptic.Tests
         [SetUp]
         public void setup()
         {
-            ConsoleFormatter.SetWriter(new TestConsoleWriter());
+//            ConsoleFormatter.SetWriter(new TestConsoleWriter());
         }
 
         [Test]

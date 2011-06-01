@@ -39,7 +39,7 @@ namespace Synoptic
             var usagePreamble = String.Format("Usage: {0} ", processName);
             var usagePattern = GenerateUsagePattern(optionSet);
 
-            ConsoleFormatter.Write(
+            new ConsoleFormatter(ConsoleWriter.Default).Write(
                 new ConsoleTable().AddRow(
                         new ConsoleCell(usagePreamble).WithWidth(usagePreamble.Length).WithPadding(0),
                         new ConsoleCell(usagePattern).WithPadding(0)));
@@ -57,7 +57,7 @@ namespace Synoptic
                         new ConsoleCell(command.Description));
             }
 
-            ConsoleFormatter.Write(commandTable);
+            new ConsoleFormatter(ConsoleWriter.Default).Write(commandTable);
         }
 
         public void ShowCommandHelp(Command command, IEnumerable<CommandAction> availableActions)
@@ -101,7 +101,7 @@ namespace Synoptic
                 actionTable.AddEmptyRow();
             }
 
-            ConsoleFormatter.Write(actionTable);
+            new ConsoleFormatter(ConsoleWriter.Default).Write(actionTable);
         }
     }
 }
