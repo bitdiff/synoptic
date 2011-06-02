@@ -20,13 +20,19 @@ namespace Synoptic.Demo
 //            
 //            return;
 
-            ObjectFactory.Initialize(service =>
+//            ObjectFactory.Initialize(service =>
+//            {
+//                service.For<IMyService>().Use<MyService>();
+//                service.For<IMyService2>().Use<MyService2>();
+//            });
+
+            var c = new Container(service =>
             {
                 service.For<IMyService>().Use<MyService>();
                 service.For<IMyService2>().Use<MyService2>();
             });
 
-            var resolver = new StructureMapDependencyResolver(ObjectFactory.Container);
+            var resolver = new StructureMapDependencyResolver(c);
 
             var optionSet = new OptionSet
                                 {

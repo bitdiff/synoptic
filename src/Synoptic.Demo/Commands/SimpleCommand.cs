@@ -6,7 +6,7 @@ namespace Synoptic.Demo.Commands
     public class SimpleCommand
     {
         [CommandAction]
-        public void Go([CommandParameter("ss|s")]string someString, int someNumber)
+        public void Go([CommandParameter("xx|x")]string someString, int someNumber)
         {
             Console.Out.WriteLine("someString: {0}", someString);
             Console.Out.WriteLine("someNumber: {0}", someNumber);
