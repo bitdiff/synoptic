@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Commands\ExceptionDemoCommand.cs" />
     <Compile Include="Commands\ServiceDemoCommand.cs" />
+    <Compile Include="Commands\SimpleCommand.cs" />
     <Compile Include="Commands\ThirdCommand.cs" />
     <Compile Include="Commands\WindowsServiceCommand.cs" />
     <Compile Include="MyGlobalOptions.cs" />
