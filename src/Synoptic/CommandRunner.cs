@@ -88,7 +88,7 @@ namespace Synoptic
             return this;
         }
 
-        public CommandRunner WithCommandsFromType<T>()
+        public CommandRunner WithCommandFromType<T>()
         {
             _availableCommands.Add(_commandFinder.FindInType(typeof(T)));
             return this;
