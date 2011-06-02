@@ -6,7 +6,7 @@
     <authors>Bit Diffusion Limited</authors>
     <owners>Bit Diffusion Limited</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>onvention-based method execution from the console for C#. Includes dependency-injection support and a console formatting api that supports indenting, wrapping etc.</description>
+    <description>Convention-based method execution from the console for C#. Includes dependency-injection support and a console formatting api that supports indenting, wrapping etc.</description>
     <tags>console commandline cmd cli formatting</tags>
   </metadata>
 </package>
