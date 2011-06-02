@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>synoptic.dll</id>
+    <version>0.1.2.10602</version>
+    <authors>Bit Diffusion Limited</authors>
+    <owners>Bit Diffusion Limited</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Making Console Applications Neater, Easier and Faster</description>
+    <tags>console commandline cmd</tags>
+  </metadata>
+</package>

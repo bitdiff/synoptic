@@ -21,6 +21,8 @@
 *.rar
 *.tar
 *.zip
+*.nupkg
+tmp-nuget/
 
 # Logs and databases #
 ######################
