@@ -97,7 +97,7 @@ It should show the following output:
 Note: to see all the actions and parameters available for a particular command, type in the command name without the action name,
 e.g.
 
-    ConsoleApplication1 my-command say-hello
+    ConsoleApplication1 my-command
 
 Passing parameters
 ------------------
@@ -119,7 +119,7 @@ In order to have a method interpreted as a valid command action that is understo
 
   - It must be contained within a class with the "[Command]" attribute.
   - The method must be public
-  - The method must only have primitive parameters (it can have no parameters too) 
+  - The method must only have primitive parameters (or it can have zero parameters) 
   - The method must be decorated with the [CommandAction] attribute.
   - If there are duplicate command names (either through method naming or aliasing), the command which will be resolved for execution is undefined.
 
