@@ -10,11 +10,11 @@ The bits and pieces
 
 In Synoptic, there are two main concepts to understand that will make things easier down the line:
 
-Commands
+*Commands*
 
 These map to classes and are a top-level structure for defining methods that can be accessed from the command line. If we are using the git cli as an example, "add" or "commit" might be considered commands.
 
-Actions
+*Actions*
 
 Each command defines one or more actions. These map to methods within your command class. The parameters defined for your method become inputs on the command line. This should all become clear in the following examples.
 
