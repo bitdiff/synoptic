@@ -37,7 +37,7 @@ namespace Synoptic.Tests
                                             Assert.That(a[2], Is.EqualTo("three"));
                                         };
 
-            new CommandRunner().WithCommandsFromType<CommandRunnerTestClass>().Run(new[]
+            new CommandRunner().WithCommandFromType<CommandRunnerTestClass>().Run(new[]
                                                                            {
                                                                                "command-runner-test-class",
                                                                                "multiple-params-to-hyphen",
@@ -58,8 +58,8 @@ namespace Synoptic.Tests
         [Test]
         public void should_handle_bool()
         {
-            new CommandRunner().WithCommandsFromType<CommandRunnerTestClass>().Run(new[] { "CommandWithBool", "--param1" });
-            new CommandRunner().WithCommandsFromType<CommandRunnerTestClass>().Run(new[] { "CommandWithBool" });
+            new CommandRunner().WithCommandFromType<CommandRunnerTestClass>().Run(new[] { "CommandWithBool", "--param1" });
+            new CommandRunner().WithCommandFromType<CommandRunnerTestClass>().Run(new[] { "CommandWithBool" });
         }
 
         [Command]
