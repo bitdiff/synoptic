@@ -10,7 +10,7 @@ namespace Synoptic
     public class CommandRunner
     {
         private IDependencyResolver _resolver = new ActivatorDependencyResolver();
-        
+
         private readonly List<Command> _availableCommands = new List<Command>();
         private readonly CommandFinder _commandFinder = new CommandFinder();
         private readonly ICommandActionFinder _commandActionFinder = new CommandActionFinder();
@@ -19,9 +19,9 @@ namespace Synoptic
 
         public void Run(string[] args)
         {
-            if(args == null)
+            if (args == null)
                 args = new string[0];
-            
+
             Queue<string> arguments = new Queue<string>(args);
 
             if (_optionSet != null)
@@ -29,27 +29,27 @@ namespace Synoptic
 
             if (_availableCommands.Count == 0)
                 WithCommandsFromAssembly(Assembly.GetCallingAssembly());
-
-            if (_availableCommands.Count == 0)
-                throw new NoCommandsDefinedException();
-
-            if (arguments.Count == 0)
-            {
-                _helpGenerator.ShowCommandUsage(_availableCommands, _optionSet);
-                return;
-            }
-
+            
             try
             {
+                if (_availableCommands.Count == 0)
+                    throw new NoCommandsDefinedException();
+
+                if (arguments.Count == 0)
+                {
+                    _helpGenerator.ShowCommandUsage(_availableCommands, _optionSet);
+                    return;
+                }
+
                 var commandName = arguments.Dequeue();
-                
+
                 var commandSelector = new CommandSelector();
                 var command = commandSelector.Select(commandName, _availableCommands);
 
                 var actionName = arguments.Count > 0 ? arguments.Dequeue() : null;
                 var availableActions = _commandActionFinder.FindInCommand(command);
 
-                if(actionName == null)
+                if (actionName == null)
                 {
                     _helpGenerator.ShowCommandHelp(command, availableActions.ToList());
                     return;
