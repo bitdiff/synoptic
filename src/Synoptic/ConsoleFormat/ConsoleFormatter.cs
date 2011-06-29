@@ -16,7 +16,6 @@ namespace Synoptic.ConsoleFormat
         public void Write(ConsoleTable table)
         {
             var maxWidth = table.Width ?? _consoleWriter.GetWidth();
-            //maxWidth -= 1;
 
             foreach (var row in table.Rows)
             {
@@ -43,7 +42,7 @@ namespace Synoptic.ConsoleFormat
             }
         }
 
-        public void Write(int indent, string format, params string[] args)
+        public void Write(int indent, string format, params object[] args)
         {
             int max = _consoleWriter.GetWidth();
             string pad = new string(' ', indent);
@@ -71,9 +70,14 @@ namespace Synoptic.ConsoleFormat
             }
         }
 
-        public void Write(string format, params string[] args)
+        public void Write(string format, params object[] args)
         {
             Write(0, format, args);
+        }
+
+        public void WriteLine()
+        {
+            _consoleWriter.WriteLine();
         }
     }
 }
