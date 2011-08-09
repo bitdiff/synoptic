@@ -13,24 +13,6 @@ namespace Synoptic.Service
         private readonly IDaemon _daemon;
         private readonly IWindowsServiceConfiguration _configuration;
 
-        public WindowsService(string serviceName, IDaemon daemon, Action<WindowsServiceConfiguration> configure) :
-            this(daemon, SetConfiguration(serviceName, configure))
-        {
-        }
-
-        private static IWindowsServiceConfiguration SetConfiguration(string serviceName, Action<WindowsServiceConfiguration> configure)
-        {
-            var configuration = new WindowsServiceConfiguration(serviceName);
-            configure(configuration);
-
-            return configuration;
-        }
-
-        public WindowsService(string serviceName, IDaemon daemon)
-            : this(daemon, new WindowsServiceConfiguration(serviceName))
-        {
-        }
-
         public WindowsService(IDaemon daemon, IWindowsServiceConfiguration configuration)
         {
             if (configuration == null)
