@@ -12,6 +12,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademarkAttribute("")]
 [assembly: AssemblyCultureAttribute("")]
 
-// <major>.<minor>.<revision>.<YMMDD>
-[assembly: AssemblyVersionAttribute("0.1.2.10602")]
 
