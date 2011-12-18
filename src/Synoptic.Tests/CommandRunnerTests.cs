@@ -50,12 +50,14 @@ namespace Synoptic.Tests
         }
 
         [Test]
+        [Ignore]
         public void should_display_help_for_assembly()
         {
             new CommandRunner().Run(null);
         }
 
         [Test]
+        [Ignore]
         public void should_handle_bool()
         {
             new CommandRunner().WithCommandFromType<CommandRunnerTestClass>().Run(new[] { "CommandWithBool", "--param1" });
