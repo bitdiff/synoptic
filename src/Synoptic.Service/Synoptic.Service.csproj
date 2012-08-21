@@ -10,8 +10,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Synoptic.Service</RootNamespace>
     <AssemblyName>Synoptic.Service</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,16 +44,20 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="UdpMessageReceivedEventArgs.cs" />
+    <Compile Include="SocketReceiveErrorEventArgs.cs" />
     <Compile Include="ComboDaemon.cs" />
     <Compile Include="DaemonEvent.cs" />
     <Compile Include="DaemonException.cs" />
+    <Compile Include="IDaemonLogger.cs" />
     <Compile Include="IUdpDaemonConfiguration.cs" />
     <Compile Include="IWindowsServiceConfiguration.cs" />
-    <Compile Include="LoopyDaemon.cs" />
+    <Compile Include="PollingDaemonBase.cs" />
     <Compile Include="SafeServiceController.cs" />
     <Compile Include="UdpDaemon.cs" />
     <Compile Include="UdpDaemonConfiguration.cs" />
     <Compile Include="ErrorEventArgs.cs" />
+    <Compile Include="UdpServer.cs" />
     <Compile Include="WindowsService.cs">
       <SubType>Component</SubType>
     </Compile>

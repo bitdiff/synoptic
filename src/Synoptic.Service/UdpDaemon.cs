@@ -7,6 +7,7 @@ using System.Threading;
 
 namespace Synoptic.Service
 {
+    [Obsolete("Use UdpServer")]
     public class UdpDaemon : IDaemon
     {
         private readonly static TraceSource Trace = new TraceSource("Synoptic.Service");

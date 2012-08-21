@@ -30,7 +30,6 @@ namespace Synoptic.Tests
                                                         typeof (CommandLineParameter),
                                                         typeof (IDaemon),
                                                         typeof (ComboDaemon),
-                                                        typeof (LoopyDaemon),
                                                         typeof (SafeServiceController),
                                                         typeof (DaemonEvent),
                                                         typeof (UdpDaemon),

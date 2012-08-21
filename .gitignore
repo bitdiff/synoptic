@@ -49,3 +49,4 @@ _ReSharper.*
 *Publish*.xml
 *~
 *.swp
+TestResults
