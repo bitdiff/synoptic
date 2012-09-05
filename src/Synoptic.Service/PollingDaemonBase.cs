@@ -11,7 +11,7 @@ namespace Synoptic.Service
         private readonly IDaemonLogger _logger;
         private readonly TimeSpan _interval;
         private readonly int? _preemptOnPort;
-        private const string LogTag = "sync_daemon";
+        private const string LogTag = "polling_daemon";
 
         private CancellationTokenSource _tokenSource;
         private readonly List<Task> _tasks = new List<Task>();
