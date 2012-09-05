@@ -46,16 +46,12 @@
     </Compile>
     <Compile Include="UdpMessageReceivedEventArgs.cs" />
     <Compile Include="SocketReceiveErrorEventArgs.cs" />
-    <Compile Include="ComboDaemon.cs" />
     <Compile Include="DaemonEvent.cs" />
     <Compile Include="DaemonException.cs" />
     <Compile Include="IDaemonLogger.cs" />
-    <Compile Include="IUdpDaemonConfiguration.cs" />
     <Compile Include="IWindowsServiceConfiguration.cs" />
     <Compile Include="PollingDaemonBase.cs" />
     <Compile Include="SafeServiceController.cs" />
-    <Compile Include="UdpDaemon.cs" />
-    <Compile Include="UdpDaemonConfiguration.cs" />
     <Compile Include="ErrorEventArgs.cs" />
     <Compile Include="UdpServer.cs" />
     <Compile Include="WindowsService.cs">

@@ -47,22 +47,6 @@ namespace Synoptic.Service.Demo
         }
 
         [CommandAction]
-        public void RunSkinnyUdpServer()
-        {
-            Console.CancelKeyPress += (s, e) => { e.Cancel = true; _resetEvent.Set(); };
-            var udpServer = new UdpDaemon(message =>
-                                              {
-                                                  Console.WriteLine("MESSAGE: " + message);
-                                                  Thread.Sleep(5000);
-                                                  Console.WriteLine("DONE");
-                                              },
-                                              new UdpDaemonConfiguration(new IPEndPoint(IPAddress.Any, 12345)));
-            udpServer.Start();
-            _resetEvent.WaitOne();
-            udpServer.Stop();
-        }
-
-        [CommandAction]
         public void SendUdpMessage(string message)
         {
             var dgram = Encoding.UTF8.GetBytes(message ?? "");
