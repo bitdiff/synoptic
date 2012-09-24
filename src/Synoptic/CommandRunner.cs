@@ -9,7 +9,7 @@ namespace Synoptic
 {
     public class CommandRunner
     {
-        private IDependencyResolver _resolver = new ActivatorDependencyResolver();
+        private ICommandDependencyResolver _resolver = new ActivatorCommandDependencyResolver();
 
         private readonly List<Command> _availableCommands = new List<Command>();
         private readonly CommandFinder _commandFinder = new CommandFinder();
@@ -82,7 +82,7 @@ namespace Synoptic
             }
         }
 
-        public CommandRunner WithDependencyResolver(IDependencyResolver resolver)
+        public CommandRunner WithDependencyResolver(ICommandDependencyResolver resolver)
         {
             _resolver = resolver;
             return this;

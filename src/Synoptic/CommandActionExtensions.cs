@@ -7,7 +7,7 @@ namespace Synoptic
 {
     internal static class CommandActionExtensions
     {
-        internal static void Run(this CommandAction commandAction, IDependencyResolver resolver, CommandLineParseResult parseResult)
+        internal static void Run(this CommandAction commandAction, ICommandDependencyResolver resolver, CommandLineParseResult parseResult)
         {
             var instance = resolver.Resolve(commandAction.LinkedToMethod.DeclaringType);
             object[] parameterValues = GetCommandParameterValues(commandAction.Parameters, parseResult);

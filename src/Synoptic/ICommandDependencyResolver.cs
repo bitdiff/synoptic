@@ -2,7 +2,7 @@
 
 namespace Synoptic
 {
-    public interface IDependencyResolver
+    public interface ICommandDependencyResolver
     {
         object Resolve(Type serviceType);
     }

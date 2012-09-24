@@ -46,7 +46,7 @@
     <Compile Include="ConsoleFormat\ConsoleWriter.cs" />
     <Compile Include="ConsoleFormat\IConsoleWriter.cs" />
     <Compile Include="Exceptions\CommandActionNotFoundException.cs" />
-    <Compile Include="ActivatorDependencyResolver.cs" />
+    <Compile Include="ActivatorCommandDependencyResolver.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandAction.cs" />
     <Compile Include="CommandActionAttribute.cs" />
@@ -77,7 +77,7 @@
     <Compile Include="HelpGenerator.cs" />
     <Compile Include="ICommandActionFinder.cs" />
     <Compile Include="ICommandLineParser.cs" />
-    <Compile Include="IDependencyResolver.cs" />
+    <Compile Include="ICommandDependencyResolver.cs" />
     <Compile Include="MethodInfoWrapper.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="ParameterInfoWrapper.cs" />

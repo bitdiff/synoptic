@@ -2,7 +2,7 @@
 
 namespace Synoptic
 {
-    internal class ActivatorDependencyResolver : IDependencyResolver
+    internal class ActivatorCommandDependencyResolver : ICommandDependencyResolver
     {
         public object Resolve(Type serviceType)
         {

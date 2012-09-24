@@ -38,7 +38,7 @@ namespace Synoptic.Demo
             k.Bind<IMyService2>().To<MyService2>();
 
             //var resolver = new StructureMapDependencyResolver(c);
-            var resolver = new NinjectDependencyResolver(k);
+            var resolver = new NinjectCommandDependencyResolver(k);
 
             var optionSet = new OptionSet
                                 {
