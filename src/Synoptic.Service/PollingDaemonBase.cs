@@ -81,7 +81,7 @@ namespace Synoptic.Service
         {
             _tokenSource.Cancel();
 
-            _logger.Debug(LogTag, "Waiting to end...");
+            _logger.Debug(LogTag, "Waiting for tasks to end...");
 
             try
             {
@@ -89,14 +89,12 @@ namespace Synoptic.Service
             }
             catch (OperationCanceledException)
             {
-                _logger.Debug(LogTag, "Task cancelled.");
             }
 
             if (_server != null)
-            {
                 _server.Dispose();
-                _logger.Debug(LogTag, "Server disposed.");
-            }
+
+            OnStopped();
 
             _logger.Debug(LogTag, "Stopped.");
         }
@@ -130,5 +128,6 @@ namespace Synoptic.Service
 
         public abstract void OnError(Exception e);
         public abstract void Run(CancellationTokenSource cts);
+        public abstract void OnStopped();
     }
 }
