@@ -85,6 +85,8 @@ namespace Synoptic.Service
                 if (ShouldPreempt(e.Message))
                     _preemptIntervalEvent.Set();
             };
+
+            _logger.Info(LogTag, "Preempt poll udp listener configured on port {0}.", _preemptOnPort.Value);
         }
 
         public void Stop()
