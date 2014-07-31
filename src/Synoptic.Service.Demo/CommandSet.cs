@@ -8,18 +8,17 @@ using Synoptic.Exceptions;
 
 namespace Synoptic.Service.Demo
 {
-    class CommandSet
+    [Command]
+    public class CommandSet
     {
-        private readonly ILogger _logger;
-        private readonly IDaemon _daemon;
+        private readonly IServiceDaemon _daemon;
         private readonly WindowsService _service;
         private readonly ManualResetEvent _resetEvent;
 
         public CommandSet()
         {
             _resetEvent = new ManualResetEvent(false);
-            _logger = new SimpleLogger();
-            _daemon = new MyDaemon(_logger, _resetEvent);
+            _daemon = new MyServiceDaemon(new SimpleLogger(), _resetEvent);
             var config = new WindowsServiceConfiguration("aa1") { CommandLineArguments = "windows-service --start" };
             _service = new WindowsService(_daemon, config);
         }

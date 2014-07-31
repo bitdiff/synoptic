@@ -28,10 +28,10 @@ namespace Synoptic.Service
                 handle(this, e);
         }
 
-        private readonly IDaemon _daemon;
+        private readonly IServiceDaemon _daemon;
         private readonly IWindowsServiceConfiguration _configuration;
 
-        public WindowsService(string serviceName, IDaemon daemon, Action<WindowsServiceConfiguration> configure) : 
+        public WindowsService(string serviceName, IServiceDaemon daemon, Action<WindowsServiceConfiguration> configure) :
             this(daemon, SetConfiguration(serviceName, configure))
         {
         }
@@ -44,16 +44,17 @@ namespace Synoptic.Service
             return configuration;
         }
 
-        public WindowsService(string serviceName, IDaemon daemon) : this(daemon, new WindowsServiceConfiguration(serviceName))
+        public WindowsService(string serviceName, IServiceDaemon daemon)
+            : this(daemon, new WindowsServiceConfiguration(serviceName))
         {
         }
 
-        public WindowsService(IDaemon daemon, IWindowsServiceConfiguration configuration)
+        public WindowsService(IServiceDaemon daemon, IWindowsServiceConfiguration configuration)
         {
-            if(configuration == null)
+            if (configuration == null)
                 throw new ArgumentNullException("configuration");
 
-            if(configuration.ServiceName == null)
+            if (configuration.ServiceName == null)
                 throw new ArgumentNullException("configuration.ServiceName");
 
             _daemon = daemon;
@@ -76,7 +77,7 @@ namespace Synoptic.Service
             }
             catch (Exception e)
             {
-                OnEvent(Error, new ErrorEventArgs(new DaemonException(String.Format("Error starting service {0}", ServiceName), e)));
+                OnEvent(Error, new ErrorEventArgs(new DaemonException(String.Format("Error starting service '{0}'.", ServiceName), e)));
                 throw;
             }
 
@@ -95,7 +96,7 @@ namespace Synoptic.Service
             }
             catch (Exception e)
             {
-                OnEvent(Error, new ErrorEventArgs(new DaemonException(String.Format("Error stopping service {0}", ServiceName), e)));
+                OnEvent(Error, new ErrorEventArgs(new DaemonException(String.Format("Error stopping service '{0}'.", ServiceName), e)));
                 throw;
             }
 

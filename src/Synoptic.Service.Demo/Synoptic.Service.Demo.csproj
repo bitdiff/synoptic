@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="CommandSet.cs" />
     <Compile Include="ILogger.cs" />
-    <Compile Include="MyDaemon.cs" />
+    <Compile Include="MyServiceDaemon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLogger.cs" />

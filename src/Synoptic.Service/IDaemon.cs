@@ -1,8 +1,10 @@
-﻿namespace Synoptic.Service
+﻿using System.Threading;
+
+namespace Synoptic.Service
 {
     public interface IDaemon
     {
-        void Start();
+        void Start(CancellationToken cancellationToken);
         void Stop();
     }
 }

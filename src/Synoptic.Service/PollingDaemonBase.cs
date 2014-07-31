@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Synoptic.Service
 {
-    public abstract class PollingDaemonBase : IDaemon
+    public abstract class PollingDaemonBase : IServiceDaemon
     {
         private readonly IDaemonLogger _logger;
         private readonly TimeSpan _interval;
         private readonly int? _preemptOnPort;
-        private const string LogTag = "polling_daemon";
 
         private CancellationTokenSource _tokenSource;
         private readonly List<Task> _tasks = new List<Task>();
@@ -31,21 +30,32 @@ namespace Synoptic.Service
             _tokenSource = new CancellationTokenSource();
             var token = _tokenSource.Token;
 
-            _tasks.Add(Task.Factory.StartNew(() => Execute(token),
-                                             token,
-                                             TaskCreationOptions.LongRunning | TaskCreationOptions.AttachedToParent,
-                                             TaskScheduler.Current)
-                           .ContinueWith(t => OnError(t.Exception),
-                                         TaskContinuationOptions.OnlyOnFaulted));
+            var task = new Task(() => Execute(token), token, TaskCreationOptions.LongRunning);
+
+            task.ContinueWith(t => OnError(t.Exception),
+                              TaskContinuationOptions.OnlyOnFaulted |
+                              TaskContinuationOptions.ExecuteSynchronously);
+
+            _tasks.Add(task);
+
+            task.Start(TaskScheduler.Current);
 
             if (_preemptOnPort.HasValue)
-                _tasks.Add(Task.Factory.StartNew(() => PreemptInterval(token),
-                                                 token,
-                                                 TaskCreationOptions.LongRunning | TaskCreationOptions.AttachedToParent,
-                                                 TaskScheduler.Current)
-                               .ContinueWith(t => OnError(t.Exception),
-                                             TaskContinuationOptions.OnlyOnFaulted));
+            {
+                var preemptTask = new Task(() =>
+                {
+                    PreemptInterval(token);
+                    token.WaitHandle.WaitOne();
+                }, token, TaskCreationOptions.LongRunning);
 
+                preemptTask.ContinueWith(t => OnError(t.Exception),
+                    TaskContinuationOptions.OnlyOnFaulted |
+                    TaskContinuationOptions.ExecuteSynchronously);
+
+                _tasks.Add(preemptTask);
+
+                preemptTask.Start(TaskScheduler.Current);
+            }
         }
 
         protected virtual bool ShouldPreempt(string message)
@@ -71,24 +81,29 @@ namespace Synoptic.Service
 
             _server.ReceiveError += (s, e) => _logger.Info(LogTag, "Socket error {0} during {1}.", e.ErrorCode, e.LastOperation);
             _server.MessageReceived += (s, e) =>
-                                           {
-                                               if (ShouldPreempt(e.Message))
-                                                   _preemptIntervalEvent.Set();
-                                           };
+            {
+                if (ShouldPreempt(e.Message))
+                    _preemptIntervalEvent.Set();
+            };
         }
 
         public void Stop()
         {
             _tokenSource.Cancel();
 
-            _logger.Debug(LogTag, "Waiting for tasks to end...");
+            _logger.Debug(LogTag, "Waiting for {0} task(s) to end...", _tasks.Count);
 
             try
             {
                 Task.WaitAll(_tasks.ToArray(), _tokenSource.Token);
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException) { }
+            catch (AggregateException e)
             {
+                foreach (var exception in e.WithoutCancellations().InnerExceptions)
+                {
+                    _logger.Error(LogTag, exception);
+                }
             }
 
             if (_server != null)
@@ -129,5 +144,6 @@ namespace Synoptic.Service
         public abstract void OnError(Exception e);
         public abstract void Run(CancellationTokenSource cts);
         public abstract void OnStopped();
+        public abstract string LogTag { get; }
     }
 }

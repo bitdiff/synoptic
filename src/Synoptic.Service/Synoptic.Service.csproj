@@ -44,6 +44,8 @@
     <Compile Include="..\SolutionVersion.cs">
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
+    <Compile Include="AggregateExceptionExtensions.cs" />
+    <Compile Include="IServiceDaemon.cs" />
     <Compile Include="UdpMessageReceivedEventArgs.cs" />
     <Compile Include="SocketReceiveErrorEventArgs.cs" />
     <Compile Include="DaemonEvent.cs" />

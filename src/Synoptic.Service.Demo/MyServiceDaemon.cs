@@ -3,14 +3,14 @@ using System.Threading;
 
 namespace Synoptic.Service.Demo
 {
-    class MyDaemon : IDaemon
+    class MyServiceDaemon : IServiceDaemon
     {
         private const string Tag = "MyDaemon";
         private readonly ILogger _log;
         private readonly ManualResetEvent _resetEvent;
         private Thread _thread;
 
-        public MyDaemon(ILogger log, ManualResetEvent resetEvent)
+        public MyServiceDaemon(ILogger log, ManualResetEvent resetEvent)
         {
             _log = log;
             _resetEvent = resetEvent;
