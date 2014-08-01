@@ -40,7 +40,13 @@ namespace Synoptic.Service
             {
                 StartPreempter(cancellationToken);
             }
+
+            _logger.Debug(LogTag, "Started.");
+
+            OnStarted();
         }
+
+        public virtual void OnStarted() { }
 
         private void StartPreempter(CancellationToken cancellationToken)
         {
@@ -51,8 +57,6 @@ namespace Synoptic.Service
 
                 cancellationToken.WaitHandle.WaitOne();
             }, cancellationToken, TaskCreationOptions.LongRunning);
-
-            preemptTask.ContinueWith(t => _preempter.Stop());
 
             ConfigureTaskForErrors(preemptTask, _preempter.OnError, cancellationToken);
 
@@ -77,10 +81,16 @@ namespace Synoptic.Service
         {
             _tokenSource.Cancel();
 
-            _logger.Debug(LogTag, "Waiting for {0} task(s) to end...", _tasks.Count);
-
             try
             {
+                if (_preempter != null)
+                {
+                    _logger.Debug(LogTag, "Waiting for preempter to stop...");
+                    _preempter.Stop();
+                }
+
+                _logger.Debug(LogTag, "Waiting for task(s) to end...");
+
                 Task.WaitAll(_tasks.ToArray(), _tokenSource.Token);
             }
             catch (OperationCanceledException) { }

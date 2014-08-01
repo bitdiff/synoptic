@@ -20,7 +20,7 @@ namespace Synoptic.Service
             Listen(cancellationToken);
         }
 
-        private const string LogTag = "udppolling.daemon";
+        private const string LogTag = "udppolling.preempter";
 
         public UdpPollingPreempter(IDaemonLogger logger)
         {
@@ -82,7 +82,7 @@ namespace Synoptic.Service
                 _server.Dispose();
             }
 
-            _logger.Info(LogTag, "Preempt poll udp listener stopped.", _preemptOnPort);
+            _logger.Info(LogTag, "Preempt poll udp listener stopped.");
         }
     }
 }
