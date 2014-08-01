@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceProcess" />
@@ -45,6 +46,7 @@
       <Link>Properties\SolutionVersion.cs</Link>
     </Compile>
     <Compile Include="AggregateExceptionExtensions.cs" />
+    <Compile Include="IPollingPreempter.cs" />
     <Compile Include="IServiceDaemon.cs" />
     <Compile Include="UdpMessageReceivedEventArgs.cs" />
     <Compile Include="SocketReceiveErrorEventArgs.cs" />
@@ -55,6 +57,7 @@
     <Compile Include="PollingDaemonBase.cs" />
     <Compile Include="SafeServiceController.cs" />
     <Compile Include="ErrorEventArgs.cs" />
+    <Compile Include="UdpPollingPreempter.cs" />
     <Compile Include="UdpServer.cs" />
     <Compile Include="WindowsService.cs">
       <SubType>Component</SubType>

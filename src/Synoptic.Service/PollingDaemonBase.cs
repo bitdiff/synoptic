@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,83 +9,68 @@ namespace Synoptic.Service
     {
         private readonly IDaemonLogger _logger;
         private readonly TimeSpan _interval;
-        private readonly int? _preemptOnPort;
+        private readonly IPollingPreempter _preempter;
 
         private CancellationTokenSource _tokenSource;
         private readonly List<Task> _tasks = new List<Task>();
 
         private readonly ManualResetEventSlim _preemptIntervalEvent = new ManualResetEventSlim(false);
-        private UdpServer _server;
 
-        protected PollingDaemonBase(IDaemonLogger logger, TimeSpan interval, int? preemptOnPort = null)
+        protected PollingDaemonBase(IDaemonLogger logger, TimeSpan interval, IPollingPreempter preempter = null)
         {
             _logger = logger;
             _interval = interval;
-            _preemptOnPort = preemptOnPort;
+            _preempter = preempter;
         }
 
         public void Start()
         {
             _tokenSource = new CancellationTokenSource();
-            var token = _tokenSource.Token;
+            var cancellationToken = _tokenSource.Token;
 
-            var task = new Task(() => Execute(token), token, TaskCreationOptions.LongRunning);
+            var task = new Task(() => Execute(cancellationToken), cancellationToken, TaskCreationOptions.LongRunning);
 
-            task.ContinueWith(t => OnError(t.Exception),
-                              TaskContinuationOptions.OnlyOnFaulted |
-                              TaskContinuationOptions.ExecuteSynchronously);
+            ConfigureTaskForErrors(task, OnError, cancellationToken);
 
             _tasks.Add(task);
 
             task.Start(TaskScheduler.Current);
 
-            if (_preemptOnPort.HasValue)
+            if (_preempter != null)
             {
-                var preemptTask = new Task(() =>
-                {
-                    PreemptInterval(token);
-                    token.WaitHandle.WaitOne();
-                }, token, TaskCreationOptions.LongRunning);
-
-                preemptTask.ContinueWith(t => OnError(t.Exception),
-                    TaskContinuationOptions.OnlyOnFaulted |
-                    TaskContinuationOptions.ExecuteSynchronously);
-
-                _tasks.Add(preemptTask);
-
-                preemptTask.Start(TaskScheduler.Current);
+                StartPreempter(cancellationToken);
             }
         }
 
-        protected virtual bool ShouldPreempt(string message)
+        private void StartPreempter(CancellationToken cancellationToken)
         {
-            return true;
-        }
-
-        private void PreemptInterval(CancellationToken ct)
-        {
-            ct.ThrowIfCancellationRequested();
-            ConfigureUdp();
-        }
-
-        private void ConfigureUdp()
-        {
-            if (!_preemptOnPort.HasValue)
-                return;
-
-            var localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), _preemptOnPort.Value);
-
-            _server = new UdpServer();
-            _server.Start(localEndPoint, _tokenSource.Token);
-
-            _server.ReceiveError += (s, e) => _logger.Info(LogTag, "Socket error {0} during {1}.", e.ErrorCode, e.LastOperation);
-            _server.MessageReceived += (s, e) =>
+            var preemptTask = new Task(() =>
             {
-                if (ShouldPreempt(e.Message))
-                    _preemptIntervalEvent.Set();
-            };
+                _preempter.ShouldPreempt += Preempted;
+                _preempter.Listen(cancellationToken);
 
-            _logger.Info(LogTag, "Preempt poll udp listener configured on port {0}.", _preemptOnPort.Value);
+                cancellationToken.WaitHandle.WaitOne();
+            }, cancellationToken, TaskCreationOptions.LongRunning);
+
+            preemptTask.ContinueWith(t => _preempter.Stop());
+
+            ConfigureTaskForErrors(preemptTask, _preempter.OnError, cancellationToken);
+
+            _tasks.Add(preemptTask);
+
+            preemptTask.Start(TaskScheduler.Current);
+        }
+
+        private void ConfigureTaskForErrors(Task task, Action<Exception, CancellationToken> errorHandler, CancellationToken cancellationToken)
+        {
+            task.ContinueWith(t => errorHandler(t.Exception, cancellationToken),
+                TaskContinuationOptions.OnlyOnFaulted |
+                TaskContinuationOptions.ExecuteSynchronously);
+        }
+
+        void Preempted(object sender, EventArgs e)
+        {
+            _preemptIntervalEvent.Set();
         }
 
         public void Stop()
@@ -108,9 +92,6 @@ namespace Synoptic.Service
                 }
             }
 
-            if (_server != null)
-                _server.Dispose();
-
             OnStopped();
 
             _logger.Debug(LogTag, "Stopped.");
@@ -128,7 +109,7 @@ namespace Synoptic.Service
                 }
                 catch (Exception e)
                 {
-                    OnError(e);
+                    OnError(e, ct);
                 }
 
                 var r = WaitHandle.WaitAny(new[] { ct.WaitHandle, _preemptIntervalEvent.WaitHandle }, _interval);
@@ -143,7 +124,7 @@ namespace Synoptic.Service
             }
         }
 
-        public abstract void OnError(Exception e);
+        public abstract void OnError(Exception e, CancellationToken cancellationToken);
         public abstract void Run(CancellationTokenSource cts);
         public abstract void OnStopped();
         public abstract string LogTag { get; }
